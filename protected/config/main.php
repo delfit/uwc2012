@@ -9,7 +9,10 @@ return array(
 	'name' => 'UWC 2012',
 	
 	// preloading 'log' component
-	'preload' => array( 'log' ),
+	'preload' => array( 
+		'bootstrap', 
+		'log'
+	),
 	
 	// autoloading model and component classes
 	'import' => array(
@@ -18,35 +21,24 @@ return array(
 	),
 	
 	'modules' => array(
-		// uncomment the following to enable the Gii tool
-		/*
 		'gii' => array(
 			'class' => 'system.gii.GiiModule',
-			 'password' => 'Enter Your Password Here',
+			'password' => 'uwc2012',
 			 // If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters' => array('127.0.0.1', '::1'),
+			
+			'generatorPaths' => array(
+				'bootstrap.gii'
+			),
 		),
-		*/
 	),
 	
 	// application components
 	'components' => array(
-		'user' => array(
-			// enable cookie-based authentication
-			'allowAutoLogin' => true,
+		'bootstrap' => array(
+			'class' => 'ext.bootstrap.components.Bootstrap',
+			'responsiveCss' => true,
 		),
-		
-		// uncomment the following to enable URLs in path-format
-		/*
-		'urlManager' => array(
-			'urlFormat' => 'path',
-			'rules' => array(
-				'<controller:\w+>/<id:\d+>' => '<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-			),
-		),
-		*/
 		
 		'db' => array(
 			'connectionString' => 'mysql:host=localhost;dbname=uwc2012',
@@ -60,6 +52,7 @@ return array(
 			// use 'site/error' action to display errors
 			'errorAction' => 'site/error',
 		),
+		
 		'log' => array(
 			'class' => 'CLogRouter',
 			'routes' => array(
@@ -67,13 +60,25 @@ return array(
 					'class' => 'CFileLogRoute',
 					'levels' => 'error, warning',
 				),
-			// uncomment the following to show log messages on web pages
-			/*
-			array(
-				'class'=>'CWebLogRoute',
+				// uncomment the following to show log messages on web pages
+				/*
+				array(
+					'class'=>'CWebLogRoute',
+				),
+				*/
 			),
-			*/
-			),
+		),
+		
+		'urlManager' => array(
+			'urlFormat' => 'path',
+			
+			// hide index.php in URLs
+			'showScriptName' => false,
+		),
+		
+		'user' => array(
+			// enable cookie-based authentication
+			'allowAutoLogin' => true,
 		),
 	),
 	
