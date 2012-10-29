@@ -72,9 +72,23 @@ return array(
 		'urlManager' => array(
 			'urlFormat' => 'path',
 			
+			'rules' => array(
+				'posts/<tag:.*?>' => 'product/list',
+				// REST patterns
+				array( 'product/list', 'pattern' => '/<model:\w+>', 'verb' => 'GET' ),
+				array( 'product/view', 'pattern' => '/<model:\w+>/<id:\d+>', 'verb' => 'GET' ),
+				array( 'product/update', 'pattern' => '/<model:\w+>/<id:\d+>', 'verb' => 'PUT' ),
+				array( 'product/delete', 'pattern' => '/<model:\w+>/<id:\d+>', 'verb' => 'DELETE' ),
+				array( 'product/create', 'pattern' => '/<model:\w+>', 'verb' => 'POST' ),
+				// Other controllers
+				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+			),
+
 			// hide index.php in URLs
 			'showScriptName' => false,
 		),
+	 
+
 		
 		'user' => array(
 			// enable cookie-based authentication
