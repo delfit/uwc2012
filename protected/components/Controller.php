@@ -68,5 +68,18 @@ class Controller extends CController
 		
 		return true;
 	}
+	
+	
+	public function beforeAction( $action ) {
+		parent::beforeAction( $action );
+		
+		// применить язык
+		if( isset( $_REQUEST[ 'lc' ] ) && !empty( $_REQUEST[ 'lc' ] ) ) {
+			$languageCode = $_REQUEST[ 'lc' ];
+			Yii::app()->language = $languageCode . '_' . $languageCode;
+		}
+
+		return true;
+	}
 
 }

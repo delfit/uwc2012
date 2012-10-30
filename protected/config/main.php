@@ -126,6 +126,9 @@ return array(
 		'default' => array(
 			'LanguageCode' => 'ru',
 			'limit' => 25
-		)
+		),
+		
+		// количество колонок на главной странице
+		'mainPageColumnsCount' => 3
 	),
 );
