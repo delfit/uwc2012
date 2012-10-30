@@ -6,7 +6,7 @@
 return array(
 	'basePath' => dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..',
 	
-	'name' => 'UWC 2012',
+	'name' => 'UWC2012',
 	
 	// preloading 'log' component
 	'preload' => array( 
@@ -101,5 +101,8 @@ return array(
 	'params' => array(
 		// this is used in contact page
 		'adminEmail' => 'webmaster@example.com',
+		
+		// количество колонок на главной странице
+		'mainPageColumnsCount' => 3
 	),
 );
