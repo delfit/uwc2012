@@ -1,6 +1,43 @@
 body
 {
 	margin: 0;
+	padding: 45px 0 0 0;
+	color: #555;
+	font: normal 10pt Arial,Helvetica,sans-serif;
+	background: #EFEFEF;
+}
+
+#footer
+{
+	padding: 10px;
+	margin: 10px 20px;
+	font-size: 0.8em;
+	text-align: center;
+	border-top: 1px solid #C9E0ED;
+}
+
+
+
+
+/* Overriding Bootstrap styles */
+body .navbar .brand, 
+body .navbar .nav > li > a 
+{
+	color: #444444;
+}
+
+body .navbar input[type="text"]
+{
+	color: #404040;
+}
+
+
+
+/* Yii generated styles */
+/*
+body
+{
+	margin: 0;
 	padding: 0;
 	color: #555;
 	font: normal 10pt Arial,Helvetica,sans-serif;
@@ -226,4 +263,4 @@ div.search-form
 .operations li a:hover
 {
 	background: #80CFFF;
-}
+}*/
