@@ -73,13 +73,35 @@ return array(
 			'urlFormat' => 'path',
 			
 			'rules' => array(
-				'posts/<tag:.*?>' => 'product/list',
-				// REST patterns
-				array( 'product/list', 'pattern' => '/<model:\w+>', 'verb' => 'GET' ),
-				array( 'product/view', 'pattern' => '/<model:\w+>/<id:\d+>', 'verb' => 'GET' ),
-				array( 'product/update', 'pattern' => '/<model:\w+>/<id:\d+>', 'verb' => 'PUT' ),
-				array( 'product/delete', 'pattern' => '/<model:\w+>/<id:\d+>', 'verb' => 'DELETE' ),
-				array( 'product/create', 'pattern' => '/<model:\w+>', 'verb' => 'POST' ),
+				'brands/<tag:.*?>' => 'brand/list',
+				// REST categories
+				array( 'brand/list', 'pattern' => 'brands', 'verb' => 'GET' ),
+				array( 'brand/view', 'pattern' => 'brand/<id:\d+>', 'verb' => 'GET' ),
+				array( 'brand/update', 'pattern' => 'brand/<id:\d+>', 'verb' => 'PUT' ),
+				array( 'brand/delete', 'pattern' => 'brand/<id:\d+>', 'verb' => 'DELETE' ),
+				array( 'brand/create', 'pattern' => 'brand', 'verb' => 'POST' ),
+				
+				
+				'categories/<tag:.*?>' => 'category/list',
+				// REST categories
+				array( 'category/list', 'pattern' => '<lc:\w+>/categories', 'verb' => 'GET' ),
+				array( 'category/view', 'pattern' => '<lc:\w+>/category/<id:\d+>', 'verb' => 'GET' ),
+				array( 'category/update', 'pattern' => '<lc:\w+>/category/<id:\d+>', 'verb' => 'PUT' ),
+				array( 'category/delete', 'pattern' => 'category/<id:\d+>', 'verb' => 'DELETE' ),
+				array( 'category/create', 'pattern' => 'category', 'verb' => 'POST' ),
+				
+				
+				'products/<tag:.*?>' => 'product/list',
+				// REST products
+				array( 'product/list', 'pattern' => '<lc:\w+>/products', 'verb' => 'GET' ),
+				array( 'product/view', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'GET' ),
+				array( 'product/update', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'PUT' ),
+				array( 'product/delete', 'pattern' => 'product/<id:\d+>', 'verb' => 'DELETE' ),
+				array( 'product/create', 'pattern' => 'product', 'verb' => 'POST' ),
+				
+				'languages/<tag:.*?>' => 'language/list',
+				array( 'language/list', 'pattern' => 'languages', 'verb' => 'GET' ),
+				
 				// Other controllers
 				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
 			),
@@ -101,5 +123,9 @@ return array(
 	'params' => array(
 		// this is used in contact page
 		'adminEmail' => 'webmaster@example.com',
+		'default' => array(
+			'LanguageCode' => 'ru',
+			'limit' => 25
+		)
 	),
 );

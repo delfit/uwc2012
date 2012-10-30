@@ -20,4 +20,17 @@ class Controller extends CController
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=array();
+	
+	
+	public function beforeAction( $action ) {
+		parent::beforeAction( $action );
+		
+		// применить язык
+		if( isset( $_REQUEST[ 'lc' ] ) && !empty( $_REQUEST[ 'lc' ] ) ) {
+			$languageCode = $_REQUEST[ 'lc' ];
+			Yii::app()->language = $languageCode . '_' . $languageCode;
+		}
+
+		return true;
+	}
 }
