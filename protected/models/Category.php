@@ -147,10 +147,11 @@ class Category extends CActiveRecord
 			);
 		}
 	
+		$currentLanguageCode = Language::model()->getCurrentLanguageCode();
 		foreach( $categories as $category ) {
 			$categoriesAttr[] = array(
 				'label' => $category->PluralName,
-				'url' => ( $level == self::CATEGORY_MAX_LEVEL ) ? 'products?cid/' . $this->getPrimaryKey() : '#'
+				'url' => ( $level == self::CATEGORY_MAX_LEVEL ) ? $currentLanguageCode . '/products?cid/' . $this->getPrimaryKey() : '#'
 			);
 			$level += 1;
 			$categoriesAttr[ 'items' ] = $this->getList( $languageID, $category->subCategories, $level );

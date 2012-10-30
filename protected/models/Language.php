@@ -109,8 +109,7 @@ class Language extends CActiveRecord
 	}
 	
 	public function getCurrentLanguage() {
-		$appLanguage = Yii::app()->language;
-		$languageCode = strstr( $appLanguage, '_', true);
+		$languageCode = $this->getCurrentLanguageCode();
 		
 		return $this->getByCode( $languageCode );
 	}
@@ -136,7 +135,14 @@ class Language extends CActiveRecord
 				':languageCode' => $languageCode 
 			)
 		);
-		 
+		
 		return $language;
+	}
+	
+	public function getCurrentLanguageCode() {
+		$appLanguage = Yii::app()->language;
+		$languageCode = strstr( $appLanguage, '_', true);
+		
+		return $languageCode;
 	}
 }
