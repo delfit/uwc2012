@@ -32,8 +32,11 @@
 							'class' => 'bootstrap.widgets.TbMenu',
 							'items' => $this->mainMenu,
 						),
-						'<form class="navbar-search pull-right" action="">				
-							<input type="text" class="search-query" placeholder="Поиск">
+						'<form class="navbar-search form-search pull-right" action="">
+							<div class="input-append">
+								<input type="text" class="search-query" placeholder="Поиск">
+								<button type="submit" class="btn"><i class="icon-search"></i></button>
+							</div>
 						</form>',
 					)
 				) );
@@ -53,13 +56,13 @@
 			
 
 			<div class="clear"></div>
-
+			
 			<div id="footer">
 				&copy; Delfit <?php echo date( 'Y' ); ?><br/>
 				<?php echo Yii::powered(); ?>
 			</div><!-- footer -->
 
 		</div><!-- page -->
-
+		
 	</body>
 </html>

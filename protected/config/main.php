@@ -53,6 +53,7 @@ return array(
 			'errorAction' => 'site/error',
 		),
 		
+		
 		'log' => array(
 			'class' => 'CLogRouter',
 			'routes' => array(
@@ -68,7 +69,7 @@ return array(
 				*/
 			),
 		),
-		
+			
 		'urlManager' => array(
 			'urlFormat' => 'path',
 			
@@ -124,9 +125,11 @@ return array(
 		// this is used in contact page
 		'adminEmail' => 'webmaster@example.com',
 		'default' => array(
-			'LanguageCode' => 'ru',
-			'limit' => 25
+			'languageCode' => 'ru',
+			'pageSize' => 25
 		),
+		
+		'imagesFolder' => 'images',
 		
 		// количество колонок на главной странице
 		'mainPageColumnsCount' => 3

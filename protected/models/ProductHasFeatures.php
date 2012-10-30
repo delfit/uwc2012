@@ -45,7 +45,7 @@ class ProductHasFeatures extends CActiveRecord
 			array('ProductID, FeatureID, Index', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ProductID, FeatureID, Index, Value', 'safe', 'on'=>'search'),
+			array('ProductHasFeatureID, ProductID, FeatureID, Index, Value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +68,7 @@ class ProductHasFeatures extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'ProductHasFeatureID' => 'ProductHasFeatureID',
 			'ProductID' => 'Product',
 			'FeatureID' => 'Feature',
 			'Index' => 'Index',
@@ -86,6 +87,7 @@ class ProductHasFeatures extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('ProductHasFeatureID',$this->ProductHasFeatureID);
 		$criteria->compare('ProductID',$this->ProductID);
 		$criteria->compare('FeatureID',$this->FeatureID);
 		$criteria->compare('Index',$this->Index);

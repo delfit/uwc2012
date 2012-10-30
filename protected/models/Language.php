@@ -116,7 +116,7 @@ class Language extends CActiveRecord
 	
 	
 	public function getDefaultLanguage() {
-		$languageCode = Yii::app()->params[ 'default' ][ 'LanguageCode' ];
+		$languageCode = Yii::app()->params[ 'default' ][ 'languageCode' ];
 		return $this->getByCode( $languageCode );
 	}
 	

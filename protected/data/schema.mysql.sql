@@ -166,12 +166,14 @@ COMMENT = 'таблица переводов для товаров';
 -- Table `uwc2012`.`ProductHasFeatures`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `uwc2012`.`ProductHasFeatures` (
+  `ProductHasFeatureID` INT NOT NULL AUTO_INCREMENT ,
   `ProductID` INT NOT NULL ,
   `FeatureID` INT NOT NULL ,
   `Index` SMALLINT NOT NULL COMMENT 'порядковый номер' ,
   `Value` TINYTEXT NOT NULL ,
   INDEX `fk_ProductHasFeatures_1_idx` (`ProductID` ASC) ,
   INDEX `FK_Feature_idx` (`FeatureID` ASC) ,
+  PRIMARY KEY (`ProductHasFeatureID`) ,
   CONSTRAINT `FK_ProductProductHasFeatures`
     FOREIGN KEY (`ProductID` )
     REFERENCES `uwc2012`.`Product` (`ProductID` )
@@ -288,19 +290,19 @@ START TRANSACTION;
 USE `uwc2012`;
 INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (1, 2, 'Компьютеры и ноутбуки', 'Компьютеры и ноутбуки');
 INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (2, 2, 'Ноутбуки', 'Ноутбуки');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (3, 2, 'Ноутбуки', 'Ноутбук');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (4, 2, 'Планшеты', 'Планшет');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (5, 2, 'Сумки для ноутбуков', 'Сумка для ноутбука');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (3, 2, 'Ноутбук', 'Ноутбуки');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (4, 2, 'Планшет', 'Планшеты');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (5, 2, 'Сумка для ноутбука', 'Сумки для ноутбуков');
 INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (6, 2, 'Комплектующие', 'Комплектующие');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (7, 2, 'Процессоры', 'Процессор');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (8, 2, 'Материнские платы', 'Материнская плата');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (9, 2, 'Видеокарты', 'Видеокарта');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (7, 2, 'Процессор', 'Процессоры');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (8, 2, 'Материнская плата', 'Материнские платы');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (9, 2, 'Видеокарта', 'Видеокарты');
 INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (10, 2, 'ТВ, фото- и видео', 'ТВ, фото- и видео');
 INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (11, 2, 'ТВ-техника', 'ТВ-техника');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (12, 2, 'ЖК-телевизоры', 'ЖК-телевизор');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (12, 2, 'ЖК-телевизор', 'ЖК-телевизоры');
 INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (13, 2, 'Фото и видео', 'Фото и видео');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (14, 2, 'Фотоаппараты', 'Фотоаппарат');
-INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (15, 2, 'Видеокамеры', 'Видеокамера');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (14, 2, 'Фотоаппарат', 'Фотоаппараты');
+INSERT INTO `uwc2012`.`CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (15, 2, 'Видеокамер', 'Видеокамеры');
 
 COMMIT;
 

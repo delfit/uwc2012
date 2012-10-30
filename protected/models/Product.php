@@ -73,8 +73,9 @@ class Product extends CActiveRecord
 		return array(
 			'category' => array( self::BELONGS_TO, 'Category', 'CategoryID' ),
 			'brand' => array( self::BELONGS_TO, 'Brand', 'BrandID' ),
+			//'features' => array( self::MANY_MANY, 'Feature', 'ProductHasFeatures(ProductID,FeatureID)' ),
 			'productHasFeatures' => array( self::HAS_MANY, 'ProductHasFeatures', 'ProductID' ),
-			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID' ),
+			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index DESC' ),
 			'productTranslations' => array( self::HAS_MANY, 'ProductTranslation', 'ProductID' ),
 		);
 	}
@@ -95,7 +96,7 @@ class Product extends CActiveRecord
 
 
 	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
+	 * Retrieves a list of models based on the current search/filter coFeaturenditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
 	public function search() {
@@ -123,21 +124,24 @@ class Product extends CActiveRecord
 	}
 	
 	
-	public function getList( $CategoryID, $filters ) {
+	public function getList( $CategoryID ) {
 		$criteria = new CDbCriteria( array(
 			'condition' => 'CategoryID = :categoryID',
 			'params' => array(
 				':categoryID' => $CategoryID
-			)
+			),
+			'with' => array(
+				'productHasFeatures'
+			),
 		) );
 		
-		if( isset( $filters[ 'page' ] ) && !empty( $filters[ 'page' ] ) && isset( $filters[ 'limit' ] ) && !empty( $filters[ 'limit' ] ) ) {
-			$criteria->offset = ( $filters[ 'page' ] - 1 ) * $filters[ 'limit' ];
-			$criteria->limit = $filters[ 'limit' ];
-		}
-		
-		$products = $this->findAll( $criteria );
-		
+		$products = new CActiveDataProvider( $this, array( 
+			'criteria' => $criteria,
+			'pagination' => array(
+				'pageSize' => Yii::app()->params[ 'default' ][ 'pageSize' ],
+			),
+		));
+	
 		return $products;
 	}
 	

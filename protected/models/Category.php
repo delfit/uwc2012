@@ -127,34 +127,40 @@ class Category extends CActiveRecord
 	 * 
 	 * @return array
 	 */
-	public function getList( $languageID, $categories = null, $level = 1 ) {
-		// не получать категории находящиеся глубже максимальной вложености
-		if( $level > self::CATEGORY_MAX_LEVEL ) {
-			return;
-		}
-		
+	public function getList() {		
 		$categoriesAttr = array();
-		if( is_null( $categories ) ) {
-			$categories = $this->findAll( 
-				array(
-					'condition' => '
-						t.ParentCategoryID IS NULL
-					',
-//					'order' => array(
-//						''
-//					)
-				)
-			);
-		}
-	
+		
 		$currentLanguageCode = Language::model()->getCurrentLanguageCode();
+		
+		$categories = $this->findAll( 
+			array(
+				'condition' => '
+					t.ParentCategoryID IS NULL
+				'
+			)
+		);
+	
 		foreach( $categories as $category ) {
+			$items = array();
+			foreach( $category->subCategories as $subCategory ) {
+				$items[] = array(
+					'label' => $subCategory->PluralName,
+				);
+			
+				foreach( $subCategory->subCategories as $lastLevelCategory ) {
+					$items[] = array(
+						'label' => $lastLevelCategory->PluralName,
+						'url' => '/' . $currentLanguageCode . '/products/?cid=' . $lastLevelCategory->getPrimaryKey()
+					);
+				}
+								
+				$items[] = '---';
+			}
+			
 			$categoriesAttr[] = array(
 				'label' => $category->PluralName,
-				'url' => ( $level == self::CATEGORY_MAX_LEVEL ) ? $currentLanguageCode . '/products?cid/' . $this->getPrimaryKey() : '#'
+				'items' => $items
 			);
-			$level += 1;
-			$categoriesAttr[ 'items' ] = $this->getList( $languageID, $category->subCategories, $level );
 		}
 		
 		
