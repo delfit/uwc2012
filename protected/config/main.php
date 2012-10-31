@@ -14,7 +14,7 @@ return array(
 	'preload' => array( 
 		'log',
 		
-		php_sapi_name() !== 'cli' ?'bootstrap': '',
+		php_sapi_name() !== 'cli' ? 'bootstrap' : '',
 	),
 	
 	// autoloading model and component classes
