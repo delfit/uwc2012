@@ -38,6 +38,7 @@ class Brand extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('Name', 'unique'),
 			array('Name', 'required'),
 			array('Name', 'length', 'max'=>100),
 			// The following rule is used by search().

@@ -28,16 +28,8 @@ class BrandController extends Controller
 	 */
 	public function accessRules() {
 		return array(
-			array( 'allow', // allow all users to perform 'index' and 'view' actions
-				'actions' => array( 'index' ),
-				'users' => array( '*' ),
-			),
-			array( 'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array( 'create', 'update' ),
-				'users' => array( '@' ),
-			),
 			array( 'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array( 'list', 'delete' ),
+				'actions' => array( 'list', 'create', 'update', 'delete' ),
 				'users' => array( 'admin' ),
 			),
 			array( 'deny', // deny all users
@@ -55,11 +47,13 @@ class BrandController extends Controller
 		
 		if( isset( $_POST[ 'Brand' ] ) ) {
 			$model->attributes = $_POST[ 'Brand' ];
-			if( $model->save() ) {
-				
+			if( !$model->save() ) {
+				Yii::app()->user->setFlash( 'error', $model->getError( 'Name' ) );
+				$this->redirect( array( 'brand/list' ) );
 			}
 		}
 		
+		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand "' . $model->Name . '" created' ) );
 		$this->redirect( array( 'brand/list' ) );
 	}
 
@@ -77,7 +71,7 @@ class BrandController extends Controller
 		if( !empty( $id ) && !empty( $name ) && !empty( $value ) ) {
 			$model->{$name} = $value;
 			if( ! $model->save() ) {
-				echo $model->getErrors();
+				echo $model->getError( $name );
 			}
 		}
 	}
@@ -102,6 +96,11 @@ class BrandController extends Controller
 		if( isset( $_GET[ 'Brand' ] ) )
 			$model->attributes = $_GET[ 'Brand' ];
 
+		$this->pageTitle = Yii::t( 'brand', 'Brands' );
+		$this->breadcrumbs = array(
+			Yii::t( 'brand', 'Brands' )
+		);
+		
 		$this->render( 'admin', array(
 			'model' => $model,
 		) );

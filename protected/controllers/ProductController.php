@@ -64,27 +64,7 @@ class ProductController extends Controller
 			'searchQuery' => $query
 		));
 	}
-        
-        public function actionSearch() {
-   
-           $query = '';
-           if( !isset( $_GET[ 'q' ] ) || empty( $_GET[ 'q' ] ) ) {
-               return;
-           }
-           
-           $query = $_GET[ 'q' ];
-           
-           $cid = null;
-           if( isset( $_GET[ 'cid' ] ) && !empty( $_GET[ 'cid' ] ) ) {
-                $cid = (integer) $_GET[ 'cid' ];
-           }
-                   
-           $products = Product::model()->searchList( $query, $cid );
-           
-           $this->render( 'list', array(
-                'products' => $products,
-           ));
-        }	
+     
 	
 	public function actionView() {
 		echo "actionProductView";

@@ -79,9 +79,9 @@ return array(
 			'rules' => array(
 				'brands/<tag:.*?>' => 'brand/list',
 				// REST categories
-				array( 'brand/list', 'pattern' => '<lc:\w+>/brands', 'verb' => 'GET' ),
-				array( 'brand/view', 'pattern' => '<lc:\w+>/brand/<id:\d+>', 'verb' => 'GET' ),
-				array( 'brand/update', 'pattern' => '<lc:\w+>/brand/<id:\d+>', 'verb' => 'PUT' ),
+				array( 'brand/list', 'pattern' => 'brands', 'verb' => 'GET' ),
+				array( 'brand/view', 'pattern' => 'brand/<id:\d+>', 'verb' => 'GET' ),
+				array( 'brand/update', 'pattern' => 'brand/<id:\d+>', 'verb' => 'PUT' ),
 				array( 'brand/delete', 'pattern' => 'brand/<id:\d+>', 'verb' => 'DELETE' ),
 				array( 'brand/create', 'pattern' => 'brand', 'verb' => 'POST' ),
 				

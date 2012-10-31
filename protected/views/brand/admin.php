@@ -1,41 +1,41 @@
+<h2><?php echo $this->pageTitle; ?></h2>
+
 <?php
-/* @var $this BrandController */
-/* @var $model Brand */
-
-$this->breadcrumbs=array(
-//	'Brands'=>array('index'),
-	'Manage',
-);
-
+$this->widget('bootstrap.widgets.TbAlert', array(
+	'block' => true,
+	'fade' => true, 
+	'closeText' => '×', 
+	'alerts' => array( 
+		'success',
+		'info',
+		'warning',
+		'error',
+		'danger'
+	),
+));
 ?>
-
-<h1>Create Brand</h1>
 
 <?php echo $this->renderPartial( '_form', array( 'model' => $model ) ); ?>
 
-<h1>Manage Brands</h1>
-
-<?php $this->widget('bootstrap.widgets.TbGridView',  array(
+<?php $this->widget( 'bootstrap.widgets.TbExtendedGridView',  array(
 	'type' => 'striped bordered',
+	'ajaxUpdate' => false,
 	'dataProvider' => $model->search(),
-//	'template' => "{items}",
-
 	'columns' => array(
 		array(
 			'class' => 'bootstrap.widgets.TbEditableColumn',
 			'name' => 'Name',
-			'sortable'=>false,
+			'sortable' => true,
 			'editable' => array(
-				'url' => $this->createUrl('brand/update'),
+				'url' => $this->createUrl( 'brand/update' ),
 				'placement' => 'right',
 				'inputclass' => 'span3'
 			)
 		),
 		array(
-			'htmlOptions' => array('nowrap'=>'nowrap'),
+			'class'=>'bootstrap.widgets.TbButtonColumn',
 			'template' => '{delete}',
-            //'class'=>'bootstrap.widgets.TbButtonColumn',
-			'class'=>'CButtonColumn'
+			'deleteButtonUrl' => 'Yii::app()->createUrl( \'brand\delete\', array( \'id\' => $data->BrandID ) )',
 		),
 	),
 )); ?>
