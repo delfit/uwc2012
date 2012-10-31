@@ -32,9 +32,9 @@
 							'class' => 'bootstrap.widgets.TbMenu',
 							'items' => $this->mainMenu,
 						),
-						'<form class="navbar-search form-search pull-right" action="">
+						'<form class="navbar-search form-search pull-right" action="' . Yii::app()->request->baseUrl . '/search' . '">
 							<div class="input-append">
-								<input type="text" class="search-query" placeholder="Поиск">
+								<input name="q" type="text" class="search-query" placeholder="Поиск">
 								<button type="submit" class="btn"><i class="icon-search"></i></button>
 							</div>
 						</form>',
