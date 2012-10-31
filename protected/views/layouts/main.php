@@ -17,7 +17,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/slimbox2.css" media="screen" />
 		
-		
+		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/topScroller.js', CClientScript::POS_END ) ?>
 		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/slimbox2.js', CClientScript::POS_END ) ?>
 		
 
@@ -62,6 +62,8 @@
 			
 
 			<div class="clear"></div>
+			
+			<a href="#" onClick="scroll(0,0); return false" class ="top-link btn"><i class="icon-arrow-up"></i><?php echo Yii::t( 'application', 'Back to top' );?></a>
 			
 			<div id="footer">
 				&copy; Delfit <?php echo date( 'Y' ); ?><br/>

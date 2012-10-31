@@ -76,7 +76,7 @@ class Product extends CActiveRecord
 			'brand' => array( self::BELONGS_TO, 'Brand', 'BrandID' ),
 			//'features' => array( self::MANY_MANY, 'Feature', 'ProductHasFeatures(ProductID,FeatureID)' ),
 			'productHasFeatures' => array( self::HAS_MANY, 'ProductHasFeatures', 'ProductID' ),
-			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index DESC' ),
+			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index DESC', 'limit' => Yii::app()->params[ 'default' ][ 'countImagesPerProduct' ] ),
 			'productTranslations' => array( self::HAS_MANY, 'ProductTranslation', 'ProductID' ),
 		);
 	}

@@ -82,7 +82,7 @@ class ProductController extends Controller
 		$this->pageTitle = $product->category->SingularName . ' ' . $product->brand->Name . ' ' .$product->Name;
 		$this->breadcrumbs = array(
 			$product->category->parentCategory->PluralName,
-			$product->category->PluralName,
+			$product->category->PluralName => Yii::app()->createUrl( 'product/list', array( 'cid' => $product->category->CategoryID, 'lc' => Yii::app()->language ) ),
 			$product->brand->Name,
 			$product->Name
 		);
@@ -92,7 +92,6 @@ class ProductController extends Controller
 			'product' => $product
 		));
 	}
-	
 	
 	
 	public function actionCreate() {
