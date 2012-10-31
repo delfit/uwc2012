@@ -12,8 +12,9 @@ return array(
 	
 	// preloading 'log' component
 	'preload' => array( 
-		'bootstrap', 
-		'log'
+		'log',
+		
+		php_sapi_name() !== 'cli' ?'bootstrap': '',
 	),
 	
 	// autoloading model and component classes

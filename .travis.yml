@@ -6,6 +6,7 @@ php:
 before_script:
   - ./protected/tests/travis/apache-setup.sh
   - ./protected/tests/travis/mysql-setup.sh
+  - ./protected/tests/travis/app-setup.sh
   - ./protected/tests/travis/phpunit-selenium-setup.sh
   - ./protected/tests/travis/selenium-setup.sh
   - cd protected/tests
