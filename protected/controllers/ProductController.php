@@ -17,9 +17,7 @@ class ProductController extends Controller
 		}
 		
 		$products = Product::model()->getList( $CategoryID );
-			
-	
-		
+
 		$this->render( 'list', array(
 			'products' => $products,
 		));
