@@ -19,6 +19,7 @@
  */
 class Product extends CActiveRecord
 {
+
 	public $Description = '';
 
 	/**
@@ -29,7 +30,7 @@ class Product extends CActiveRecord
 	public static function model( $className = __CLASS__ ) {
             return parent::model( $className );
 	}
-
+	
 
 	/**
 	 * @return string the associated database table name
@@ -37,7 +38,7 @@ class Product extends CActiveRecord
 	public function tableName() {
             return 'Product';
 	}
-
+	
 
 	/**
 	 * @return таблица базы данных с переводами атрибутов
@@ -45,7 +46,7 @@ class Product extends CActiveRecord
 	public function translationTableName() {
 		return 'ProductTranslation';
 	}
-
+	
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -62,7 +63,7 @@ class Product extends CActiveRecord
                 array( 'ProductID, CategoryID, BrandID, Name, IsDraft', 'safe', 'on' => 'search' ),
             );
 	}
-
+	
 
 	/**
 	 * @return array relational rules.
@@ -79,7 +80,7 @@ class Product extends CActiveRecord
                 'productTranslations' => array( self::HAS_MANY, 'ProductTranslation', 'ProductID' ),
             );
 	}
-
+	
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -93,7 +94,7 @@ class Product extends CActiveRecord
                 'IsDraft' => 'Is Draft',
             );
 	}
-
+	
 
 	/**
 	 * Retrieves a list of models based on the current search/filter coFeaturenditions.
@@ -111,16 +112,16 @@ class Product extends CActiveRecord
             $criteria->compare( 'Name', $this->Name, true );
             $criteria->compare( 'IsDraft', $this->IsDraft );
 
-            return new CActiveDataProvider( $this, array(
-                'criteria' => $criteria,
-            ) );
+		return new CActiveDataProvider( $this, array(
+			'criteria' => $criteria,
+		));
 	}
-
+	
 
 	public function behaviors() {
-            return array_merge( parent::behaviors(), array(
-                 'application.behaviours.TranslationBehaviour'
-            ) );
+		return array_merge( parent::behaviors(), array(
+			'application.behaviours.TranslationBehaviour'
+		));
 	}
         
         
@@ -204,35 +205,119 @@ class Product extends CActiveRecord
             return $products;
         }
 	
-        
-        /**
-         * Получить список товаров из категории
-         * 
-         * @param integer $CategoryID  идентификатор категории
-         * 
-         * @return CActiveDataProvider
-         */
-	public function getList( $CategoryID ) {
-            $criteria = new CDbCriteria( array(
-                'condition' => 'CategoryID = :categoryID',
-                'params' => array(
-                        ':categoryID' => $CategoryID
-                ),
-                'with' => array(
-                        'productHasFeatures'
-                ),
-            ) );
 
-            $products = new CActiveDataProvider( $this, array( 
-                'criteria' => $criteria,
-                'pagination' => array(
-                    'pageSize' => Yii::app()->params[ 'default' ][ 'pageSize' ],
-                ),
-            ));
+	/**
+	 * Получить список товаро соответствующих критерию
+	 * 
+	 * @param string $query
+	 * @param integer $categoryID
+	 * 
+	 * @return CActiveDataProvider
+	 */
+	public function searchList( $query, $categoryID = null ) {
+		// убрать лишние символы
+		// TODO убрать пробелы встречающиеся больше одного раза
+		$query = str_replace( ' ', '%', $query );
 
-            return $products;
+
+		// формирование условия получения данных по которым производится поиск
+		$criteria = new CDbCriteria( array(
+			'condition' => '
+				CONCAT_WS( \' \',
+					(
+						SELECT 
+							CategoryTranslation.PluralName
+						FROM 
+							CategoryTranslation
+						WHERE
+							CategoryTranslation.CategoryID = t.CategoryID AND
+							CategoryTranslation.LanguageID = :currentLanguageID
+						LIMIT 1
+					),  
+					brand.Name,
+					t.Name,
+					(
+						SELECT 
+							ProductTranslation.Description
+						FROM 
+							ProductTranslation
+						WHERE
+							ProductTranslation.ProductID = t.ProductID AND
+							ProductTranslation.LanguageID = :currentLanguageID
+						LIMIT 1
+					),
+					(
+						SELECT 
+								GROUP_CONCAT( Value separator \' \' )
+						FROM 
+								ProductHasFeatures 
+						WHERE 
+								ProductHasFeatures.ProductID = t.ProductID
+					)
+				) like :query
+			',
+			'params' => array(
+				':query' => '%' . $query . '%',
+				':currentLanguageID' => 2
+			),
+			'with' => array(
+				'brand',
+				'category',
+			)
+		));
+		
+
+		if( !empty( $categoryID ) ) {
+			if( !empty( $criteria->condition ) ) {
+				$criteria->condition .= ' AND ';
+			}
+
+			$criteria->condition .= ' t.CategoryID = :categoryID ';
+			$criteria->params[ ':categoryID' ] = $categoryID;
+		}
+
+		$products = new CActiveDataProvider( $this, array(
+			'criteria' => $criteria,
+			'pagination' => array(
+				'pageSize' => Yii::app()->params[ 'default' ][ 'pageSize' ],
+			),
+		));
+		
+
+		return $products;
 	}
 	
+
+	/**
+	 * Получить список товаров из категории
+	 * 
+	 * @param integer $CategoryID  идентификатор категории
+	 * 
+	 * @return CActiveDataProvider
+	 */
+	public function getList( $CategoryID ) {
+		$criteria = new CDbCriteria( array(
+			'condition' => 'CategoryID = :categoryID',
+			'params' => array(
+				':categoryID' => $CategoryID
+			),
+			'with' => array(
+				'productHasFeatures'
+			),
+		));
+
+		$products = new CActiveDataProvider( $this, array(
+			'criteria' => $criteria,
+			'pagination' => array(
+				'pageSize' => Yii::app()->params[ 'default' ][ 'pageSize' ],
+			),
+		));
+		
+
+		return $products;
+	}
+	
+
 	public function getView( $ProductID ) {
 		
 	}

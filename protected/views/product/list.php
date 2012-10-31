@@ -1,19 +1,14 @@
-<?php
-//$this->pageTitle=Yii::app()->name . ' - Products';
-//$this->breadcrumbs=array(
-//	'Products', 'Notebook'
-//);
 
-?>
+<h2><?php echo $this->pageTitle; ?></h2>
 
 <?php
-$this->widget( 'zii.widgets.CListView', array(
+$this->widget( 'bootstrap.widgets.TbListView', array(
 	'dataProvider' => $products,
 	'itemView' => '_product', 
 	'enablePagination' => true, 
-	'ajaxUpdate'=>false,
+	'ajaxUpdate' => false,
 	'pager' => array(
-		'class' => 'CLinkPager',
+		'class' => 'bootstrap.widgets.TbPager',
 		'pageSize' => 1
 	)
 ));

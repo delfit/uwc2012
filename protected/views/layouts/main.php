@@ -1,9 +1,9 @@
 <?php /* @var $this Controller */ ?>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="<?php echo Yii::app()->language; ?>">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="language" content="ru" />
+		<meta name="language" content="<?php echo Yii::app()->language; ?>" />
 
 		<!-- blueprint CSS framework -->
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
@@ -34,7 +34,7 @@
 						),
 						'<form class="navbar-search form-search pull-right" action="' . Yii::app()->request->baseUrl . '/search' . '">
 							<div class="input-append">
-								<input name="q" type="text" class="search-query" placeholder="Поиск">
+								<input name="q" type="text" class="search-query" placeholder="' . Yii::t( 'application', 'Searсh' ) . '" />
 								<button type="submit" class="btn"><i class="icon-search"></i></button>
 							</div>
 						</form>',

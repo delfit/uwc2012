@@ -130,8 +130,6 @@ class Category extends CActiveRecord
 	public function getList() {		
 		$categoriesAttr = array();
 		
-		$currentLanguageCode = Language::model()->getCurrentLanguageCode();
-		
 		$categories = $this->findAll( 
 			array(
 				'condition' => '
@@ -150,12 +148,16 @@ class Category extends CActiveRecord
 				foreach( $subCategory->subCategories as $lastLevelCategory ) {
 					$items[] = array(
 						'label' => $lastLevelCategory->PluralName,
-						'url' => '/' . $currentLanguageCode . '/products/?cid=' . $lastLevelCategory->getPrimaryKey()
+						'url' => Yii::app()->createUrl( 'product/list', array( 'cid' => $lastLevelCategory->getPrimaryKey(), 'lc' => Yii::app()->language ) )
 					);
 				}
 								
 				$items[] = '---';
 			}
+			
+			
+			// убрать последний разделитель
+			unset( $items[ count( $items ) - 1 ] );
 			
 			$categoriesAttr[] = array(
 				'label' => $category->PluralName,
