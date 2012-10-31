@@ -15,12 +15,9 @@ class TranslationBehaviour extends CActiveRecordBehavior {
 			$translation = $model->getTranslation( $language->LanguageID );
 		}
 		
-		// найти перевод на языке по умолчанию, если нету перевода на текущем языке
+		// найти любой доступный перевод, если нет перевода на текущем языке
 		if( empty( $translation ) ) {
-			$defaultLanguage = Language::model()->getDefaultLanguage();
-			if( !empty( $defaultLanguage ) ) {
-				$translation = $model->getTranslation( $defaultLanguage->LanguageID );
-			}
+			$translation = $model->getTranslation();
 		}
 
 		// заполнить интернационализированные свойства
@@ -38,20 +35,31 @@ class TranslationBehaviour extends CActiveRecordBehavior {
 	/**
 	 * Получить перевод на указанном языке
 	 * 
-	 * @param integer $languageID  идентификатор языка
+	 * @param integer $languageID (option) идентификатор языка, если не указан -- определяется первый доступный перевод
 	 * 
 	 * @return object
 	 */
-	public function getTranslation( $languageID ) {
+	public function getTranslation( $languageID = null ) {
 		$model = $this->getOwner();
 		$translationTable = $model->translationTableName();
-		$translation = $translationTable::model()->find(
-			$model->tableSchema->primaryKey . ' = :tablePk AND LanguageID = :languageID',
-			array(
+		
+		$criteria = new CDbCriteria( array(
+			'condition' => $model->tableSchema->primaryKey . ' = :tablePk',
+			'params' => array(
 				':tablePk' => $this->getOwner()->getPrimaryKey(),
-				':languageID' => $languageID
 			)
-		);
+		) );
+		
+		if( $languageID ) {
+			if( !empty( $criteria->condition ) ) {
+				$criteria->condition .= ' AND ';
+			}
+			
+			$criteria->condition .= ' LanguageID = :languageID ';
+			$criteria->params[ 'languageID' ] = $languageID;
+		}
+		
+		$translation = $translationTable::model()->find( $criteria );
 		
 		
 		return $translation;

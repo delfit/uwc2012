@@ -298,7 +298,20 @@ class TbActiveForm extends CActiveForm
 	{
 		return $this->inputRow(TbInput::TYPE_DATERANGEPICKER, $model, $attribute, null, $htmlOptions);
 	}
-
+	
+	/**
+     * Renders a timepicker field row.
+     * @param CModel $model the data model
+     * @param string $attribute the attribute
+     * @param array $htmlOptions additional HTML attributes
+     * @return string the generated row
+     * @since 0.10.0
+     */
+    public function timepickerRow($model, $attribute, $htmlOptions = array())
+    {
+        return $this->inputRow(TbInput::TYPE_TIMEPICKER, $model, $attribute, null, $htmlOptions);
+    }
+	
 	/**
 	 * Renders a checkbox list for a model attribute.
 	 * This method is a wrapper of {@link CHtml::activeCheckBoxList}.

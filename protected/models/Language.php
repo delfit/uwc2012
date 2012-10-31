@@ -109,40 +109,25 @@ class Language extends CActiveRecord
 	}
 	
 	public function getCurrentLanguage() {
-		$languageCode = $this->getCurrentLanguageCode();
-		
-		return $this->getByCode( $languageCode );
-	}
-	
-	
-	public function getDefaultLanguage() {
-		$languageCode = Yii::app()->params[ 'default' ][ 'languageCode' ];
-		return $this->getByCode( $languageCode );
+		return $this->findByCode( Yii::app()->language );
 	}
 	
 	
 	/**
-	 * Определить язык по его коду
+	 * Получить модель языка по его коду
 	 * 
-	 * @param string $languageCode  код языка ( en, ua, ru )
+	 * @param string $languageCode  код языка ( en, uk, ru )
 	 * 
 	 * @return object
 	 */
-	public function getByCode( $languageCode ) {
-		$language = $this->find( 
+	public function findByCode( $languageCode ) {
+		$languageModel = $this->find( 
 			'Code = :languageCode', 
 			array( 
 				':languageCode' => $languageCode 
 			)
 		);
 		
-		return $language;
-	}
-	
-	public function getCurrentLanguageCode() {
-		$appLanguage = Yii::app()->language;
-		$languageCode = strstr( $appLanguage, '_', true);
-		
-		return $languageCode;
+		return $languageModel;
 	}
 }
