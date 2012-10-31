@@ -8,10 +8,13 @@ return array(
 	
 	'name' => 'UWC2012',
 	
+	'language' => 'ru', 
+	
 	// preloading 'log' component
 	'preload' => array( 
-		'bootstrap', 
-		'log'
+		'log',
+		
+		php_sapi_name() !== 'cli' ? 'bootstrap' : '',
 	),
 	
 	// autoloading model and component classes
@@ -136,7 +139,6 @@ return array(
 		// this is used in contact page
 		'adminEmail' => 'webmaster@example.com',
 		'default' => array(
-			'languageCode' => 'ru',
 			'pageSize' => 1
 		),
 		

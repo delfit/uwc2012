@@ -6,8 +6,9 @@
 	else {
 		$mainProductImageSrc = 'http://placehold.it/300x200';
 	}
-	$currentLanguageCode = Language::model()->getCurrentLanguageCode();
-	$productURL = Yii::app()->request->baseUrl . '/' . $currentLanguageCode . '/product/' . $product->ProductID;
+	
+	
+	$productURL = Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) );
 ?>
 <div class="span12">
 	<?php echo CHtml::tag( 'h3', array(), $fullProductName ); ?>

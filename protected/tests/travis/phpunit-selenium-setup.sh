@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sudo apt-get install pear
+sudo apt-get install php-pear
 sudo pear channel-discover pear.symfony.com
 sudo pear channel-discover pear.phpunit.de
 sudo pear install pear.symfony.com/Yaml
