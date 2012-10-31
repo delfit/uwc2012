@@ -17,9 +17,9 @@
 		
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/slimbox2.css" media="screen" />
 		
+		
 		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/topScroller.js', CClientScript::POS_END ) ?>
 		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/slimbox2.js', CClientScript::POS_END ) ?>
-		
 
 		<title><?php echo CHtml::encode( $this->pageTitle ); ?></title>
 	</head>
@@ -28,6 +28,7 @@
 		<div class="container" id="page">
 			<div id="header">
 				<?php
+				// главное меню
 				$this->widget( 'bootstrap.widgets.TbNavbar', array(
 					'brand' => CHtml::encode( Yii::app()->name ), 
 					'brandUrl' => Yii::app()->homeUrl, 
@@ -50,11 +51,25 @@
 		
 				<?php if( isset( $this->breadcrumbs ) ): ?>
 					<?php
+					// хлебные крошки
 					$this->widget( 'bootstrap.widgets.TbBreadcrumbs', array(
 						'links' => $this->breadcrumbs,
 					) );
 					?><!-- breadcrumbs -->
 				<?php endif ?>
+				
+				<?php
+				// кнопка "Наверх"
+				$this->widget( 'bootstrap.widgets.TbButton',array(
+					'label' => Yii::t( 'application', 'Back to top' ),
+					'icon' => 'arrow-up white',
+					'type' => 'inverse',
+					'htmlOptions' => array(
+						'class' => 'top-link',
+						'onClick' => 'scroll(0,0); return false;'
+					)
+				));
+				?>
 			</div>
 			
 
@@ -63,7 +78,6 @@
 
 			<div class="clear"></div>
 			
-			<a href="#" onClick="scroll(0,0); return false" class ="top-link btn"><i class="icon-arrow-up"></i><?php echo Yii::t( 'application', 'Back to top' );?></a>
 			
 			<div id="footer">
 				&copy; Delfit <?php echo date( 'Y' ); ?><br/>
