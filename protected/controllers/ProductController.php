@@ -46,8 +46,24 @@ class ProductController extends Controller
            ));
         }	
 	
+	
 	public function actionView() {
-		echo "actionProductView";
+		$id = null;
+		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
+			 $id = (integer) $_GET[ 'id' ];
+		}
+		
+		// TODO exception
+		
+		$product = Product::model()->findByPk( $id );
+		
+		if( empty( $product ) ) {
+			throw new CHttpException( 404, Yii::t( 'application', 'Product not found' ) );
+		}
+		
+		$this->render( 'view', array(
+			'product' => $product
+		));
 	}
 	
 	public function actionCreate() {

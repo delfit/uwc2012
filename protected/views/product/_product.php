@@ -4,7 +4,7 @@
 		$mainProductImageSrc = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $data->productHasImages[0]->FileName;
 	}
 	else {
-		$mainProductImageSrc = 'http://placehold.it/300x200';
+		$mainProductImageSrc = 'http://placehold.it/300x200&text=Image+is+Not+Avaliable';
 	}
 		
 	$currentLanguageCode = Language::model()->getCurrentLanguageCode();
@@ -18,7 +18,7 @@
 		<a href="#" target="_blank" >Добавить к сравнению</a>
 	</div>
 	<div class="span8">
-		<?php echo CHtml::tag( 'h4', array(), $fullProductName ); ?>
+		<h4><a href="<?php echo $productURL;?>" target="_self"><?php echo $fullProductName; ?></a></h4>
 		<?php
 
 		$features = '';
@@ -27,5 +27,7 @@
 		}
 		echo $features;
 		?>
+		<p>Код товара: 		<?php echo $data->ProductID;?></p>
+		
 	</div>
 </div>
