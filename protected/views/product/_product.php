@@ -4,7 +4,7 @@
 		$mainProductImageSrc = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $data->productHasImages[0]->FileName;
 	}
 	else {
-		$mainProductImageSrc = 'http://placehold.it/300x200';
+		$mainProductImageSrc = 'http://placehold.it/300x200&text=Image+is+Not+Avaliable';
 	}
 	
 	
@@ -26,5 +26,7 @@
 		}
 		echo $features;
 		?>
+		<p>Код товара: 		<?php echo $data->ProductID;?></p>
+		
 	</div>
 </div>

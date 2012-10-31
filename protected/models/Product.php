@@ -69,16 +69,16 @@ class Product extends CActiveRecord
 	 * @return array relational rules.
 	 */
 	public function relations() {
-            // NOTE: you may need to adjust the relation name and the related
-            // class name for the relations automatically generated below.
-            return array(
-                'category' => array( self::BELONGS_TO, 'Category', 'CategoryID' ),
-                'brand' => array( self::BELONGS_TO, 'Brand', 'BrandID' ),
-                //'features' => array( self::MANY_MANY, 'Feature', 'ProductHasFeatures(ProductID,FeatureID)' ),
-                'productHasFeatures' => array( self::HAS_MANY, 'ProductHasFeatures', 'ProductID' ),
-                'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index DESC' ),
-                'productTranslations' => array( self::HAS_MANY, 'ProductTranslation', 'ProductID' ),
-            );
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+			'category' => array( self::BELONGS_TO, 'Category', 'CategoryID' ),
+			'brand' => array( self::BELONGS_TO, 'Brand', 'BrandID' ),
+			//'features' => array( self::MANY_MANY, 'Feature', 'ProductHasFeatures(ProductID,FeatureID)' ),
+			'productHasFeatures' => array( self::HAS_MANY, 'ProductHasFeatures', 'ProductID' ),
+			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index DESC', 'limit' => Yii::app()->params[ 'default' ][ 'countImagesPerProduct' ] ),
+			'productTranslations' => array( self::HAS_MANY, 'ProductTranslation', 'ProductID' ),
+		);
 	}
 	
 

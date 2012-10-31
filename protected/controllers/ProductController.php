@@ -66,8 +66,31 @@ class ProductController extends Controller
 	}
      
 	
+	
 	public function actionView() {
-		echo "actionProductView";
+		$id = null;
+		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
+			 $id = (integer) $_GET[ 'id' ];
+		}
+		
+		$product = Product::model()->findByPk( $id );
+		if( empty( $product ) ) {
+			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
+		}
+		
+		
+		$this->pageTitle = $product->category->SingularName . ' ' . $product->brand->Name . ' ' .$product->Name;
+		$this->breadcrumbs = array(
+			$product->category->parentCategory->PluralName,
+			$product->category->PluralName => Yii::app()->createUrl( 'product/list', array( 'cid' => $product->category->CategoryID, 'lc' => Yii::app()->language ) ),
+			$product->brand->Name,
+			$product->Name
+		);
+		
+		
+		$this->render( 'view', array(
+			'product' => $product
+		));
 	}
 	
 	

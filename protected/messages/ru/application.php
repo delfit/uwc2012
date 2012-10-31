@@ -1,6 +1,6 @@
 <?php
 return array(
-	'Name' => 'Название',
+	'Back to top' => 'Наверх',
 	'Searсh' => 'Поиск',
 	'Searсh results for' => 'Результаты поиска',
 );

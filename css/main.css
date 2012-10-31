@@ -21,8 +21,20 @@ body
 	border-top: 1px solid #C9E0ED;
 }
 
+.description-text 
+{
+	text-align: justify;
+}
 
-
+.top-link
+{
+	cursor: pointer;
+	display: none;
+	left: 1%;
+	position: fixed;
+	text-decoration: none;
+	top: 10%;
+}
 
 /* Overriding Bootstrap styles */
 body .navbar .brand, 
