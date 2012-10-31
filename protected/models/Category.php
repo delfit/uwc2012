@@ -142,11 +142,13 @@ class Category extends CActiveRecord
 			$items = array();
 			foreach( $category->subCategories as $subCategory ) {
 				$items[] = array(
+					'id' => $subCategory->CategoryID,
 					'label' => $subCategory->PluralName,
 				);
 			
 				foreach( $subCategory->subCategories as $lastLevelCategory ) {
 					$items[] = array(
+						'id' => $lastLevelCategory->CategoryID,
 						'label' => $lastLevelCategory->PluralName,
 						'url' => Yii::app()->createUrl( 'product/list', array( 'cid' => $lastLevelCategory->getPrimaryKey(), 'lc' => Yii::app()->language ) )
 					);
@@ -160,6 +162,7 @@ class Category extends CActiveRecord
 			unset( $items[ count( $items ) - 1 ] );
 			
 			$categoriesAttr[] = array(
+				'id' => $category->CategoryID,
 				'label' => $category->PluralName,
 				'items' => $items
 			);

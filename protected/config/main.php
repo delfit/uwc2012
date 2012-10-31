@@ -92,7 +92,7 @@ return array(
 				array( 'category/view', 'pattern' => '<lc:\w+>/category/<id:\d+>', 'verb' => 'GET' ),
 				array( 'category/update', 'pattern' => '<lc:\w+>/category/<id:\d+>', 'verb' => 'PUT' ),
                             
-                                array( 'category/list', 'pattern' => 'categories', 'verb' => 'GET' ),
+                array( 'category/list', 'pattern' => 'categories', 'verb' => 'GET' ),
 				array( 'category/view', 'pattern' => 'category/<id:\d+>', 'verb' => 'GET' ),
 				array( 'category/update', 'pattern' => 'category/<id:\d+>', 'verb' => 'PUT' ),
                             
@@ -102,7 +102,7 @@ return array(
 				
 				'products/<tag:.*?>' => 'product/list',
 				// REST products
-                                array( 'product/search', 'pattern' => '<lc:\w+>/search', 'verb' => 'GET' ),
+                array( 'product/search', 'pattern' => '<lc:\w+>/search', 'verb' => 'GET' ),
 				array( 'product/list', 'pattern' => '<lc:\w+>/products', 'verb' => 'GET' ),
 				array( 'product/view', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'GET' ),
                             
