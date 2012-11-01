@@ -35,6 +35,20 @@ $this->pageTitle = Yii::app()->name;
 	</div>
 </div>
 
+<?php
+$this->widget('bootstrap.widgets.TbAlert', array(
+	'block' => true,
+	'fade' => true, 
+	'closeText' => '×', 
+	'alerts' => array( 
+		'success',
+		'info',
+		'warning',
+		'error',
+		'danger'
+	),
+));
+?>
 
 <div class="row">
 	<?php
