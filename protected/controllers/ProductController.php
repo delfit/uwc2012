@@ -100,7 +100,60 @@ class ProductController extends Controller
 	
 	
 	public function actionUpdate() {
-		echo "actionProductUpdate";
+		$id = null;
+		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
+			 $id = (integer) $_GET[ 'id' ];
+		}
+		
+		$product = Product::model()->findByPk( $id );
+		if( empty( $product ) ) {
+			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
+		}
+		
+		
+		$categories = Category::model()->getList();
+		
+		$productFeaturesDataProvider = new CActiveDataProvider( 'ProductHasFeatures', array(
+			'criteria' => array(
+				'condition' => 'ProductID = :productID',
+				'params' => array(
+					':productID' => $product->getPrimaryKey()
+				),
+				'with' => array(
+					'feature'
+				)
+			),
+			'pagination' => false
+		));
+		
+		$productImagesDataProvider = new CActiveDataProvider( 'ProductHasImages', array(
+			'criteria' => array(
+				'condition' => 'ProductID = :productID',
+				'params' => array(
+					':productID' => $product->getPrimaryKey()
+				),
+			),
+			'pagination' => false
+		));
+		
+		
+		$brands = Brand::model()->findAll();
+		$brandsDropDownList = array();
+		foreach( $brands as $brand) {
+			$brandsDropDownList[ $brand->BrandID ] = $brand->Name;
+		}
+		
+		
+		$this->pageTitle = $product->category->SingularName . ' ' . $product->brand->Name . ' ' .$product->Name;
+		
+		
+		$this->render( 'edit', array(
+			'product' => $product,
+			'productFeaturesDataProvider' => $productFeaturesDataProvider,
+			'productImagesDataProvider' => $productImagesDataProvider,
+			'categories' => $categories,
+			'brands' => $brandsDropDownList
+		));
 	}
 	
 	
