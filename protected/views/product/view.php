@@ -11,7 +11,20 @@
 	$productURL = Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) );
 ?>
 <div class="span12">
-	<?php echo CHtml::tag( 'h3', array(), $fullProductName ); ?>
+	<h3>
+		<?php
+		// отрисовать кнопки управления товаром
+		if( ! Yii::app()->user->isGuest ) {
+			echo DHtml::actionButtons( 
+				Yii::app()->createUrl( 'product/update', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ), 
+				Yii::app()->createUrl( 'product/delete', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) )
+			);
+		}
+		
+		echo $fullProductName;
+		?>
+	</h3>
+	
 	<div class="span4">
 		<ul class="thumbnails">
 			<?php

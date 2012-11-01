@@ -52,45 +52,6 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 
 <div class="row">
 	<?php
-	
-	/**
-	 * Отрисовывает кнопки управления категорией
-	 * 
-	 * @param CController $_this
-	 * @param integer $categoryID
-	 * @return string
-	 */
-	function drawActionButtons( $_this, $categoryID ) {
-		return $_this->widget( 'bootstrap.widgets.TbButtonGroup', array(
-			'size' => 'mini',
-			'type' => 'link', 
-			'htmlOptions' => array(
-				// TODO вынести стили отсюда
-				'style' => 'display: inline; padding-right: 10px;'
-			),
-			'buttons' => array(
-				array( 
-					'url' => Yii::app()->createUrl( 'category/update', array( 'id' => $categoryID, 'lc' => Yii::app()->language ) ), 
-					'icon' => 'pencil white', 
-					'type' => 'primary',
-					'htmlOptions' => array(
-						'title' => Yii::t( 'application', 'Edit' )
-					), 
-				),
-				array( 
-					'url' => '#', 
-					'icon' => 'trash white', 
-					'type' => 'danger',
-					'htmlOptions' => array(
-						'title' => Yii::t( 'application', 'Delete' ),
-						'submit' => Yii::app()->createUrl( 'category/delete', array( 'id' => $categoryID, 'lc' => Yii::app()->language ) ),
-						'confirm' => Yii::t( 'application', 'Are you sure?' ), 
-						'name' => 'accept'
-					), 
-				),
-			),
-		), true );
-	}
 
 	// разбить содержимое главного меню на колонки
 	$rawColumns = array();
@@ -108,7 +69,12 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 		foreach( $categories as $category ) {
 			// отрисовать корневые разделы для гостя или для админа
 			echo CHtml::openTag( 'h3' );
-			echo ( ! Yii::app()->user->isGuest ? drawActionButtons( $this, $category[ 'id' ] ) : '' );
+			if( ! Yii::app()->user->isGuest ) {
+				echo DHtml::actionButtons( 
+					Yii::app()->createUrl( 'category/update', array( 'id' => $category[ 'id' ], 'lc' => Yii::app()->language ) ), 
+					Yii::app()->createUrl( 'category/delete', array( 'id' => $category[ 'id' ], 'lc' => Yii::app()->language ) )
+				);
+			}
 			echo $category[ 'label' ];
 			echo CHtml::closeTag( 'h3' );
 			
@@ -131,7 +97,12 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 
 					// отрисовать разделы 3го уровня для гостя или для админа
 					echo CHtml::openTag( 'li' );
-					echo ( ! Yii::app()->user->isGuest ? drawActionButtons( $this, $subCategory[ 'id' ] ) : '' );
+					if( ! Yii::app()->user->isGuest ) {
+						echo DHtml::actionButtons( 
+							Yii::app()->createUrl( 'category/update', array( 'id' => $subCategory[ 'id' ], 'lc' => Yii::app()->language ) ), 
+							Yii::app()->createUrl( 'category/delete', array( 'id' => $subCategory[ 'id' ], 'lc' => Yii::app()->language ) )
+						);
+					}
 					echo CHtml::link( $subCategory[ 'label' ], $subCategory[ 'url' ] );
 					echo CHtml::closeTag( 'li' );
 				}
@@ -144,7 +115,12 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 
 					// отрисовать разделы 2го уровня для гостя или для админа
 					echo CHtml::openTag( 'h4' );
-					echo ( ! Yii::app()->user->isGuest ? drawActionButtons( $this, $subCategory[ 'id' ] ) : '' );
+					if( ! Yii::app()->user->isGuest ) {
+						echo DHtml::actionButtons( 
+							Yii::app()->createUrl( 'category/update', array( 'id' => $subCategory[ 'id' ], 'lc' => Yii::app()->language ) ), 
+							Yii::app()->createUrl( 'category/delete', array( 'id' => $subCategory[ 'id' ], 'lc' => Yii::app()->language ) )
+						);
+					}
 					echo $subCategory[ 'label' ];
 					echo CHtml::closeTag( 'h4' );
 				}

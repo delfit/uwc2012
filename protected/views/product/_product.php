@@ -19,7 +19,19 @@
 	</div>
 	
 	<div class="span8">
-		<a href="<?php echo $productURL;?>"><h4><?php echo $fullProductName; ?></h4></a>
+		<h4>
+			<?php
+			// отрисовать кнопки управления товаром
+			if( ! Yii::app()->user->isGuest ) {
+				echo DHtml::actionButtons( 
+					Yii::app()->createUrl( 'product/update', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) ), 
+					Yii::app()->createUrl( 'product/delete', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) )
+				);
+			}
+			?>
+			<a href="<?php echo $productURL;?>"><?php echo $fullProductName; ?></a>
+		</h4>
+		
 		
 		<?php
 		$features = '';
