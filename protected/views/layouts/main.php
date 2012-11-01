@@ -28,6 +28,29 @@
 		<div class="container" id="page">
 			<div id="header">
 				<?php
+				
+				if( Yii::app()->user->isGuest ) {
+					$configMenuItem[] = array(
+						'icon' => 'cog',
+						'items' => array(
+							array( 'label' => Yii::t( 'application', 'Login' ), 'url' => Yii::app()->createUrl( '/site/login' ), 'icon' => 'user' ),
+						)
+					);
+				}
+				else {
+					$configMenuItem[] = array(
+						'icon' => 'cog',
+						'items' => array(
+							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create' ), 'icon' => 'plus' ),
+							array( 'label' => Yii::t( 'product', 'Add product' ), 'url' => Yii::app()->createUrl( 'product/create' ), 'icon' => 'plus' ),
+							array( 'label' => Yii::t( 'brand', 'Brands' ), 'url' => Yii::app()->createUrl( '/brand/list' ), 'icon' => 'list' ),
+							'---',
+							array( 'label' => Yii::t( 'application', 'Exit' ), 'url' => Yii::app()->createUrl( '/site/logout' ), 'icon' => 'off' ),
+						)
+					);
+				}
+				
+				
 				// главное меню
 				$this->widget( 'bootstrap.widgets.TbNavbar', array(
 					'brand' => CHtml::encode( Yii::app()->name ), 
@@ -37,7 +60,7 @@
 					'items' => array(
 						array(
 							'class' => 'bootstrap.widgets.TbMenu',
-							'items' => $this->mainMenu,
+							'items' => array_merge( $configMenuItem ,$this->mainMenu ),
 						),
 						'<form class="navbar-search form-search pull-right" action="' . Yii::app()->request->baseUrl . '/search' . '">
 							<div class="input-append">
@@ -49,14 +72,14 @@
 				) );
 				?>
 		
-				<?php if( isset( $this->breadcrumbs ) ): ?>
-					<?php
-					// хлебные крошки
+				<?php 
+				// хлебные крошки
+				if( isset( $this->breadcrumbs ) ) {
 					$this->widget( 'bootstrap.widgets.TbBreadcrumbs', array(
 						'links' => $this->breadcrumbs,
 					) );
-					?><!-- breadcrumbs -->
-				<?php endif ?>
+				}
+				?>
 				
 				<?php
 				// кнопка "Наверх"
