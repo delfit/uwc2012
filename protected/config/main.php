@@ -81,23 +81,23 @@ return array(
 				// REST categories
 				array( 'brand/list', 'pattern' => 'brands', 'verb' => 'GET' ),
 				array( 'brand/view', 'pattern' => 'brand/<id:\d+>', 'verb' => 'GET' ),
-				array( 'brand/update', 'pattern' => 'brand/<id:\d+>', 'verb' => 'PUT' ),
-				array( 'brand/delete', 'pattern' => 'brand/<id:\d+>', 'verb' => 'DELETE' ),
-				array( 'brand/create', 'pattern' => 'brand', 'verb' => 'POST' ),
+//				array( 'brand/update', 'pattern' => 'brand/<id:\d+>', 'verb' => 'PUT' ),
+//				array( 'brand/delete', 'pattern' => 'brand/<id:\d+>', 'verb' => 'DELETE' ),
+//				array( 'brand/create', 'pattern' => 'brand', 'verb' => 'POST' ),
 				
 				
 				'categories/<tag:.*?>' => 'category/list',
 				// REST categories
 				array( 'category/list', 'pattern' => '<lc:\w+>/categories', 'verb' => 'GET' ),
 				array( 'category/view', 'pattern' => '<lc:\w+>/category/<id:\d+>', 'verb' => 'GET' ),
-				array( 'category/update', 'pattern' => '<lc:\w+>/category/<id:\d+>', 'verb' => 'PUT' ),
-                            
+				
+				//array( 'category/update', 'pattern' => '<lc:\w+>/category/<id:\d+>', 'verb' => 'PUT' ),            
                 array( 'category/list', 'pattern' => 'categories', 'verb' => 'GET' ),
 				array( 'category/view', 'pattern' => 'category/<id:\d+>', 'verb' => 'GET' ),
-				array( 'category/update', 'pattern' => 'category/<id:\d+>', 'verb' => 'PUT' ),
-                            
-				array( 'category/delete', 'pattern' => 'category/<id:\d+>', 'verb' => 'DELETE' ),
-				array( 'category/create', 'pattern' => 'category', 'verb' => 'POST' ),
+				
+//				array( 'category/update', 'pattern' => 'category/<id:\d+>', 'verb' => 'PUT' ),                            
+//				array( 'category/delete', 'pattern' => 'category/<id:\d+>', 'verb' => 'DELETE' ),
+//				array( 'category/create', 'pattern' => 'category', 'verb' => 'POST' ),
 				
 				
 				'products/<tag:.*?>' => 'product/list',
@@ -106,13 +106,13 @@ return array(
 				array( 'product/list', 'pattern' => '<lc:\w+>/products', 'verb' => 'GET' ),
 				array( 'product/view', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'GET' ),
                             
-                                array( 'product/search', 'pattern' => 'search', 'verb' => 'GET' ),
+                array( 'product/search', 'pattern' => 'search', 'verb' => 'GET' ),
 				array( 'product/list', 'pattern' => 'products', 'verb' => 'GET' ),
 				array( 'product/view', 'pattern' => 'product/<id:\d+>', 'verb' => 'GET' ),
                             
-				array( 'product/update', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'PUT' ),
-				array( 'product/delete', 'pattern' => 'product/<id:\d+>', 'verb' => 'DELETE' ),
-				array( 'product/create', 'pattern' => 'product', 'verb' => 'POST' ),
+//				array( 'product/update', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'PUT' ),
+//				array( 'product/delete', 'pattern' => 'product/<id:\d+>', 'verb' => 'DELETE' ),
+//				array( 'product/create', 'pattern' => 'product', 'verb' => 'POST' ),
 				
 				'languages/<tag:.*?>' => 'language/list',
 				array( 'language/list', 'pattern' => 'languages', 'verb' => 'GET' ),
