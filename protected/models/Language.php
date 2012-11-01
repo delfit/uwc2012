@@ -112,6 +112,15 @@ class Language extends CActiveRecord
 		return $this->findByCode( Yii::app()->language );
 	}
 	
+	public function getCurrentLanguageID() {
+		$currentLanguage =  $this->getCurrentLanguage();
+		if( isset( $currentLanguage->LanguageID ) ) {
+			return $currentLanguage->LanguageID;
+		}
+		
+		return null;
+	}
+	
 	
 	/**
 	 * Получить модель языка по его коду
@@ -129,5 +138,17 @@ class Language extends CActiveRecord
 		);
 		
 		return $languageModel;
+	}
+	
+	
+	public function getSingularList() {
+		$singularList = array();
+		$languages = $this->findAll();
+		foreach( $languages as $language ) {
+			$singularList[ $language->LanguageID ] = $language->Code . ' ' . $language->Name;
+		}
+		
+		
+		return $singularList;
 	}
 }

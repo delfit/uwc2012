@@ -100,7 +100,7 @@ return array(
                 array( 'product/search', 'pattern' => 'search', 'verb' => 'GET' ),
 				array( 'product/list', 'pattern' => 'products', 'verb' => 'GET' ),
 				array( 'product/view', 'pattern' => 'product/<id:\d+>', 'verb' => 'GET' ),
-
+				
 				'languages/<tag:.*?>' => 'language/list',
 				array( 'language/list', 'pattern' => 'languages', 'verb' => 'GET' ),
 				

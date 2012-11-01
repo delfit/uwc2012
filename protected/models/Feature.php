@@ -16,6 +16,7 @@ class Feature extends CActiveRecord
 {
 	public $Name = '';
 	public $Description = '';
+	public $LanguageID = null;
 	
 	/**
 	 * Returns the static model of the specified AR class.
@@ -52,6 +53,7 @@ class Feature extends CActiveRecord
 		return array(
 			array('CategoryID', 'required'),
 			array('CategoryID', 'numerical', 'integerOnly'=>true),
+			array('Name, Description, LanguageID', 'safe' ),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('FeatureID, CategoryID', 'safe', 'on'=>'search'),
@@ -107,4 +109,13 @@ class Feature extends CActiveRecord
 			'application.behaviours.TranslationBehaviour'
 		) );
 	}
+	
+	public function hasAttribute( $name ) {
+		if( property_exists( $this, $name ) ) {
+			return true;
+		}
+		
+		return parent::hasAttribute( $name );
+	}
+	
 }
