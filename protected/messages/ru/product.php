@@ -7,7 +7,10 @@ return array(
 	'Features' => 'Характеристики',
 	'File Name' => 'Имя файла',
 	'Images' => 'Изображения',
+	'New Product' => 'Новый товар',
 	'Product code' => 'Код товара',
-	'Product not found' => 'Товар не найден', 
+	'Product not found' => 'Товар не найден',
+	'Product created' => 'Товар добавлено',
+	'Product updated' => 'Товар обновлен'
 );
 ?>

@@ -16,11 +16,44 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 ?>
 
 
+<center>
+	
+	<?php
+	
+		if( $product->getIsNewRecord() ) {
+			$action = 'product/create';
+		}
+		else {
+			$action = 'product/update';
+		}
+		// TODO вынести в DHtml заменить <center>
+		$buttons = array();
+		foreach( $languages as $language ) {			
+			$buttons[] = array(
+				'label' => $language->Name . ' [' . $language->Code . ']',
+				'active' => $language->LanguageID == $product->LanguageID ? true : false,
+				'url' => Yii::app()->createUrl( $action, array( 'id' => $product->ProductID, 'lc' => Yii::app()->language, 'tlid' => $language->LanguageID ) )
+			);
+		}
+
+		$this->widget('bootstrap.widgets.TbButtonGroup', array(
+			'type' => 'primary',
+			'toggle' => 'radio',
+			'buttons' => $buttons,
+		));
+	?>
+	
+</center>
+<br />
+
+
 <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm'); ?>
 
 <div class="row">
 	<div class="span3">
-		 <?php echo $form->dropDownListRow( $product, 'CategoryID', array( $categories ) ); ?>
+		<?php 
+			echo $form->dropDownListRow( $product, 'CategoryID', $categories );
+		?>
 	</div>
 	<div class="span3">
 		<?php echo $form->dropDownListRow( $product, 'BrandID', $brands ); ?>
