@@ -101,7 +101,7 @@ class BrandController extends Controller
 			Yii::t( 'brand', 'Brands' )
 		);
 		
-		$this->render( 'admin', array(
+		$this->render( 'list', array(
 			'model' => $model,
 		) );
 	}
