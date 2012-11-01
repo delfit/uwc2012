@@ -102,7 +102,7 @@ class FeatureController extends Controller
 	}
 
 	/**
-	 * Получить список брендов
+	 * Получить список характеристик
 	 */
 	public function actionList() {
 		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
@@ -124,7 +124,15 @@ class FeatureController extends Controller
 		);
 		
 		$languages = Language::model()->findAll();
-		$categories = Category::model()->getSingularList( 3 );
+		
+		// получаем категории игнорируя первых два уровня
+		$categoriesSingularList = Category::model()->getSingularList( 
+			Category::CATEGORY_MAX_LEVEL, 
+			array(
+				Category::CATEGORY_FIRST_LEVEL,
+				Category::CATEGORY_SECOND_LEVEL
+			) 
+		);
 		
 		$criteria = new CDbCriteria( array( 
 			'condition' => 'CategoryID = :categoryID',
@@ -141,7 +149,7 @@ class FeatureController extends Controller
 		);
 		
 		$this->render( 'list', array(
-			'categories' => $categories,
+			'categories' => $categoriesSingularList,
 			'languages' => $languages,
 			'model' => $model,
 			'featuresDataProvider' => $featuresDataProvider

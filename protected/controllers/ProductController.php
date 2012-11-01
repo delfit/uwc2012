@@ -6,8 +6,6 @@
  */
 class ProductController extends Controller
 {
-	const PERENT_CATEGORY_COUNT_LEVELS = 3;
-	
 	public function actionList() {	
 		$cid = null;
 		if( isset( $_GET[ 'cid' ] ) && !empty( $_GET[ 'cid' ] ) ) {
@@ -241,8 +239,16 @@ class ProductController extends Controller
 			$brandsDropDownList[ $brand->BrandID ] = $brand->Name;
 		}
 		
-				
-		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
+		// получаем категории игнорируя первый два уровня
+		$categoriesSingularList = Category::model()->getSingularList( 
+			Category::CATEGORY_MAX_LEVEL, 
+			array(
+				Category::CATEGORY_FIRST_LEVEL,
+				Category::CATEGORY_SECOND_LEVEL
+			) 
+		);
+		
+		
 		$languages = Language::model()->findAll();
 		
 		

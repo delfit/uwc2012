@@ -16,7 +16,11 @@
  */
 class Category extends CActiveRecord
 {
-	// поддерживаются категории трех уровней	
+	// поддерживаются категории трех уровней
+	const CATEGORY_FIRST_LEVEL = 1;
+	const CATEGORY_SECOND_LEVEL = 2;
+	const CATEGORY_THIRD_LEVEL = 3;
+	
 	const CATEGORY_MAX_LEVEL = 3;
 	
 	// Интернационализированные свойства
@@ -185,7 +189,19 @@ class Category extends CActiveRecord
 	}
 	
 	
-	public function getSingularList( $levelCount = 3, $categories = null, $currentLevel = 1, $parentCategoryName = '' ) {
+	/**
+	 * Сформировать одноуровневый список категорий
+	 * 
+	 * @param integer $levelCount  количество получаемых уровней в глубь
+	 * @param array $skipLevels  номера уровней которые необходимо пропустить
+	 * 
+	 * @param array $categories  список категорий определенного уровня, применяется для рекурсивной обработки категорий
+	 * @param integer $currentLevel  номер текущего уровня, применяется для рекурсивной обработки категорий
+	 * @param string $parentCategoryName  полное название родительской категории, применяется для рекурсивной обработки категорий
+	 * 
+	 * @return array
+	 */
+	private function generateSingularList( $levelCount = self::CATEGORY_MAX_LEVEL, $skipLevels = array(), $categories = null, $currentLevel = 1, $parentCategoryName = '' ) {
 		$categoriesSingularList = array();
 		
 		if( $currentLevel > $levelCount ) {
@@ -200,10 +216,13 @@ class Category extends CActiveRecord
 		
 		foreach( $categories as $category ) {
 			$fullPluralName = $parentCategoryName . ' ' . $category->PluralName;
-			$categoriesSingularList[ $category->CategoryID ] = $fullPluralName;
+			
+			if( empty( $skipLevels ) || !in_array( $currentLevel, $skipLevels ) ) {
+				$categoriesSingularList[ $category->CategoryID ] = $fullPluralName;
+			}
 			
 			if( isset( $category->subCategories ) && !empty( $category->subCategories ) ) {
-				$subCategoriesSingularList = $this->getSingularList( $levelCount, $category->subCategories, $currentLevel + 1, $fullPluralName );
+				$subCategoriesSingularList = $this->generateSingularList( $levelCount, $skipLevels, $category->subCategories, $currentLevel + 1, $fullPluralName );
 				
 				// объеденяем массивы с сохранением значений ключей
 				foreach( $subCategoriesSingularList as $key => $value ) {
@@ -214,6 +233,19 @@ class Category extends CActiveRecord
 		
 		
 		return $categoriesSingularList;
+	}
+	
+	
+	/**
+	 * Получить одноуровневый список категорий
+	 * 
+	 * @param integer $levelCount  количество получаемых уровней в глубь
+	 * @param array $skipLevels  номера уровней которые необходимо пропустить
+	 * 
+	 * @return array
+	 */
+	public function getSingularList( $levelCount = self::CATEGORY_MAX_LEVEL, $skipLevels = array() ) {
+		return $this->generateSingularList( $levelCount, $skipLevels );
 	}
 	
 	
