@@ -9,7 +9,7 @@
 	echo CHtml::openTag( 'tr' );
 	echo CHtml::tag( 'th', array(), '&nbsp;' );
 	foreach( $compareProducts as $compareProduct ) {
-		echo CHtml::tag( 'th', array(), $compareProduct->fullProductName );
+		echo CHtml::tag( 'th', array(), $compareProduct->fullName );
 	}
 	echo CHtml::closeTag( 'tr' );
 	echo CHtml::closeTag( 'thead' );
@@ -22,8 +22,8 @@
 	foreach( $compareProducts as $compareProduct ) {
 		echo CHtml::openTag( 'td' );
 		// TODO улучшить код
-		echo '<a href="' . $compareProduct->mainImageURL . '" rel="lightbox-product" class="thumbnail" title="' . $compareProduct->fullProductName . '">
-			<img src="' . $compareProduct->mainImageURL . '" alt="' . $compareProduct->fullProductName . '" class="img-rounded" align="top" />
+		echo '<a href="' . $compareProduct->mainImageURL . '" rel="lightbox-product" class="span3 thumbnail" title="' . $compareProduct->fullName . '">
+			<img src="' . $compareProduct->mainImageURL . '" alt="' . $compareProduct->fullName . '" class="img-rounded" align="top" />
 		</a>';
 		echo CHtml::closeTag( 'td' );
 	}
@@ -34,7 +34,7 @@
 		echo CHtml::openTag( 'tr' );
 		echo CHtml::tag( 'td', array( 'style' => 'font-weight: bold;' ), $categoryFeature->Name );
 		foreach( $compareProducts as $compareProduct ) {
-			echo CHtml::tag( 'td', array(), $compareProduct->productHasFeatures[ $key ]->Value );
+			echo CHtml::tag( 'td', array(), isset( $compareProduct->productHasFeatures[ $key ] ) ? $compareProduct->productHasFeatures[ $key ]->Value : '&nbsp;' );
 		}
 		echo CHtml::closeTag( 'tr' );
 	}

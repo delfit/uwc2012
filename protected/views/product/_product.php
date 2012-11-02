@@ -4,7 +4,11 @@
 
 <div class="row row-spacer" itemscope itemtype="http://data-vocabulary.org/Product">
 	<div class="span4">
-		<a href="<?php echo $productURL;?>" target="_self"><img src="<?php echo $data->mainImageURL; ?>" alt="<?php echo $data->fullProductName; ?>" class="img-rounded" align="top" /></a><br />
+		<a href="<?php echo $productURL;?>" target="_self">
+			<img src="<?php echo $data->mainImageURL; ?>" alt="<?php echo $data->fullName; ?>" class="img-rounded" itemprop="image" align="top" />
+		</a>
+		<br />
+		
 		<?php
 		// отрисовать ссылку на сравнение/добавление товара к сравнению
 		if( 
@@ -35,8 +39,12 @@
 				);
 			}
 			?>
-			<a href="<?php echo $productURL;?>"><?php echo $data->fullProductName; ?></a>
+			<a href="<?php echo $productURL;?>"><?php echo $data->fullName; ?></a>
 		</h4>
+		
+		<span class="hidden" itemprop="category"><?php echo $data->category->PluralName; ?></span>
+		<span class="hidden" itemprop="brand"><?php echo $data->brand->Name; ?></span>
+		<span class="hidden" itemprop="name"><?php echo $data->Name; ?></span>
 		
 		
 		<?php

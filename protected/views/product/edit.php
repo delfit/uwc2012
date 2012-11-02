@@ -7,7 +7,7 @@
 	else {
 		echo CHtml::tag( 'a', array( 
 			'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ),
-		), $product->fullProductName );
+		), $product->fullName );
 	}
 	?>
 </h3>

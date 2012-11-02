@@ -3,15 +3,10 @@ $(document).ready(function(){
 		element.preventDefault();
 		var link = $(this);
 		
-		var productID = link.parent().next().find('span').html();
-		
 		// добавить товар в список сравнения
 		$.ajax({
 			url: link.attr('href'),
 			type: "GET",
-			data: { 
-				'id': productID 
-			},
 			dataType: "json",
 			success: function( resultJSON ) {
 				// заменить ссылку

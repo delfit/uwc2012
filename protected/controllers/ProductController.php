@@ -187,7 +187,7 @@ class ProductController extends Controller
 		$features =  ProductHasFeatures::model()->getEmptyList( $cid );
 		
 		
-		$this->pageTitle = $this->pageTitle = Yii::t( 'product', 'New Product' );
+		$this->pageTitle = Yii::t( 'product', 'New Product' );
 		$this->breadcrumbs = array(
 			Yii::t( 'product', 'New Product' )
 		);
@@ -290,9 +290,12 @@ class ProductController extends Controller
 	
 		$languages = Language::model()->findAll();
 		
+		// TODO 
+		$features =  ProductHasFeatures::model()->getListWithValues( $product );
+		
 		
 		// TODO возможно, вынести полное имя товара как свойство модели
-		$this->pageTitle = $product->category->SingularName . ' ' . $product->brand->Name . ' ' .$product->Name;
+		$this->pageTitle = $product->fullName;
 		$this->breadcrumbs = array(
 			$product->category->parentCategory->PluralName,
 			$product->category->PluralName => Yii::app()->createUrl( 'product/list', array( 'cid' => $product->category->CategoryID, 'lc' => Yii::app()->language ) ),
@@ -300,8 +303,6 @@ class ProductController extends Controller
 			$product->Name
 		);
 		
-		// TODO 
-		$features =  ProductHasFeatures::model()->getListWithValues( $product );
 		
 		$this->render( 'edit', array(
 			'product' => $product,
@@ -344,26 +345,6 @@ class ProductController extends Controller
 		if( $model === null )
 			throw new CHttpException( 404, 'The requested page does not exist.' );
 		return $model;
-	}
-	
-	
-	public function actionComparsionAdd( $ProductID ) {
-		echo CJSON::encode( array(
-			'text' => Yii::t( 'product', 'Compare' ),
-			'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => 1 ) ),
-		));
-		
-		Yii::app()->end();
-	}
-	
-	
-	public function actionComparsionAdd( $ProductID ) {
-		echo CJSON::encode( array(
-			'text' => Yii::t( 'product', 'Compare' ),
-			'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => 1 ) ),
-		));
-		
-		Yii::app()->end();
 	}
 	
 	

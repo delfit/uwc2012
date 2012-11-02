@@ -5,9 +5,11 @@ php:
 
 before_script:
   - chmod -R 0777 ./assets
+  - chmod -R 0777 ./images
   - chmod -R 0777 ./protected/runtime
   - ./protected/tests/travis/apache-setup.sh
   - ./protected/tests/travis/mysql-setup.sh
+  - dpkg -l | grep php5
   - ./protected/tests/travis/php-setup.sh
   - ./protected/tests/travis/phpunit-selenium-setup.sh
   - firefox --version

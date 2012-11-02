@@ -439,4 +439,20 @@ class Product extends CActiveRecord
 			return false;
 		}
 	}
+	
+	
+	public function getMainImageURL() {
+		// TODO уточнить размеры картинок
+		$mainImageUrl = 'http://placehold.it/300x200&text=Image+is+Not+Avaliable';
+		if( isset( $this->productHasImages[ 0 ] ) ) {
+			$mainImageUrl = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $this->productHasImages[ 0 ]->FileName;
+		}
+		
+		return $mainImageUrl;
+	}
+	
+	
+	public function getFullName() {
+		return $this->category->SingularName . ' ' . $this->brand->Name . ' ' . $this->Name;
+	}
 }

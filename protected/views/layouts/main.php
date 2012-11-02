@@ -55,8 +55,8 @@
 					$configMenuItem[] = array(
 						'icon' => 'cog',
 						'items' => array(
-							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create' ), 'icon' => 'plus' ),
 							array( 'label' => Yii::t( 'product', 'Add product' ), 'url' => Yii::app()->createUrl( 'product/create' ), 'icon' => 'plus' ),
+							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create' ), 'icon' => 'plus' ),
 							array( 'label' => Yii::t( 'brand', 'Brands' ), 'url' => Yii::app()->createUrl( '/brand/list' ), 'icon' => 'list' ),
 							'---',
 							array( 'label' => Yii::t( 'application', 'Exit' ), 'url' => Yii::app()->createUrl( '/site/logout' ), 'icon' => 'off' ),
