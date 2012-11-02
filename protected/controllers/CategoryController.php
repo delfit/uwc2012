@@ -6,6 +6,8 @@
  */
 class CategoryController extends Controller
 {
+	const PERENT_CATEGORY_COUNT_LEVELS = 2;
+	
 	public function actionList() {
 		
 	}
@@ -14,13 +16,96 @@ class CategoryController extends Controller
 		echo "actionCategoryView";
 	}
 	
+	
+	/**
+	 * Создать категорию
+	 */
 	public function actionCreate() {
-		echo "actionCategoryCreate";
+		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
+			$currentTranslationLanguageID = (integer) $_GET[ 'tlid' ];
+		}
+		else {
+			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
+		}
+		
+		$model = new Category();
+		$model->LanguageID = $currentTranslationLanguageID;
+			
+		if( isset( $_POST[ 'Category' ] ) && !empty( $_POST[ 'Category' ] ) ) {
+			$model->attributes = $_POST[ 'Category' ];
+			
+			if( $model->save() ) {
+				Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category updated' ) );
+				$id = $model->getPrimaryKey();
+				$this->redirect( 
+					Yii::app()->createUrl( 
+						"category/update", 
+						array( 
+							'id' => $id,
+							'lc' => $currentTranslationLanguageID
+						)
+				));
+			}
+			else{
+				Yii::app()->user->setFlash( 'error', $model->getErrors() );
+			}
+		}
+		
+		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
+		$languages = Language::model()->findAll();
+		
+		$this->render(
+			'category', 
+			array(
+				'languages' => $languages,
+				'categories' => $categoriesSingularList,
+				'model' => $model
+			)
+		);
 	}
 	
-	public function actionUpdate() {
-		echo "actionCategoryUpdate";
+	
+	/**
+	 * Редактировать категорию
+	 */
+	public function actionUpdate( $id ) {		
+		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
+			$currentTranslationLanguageID = (integer) $_GET[ 'tlid' ];
+		}
+		else {
+			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
+		}
+		
+		Yii::app()->user->setState( 'CurrentTranslationLanguageID', $currentTranslationLanguageID );	
+		$model = $this->loadModel( $id );
+		Yii::app()->user->setState( 'CurrentTranslationLanguageID', null );
+			
+		if( isset( $_POST[ 'Category' ] ) && !empty( $_POST[ 'Category' ] ) ) {
+			$model->attributes = $_POST[ 'Category' ];
+			$model->LanguageID = $currentTranslationLanguageID;
+			
+			if( $model->save() ) {
+				Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category updated' ) );
+			}
+			else{
+				Yii::app()->user->setFlash( 'error', $model->getErrors() );
+			}
+		}
+		
+		
+		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
+		$languages = Language::model()->findAll();
+		
+		$this->render(
+			'category', 
+			array(
+				'languages' => $languages,
+				'categories' => $categoriesSingularList,
+				'model' => $model
+			)
+		);
 	}
+	
 	
 	public function actionDelete( $id ) {
 		$this->loadModel( $id )->delete();

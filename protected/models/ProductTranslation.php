@@ -93,4 +93,11 @@ class ProductTranslation extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	public function primaryKey() {
+		return array(
+			'ProductID',
+			'LanguageID'
+		);
+	}
 }

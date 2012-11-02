@@ -21,6 +21,7 @@ class Product extends CActiveRecord
 {
 
 	public $Description = '';
+	public $LanguageID = null;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -57,6 +58,8 @@ class Product extends CActiveRecord
             return array(
                 array( 'CategoryID, BrandID, Name', 'required' ),
                 array( 'CategoryID, BrandID, IsDraft', 'numerical', 'integerOnly' => true ),
+                array( 'LanguageID, Description', 'safe' ),
+				
                 array( 'Name', 'length', 'max' => 100 ),
                 // The following rule is used by search().
                 // Please remove those attributes that should not be searched.

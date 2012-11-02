@@ -96,4 +96,11 @@ class CategoryTranslation extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	public function primaryKey() {
+		return array(
+			'CategoryID',
+			'LanguageID'
+		);
+	}
 }
