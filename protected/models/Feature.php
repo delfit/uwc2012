@@ -118,4 +118,14 @@ class Feature extends CActiveRecord
 		return parent::hasAttribute( $name );
 	}
 	
+	
+	public function IsUsed() {
+		return ProductHasFeatures::model()->exists( 
+			'FeatureID = :featureID', 
+			array( 
+				':featureID' => $this->FeatureID
+			)
+		);
+	}
+	
 }

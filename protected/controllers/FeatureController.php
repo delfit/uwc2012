@@ -36,17 +36,7 @@ class FeatureController extends Controller
 	 */
 	public function actionCreate() {
 		$model = new Feature;
-		
-		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
-			$currentTranslationLanguageID = (integer) $_GET[ 'tlid' ];
-		}
-		else {
-			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
-		}
-		
-		$model->LanguageID = $currentTranslationLanguageID;
-		
-		
+			
 		if( isset( $_POST[ 'Feature' ] ) ) {
 			$model->attributes = $_POST[ 'Feature' ];
 			if( !$model->save() ) {
@@ -60,7 +50,12 @@ class FeatureController extends Controller
 		}
 		
 		Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature "' . $model->Name . '" created' ) );
-		$this->redirect( array( 'feature/list' ) );
+		
+		$requestActionParams = $this->getActionParams();
+		if( key_exists( 'id', $requestActionParams ) ) {
+			unset( $requestActionParams[ 'id' ] );
+		}		
+		$this->redirect( Yii::app()->createUrl( 'feature/list', $requestActionParams ) );
 	}
 
 
@@ -68,11 +63,19 @@ class FeatureController extends Controller
 	 * Редактировать бренд
 	 */
 	public function actionUpdate() {
+		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
+			$currentTranslationLanguageID = (integer) $_GET[ 'tlid' ];
+		}
+		else {
+			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
+		}
+		
 		$id = ( integer ) $_POST[ 'pk' ];
 		$name = ( string ) $_POST[ 'name' ];
 		$value = ( string ) $_POST[ 'value' ];
 		
 		$model = $this->loadModel( $_POST[ 'pk' ] );
+		$model->LanguageID = $currentTranslationLanguageID;
 
 		if( !empty( $id ) && !empty( $name ) && !empty( $value ) ) {
 			$model->{$name} = $value;
@@ -80,25 +83,47 @@ class FeatureController extends Controller
 				echo $model->getError( $name );
 			}
 		}
+		
+		
+//		$requestActionParams = $this->getActionParams();
+//		if( key_exists( 'id', $requestActionParams ) ) {
+//			unset( $requestActionParams[ 'id' ] );
+//		}		
+//		$this->redirect( Yii::app()->createUrl( 'feature/list', $requestActionParams ) );
 	}
 
 
 	/**
-	 * Удалить бренд
+	 * Удалить характеристику
 	 * 
 	 * @param integer $id  идентификатор характеристики
 	 */
-	public function actionDelete( $id ) {
-		$success = $this->loadModel( $id )->delete();
+	public function actionDelete() {
+		$id = null;
+		if( isset( $_GET[ 'id' ] ) ) {
+			$id = (integer) $_GET[ 'id' ];
+		}
 		
-		if( $success ) {
-			Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature deleted' ) );
+		$feature = $this->loadModel( $id );
+		
+		if( $feature->IsUsed() ) {
+			Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature used in products and can not be delated' ) );
 		}
 		else {
-			Yii::app()->user->setFlash( 'error', Yii::t( 'feature', 'Category not deleted' ) );
+			$success = $feature->delete();
+			if( $success ) {
+				Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature deleted' ) );
+			}
+			else {
+				Yii::app()->user->setFlash( 'error', Yii::t( 'feature', 'Feature not deleted' ) );
+			}
 		}
 		
-		$this->redirect( array( 'feature/list' ) );
+		$requestActionParams = $this->getActionParams();
+		if( key_exists( 'id', $requestActionParams ) ) {
+			unset( $requestActionParams[ 'id' ] );
+		}		
+		$this->redirect( Yii::app()->createUrl( 'feature/list', $requestActionParams ) );
 	}
 
 	/**
@@ -112,9 +137,15 @@ class FeatureController extends Controller
 			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
 		}
 		
+		$cid = null;
+		if( isset( $_GET[ 'cid' ] ) ) {
+			$cid = (integer) $_GET[ 'cid' ];
+		}
+		
 		$model = new Feature( 'search' );
 		$model->LanguageID = $currentTranslationLanguageID;
 		$model->unsetAttributes();
+		$model->CategoryID = $cid;
 		if( isset( $_GET[ 'Feature' ] ) )
 			$model->attributes = $_GET[ 'Feature' ];
 
@@ -137,16 +168,21 @@ class FeatureController extends Controller
 		$criteria = new CDbCriteria( array( 
 			'condition' => 'CategoryID = :categoryID',
 			'params' => array(
-				':categoryID' => 3
+				':categoryID' => $cid
 			)
 		) );
 		
+		
+		Yii::app()->user->setState( 'CurrentTranslationLanguageID', $currentTranslationLanguageID );	
 		$featuresDataProvider = new CActiveDataProvider(
 			$model,
 			array(
 				'criteria' => $criteria
 			)
 		);
+		$featuresDataProvider->getData();
+		Yii::app()->user->setState( 'CurrentTranslationLanguageID', null );	
+		
 		
 		$this->render( 'list', array(
 			'categories' => $categoriesSingularList,
@@ -163,7 +199,7 @@ class FeatureController extends Controller
 	 * @param integer the ID of the model to be loaded
 	 */
 	public function loadModel( $id ) {
-		$model = Brand::model()->findByPk( $id );
+		$model = Feature::model()->findByPk( $id );
 		if( $model === null )
 			throw new CHttpException( 404, 'The requested page does not exist.' );
 		return $model;

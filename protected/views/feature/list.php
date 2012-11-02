@@ -1,12 +1,3 @@
-<?php
-	$form = $this->beginWidget( 'bootstrap.widgets.TbActiveForm', array(
-		'id' => 'category-form',
-		'type' => 'horizontal',
-		'htmlOptions'=>array('class'=>'well'),
-		'action' => Yii::app()->createUrl( 'feature/create' )
-	) );
-?>
-
 <center>
 	
 	<?php
@@ -15,7 +6,7 @@
 			$buttons[] = array(
 				'label' => $language->Name . ' [' . $language->Code . ']',
 				'active' => $language->LanguageID == $model->LanguageID ? true : false,
-				'url' => Yii::app()->createUrl( 'feature/list', array( 'id' => $model->CategoryID, 'lc' => Yii::app()->language, 'tlid' => $language->LanguageID ) )
+				'url' => Yii::app()->createUrl( 'feature/list', array( 'tlid' => $language->LanguageID, 'cid' => $model->CategoryID, 'lc' => Yii::app()->language ) )
 			);
 		}
 
@@ -27,14 +18,44 @@
 	?>
 	
 </center>
+</br>
+<?php
+	$form = $this->beginWidget( 'bootstrap.widgets.TbActiveForm', array(
+		'id' => 'category-form',
+		'type' => 'horizontal',
+		'htmlOptions'=>array('class'=>'well'),
+		'action' => Yii::app()->createUrl( 'feature/create' )
+	) );
+?>
 
 <fieldset> 
 	<legend> <?php echo Yii::t( 'category', 'New Feature' ); ?> </legend>
 	<?php 
-		echo $form->dropDownListRow( $model, 'CategoryID', $categories, array( 'class' => 'span7' ) );
+		$baseUrl = Yii::app()->getBaseUrl( true );
+		$actionParams = $this->getActionParams();
+		if( key_exists( 'cid', $actionParams ) ) {
+			unset( $actionParams[ 'cid' ] );
+		}
+		$routeUrl = Yii::app()->createUrl( $this->getRoute(), $actionParams );
+
+		$separator = '&';
+		if( empty( $actionParams ) ) {
+			$separator = '?';
+		}
+		
+		echo $form->dropDownListRow( 
+			$model, 
+			'CategoryID',
+			$categories,
+			array(
+				'onChange' => 'window.location="' . $baseUrl . $routeUrl . $separator .'cid=" + this.value',
+				'class' => 'span7'
+			)
+		);
 	?>
-	<?php echo $form->textFieldRow( Feature::model(), 'Name', array( 'class' => 'span7' ) ); ?>
-	<?php echo $form->textAreaRow( Feature::model(), 'Description', array( 'class' => 'span7' ) ); ?>
+	<?php echo $form->textFieldRow( $model, 'Name', array( 'class' => 'span7' ) ); ?>
+	<?php echo $form->textAreaRow( $model, 'Description', array( 'class' => 'span7' ) ); ?>
+	<?php echo $form->hiddenField( $model, 'LanguageID' ); ?>
 
 </fieldset>
 
@@ -64,38 +85,40 @@
 ?>
 
 <?php 
-	$this->widget( 'bootstrap.widgets.TbExtendedGridView',  array(
-		'type' => 'striped bordered',
-		'ajaxUpdate' => false,
-		'dataProvider' => $featuresDataProvider,
-		'template' => "{items}",
-		'columns' => array(
-			'FeatureID',
-			array(
-				'class' => 'bootstrap.widgets.TbEditableColumn',
-				'name' => 'Name',
-				'sortable' => true,
-				'editable' => array(
-					'url' => $this->createUrl( 'feature/update' ),
-					'placement' => 'right',
-					'inputclass' => 'span3'
-				)
+	if( count( $featuresDataProvider ) > 0 ) {
+		$this->widget( 'bootstrap.widgets.TbExtendedGridView',  array(
+			'type' => 'striped bordered',
+			'ajaxUpdate' => false,
+			'dataProvider' => $featuresDataProvider,
+			'template' => "{items}",
+			'columns' => array(
+				'FeatureID',
+				array(
+					'class' => 'bootstrap.widgets.TbEditableColumn',
+					'name' => 'Name',
+					'sortable' => true,
+					'editable' => array(
+						'url' => $this->createUrl( 'feature/update', array( 'tlid' => $model->LanguageID  ) ),
+						'placement' => 'right',
+						'inputclass' => 'span3'
+					)
+				),
+				array(
+					'class' => 'bootstrap.widgets.TbEditableColumn',
+					'name' => 'Description',
+					'sortable' => true,
+					'editable' => array(
+						'url' => $this->createUrl( 'feature/update', array( 'tlid' => $model->LanguageID, 'cid' => $model->CategoryID, 'lc' => Yii::app()->language ) ),
+						'placement' => 'right',
+						'inputclass' => 'span3'
+					)
+				),
+				array(
+					'class'=>'bootstrap.widgets.TbButtonColumn',
+					'template' => '{delete}',
+					'deleteButtonUrl' => 'Yii::app()->createUrl( \'feature\delete\', array( \'id\' => $data->FeatureID, \'tlid\' => ' . $model->LanguageID . ', \'cid\' => ' . $model->CategoryID . ' ) )',
+				),
 			),
-			array(
-				'class' => 'bootstrap.widgets.TbEditableColumn',
-				'name' => 'Description',
-				'sortable' => true,
-				'editable' => array(
-					'url' => $this->createUrl( 'feature/update' ),
-					'placement' => 'right',
-					'inputclass' => 'span3'
-				)
-			),
-			array(
-				'class'=>'bootstrap.widgets.TbButtonColumn',
-				'template' => '{delete}',
-				'deleteButtonUrl' => 'Yii::app()->createUrl( \'feature\delete\', array( \'id\' => $data->FeatureID ) )',
-			),
-		),
-	));
+		));
+	}
 ?>

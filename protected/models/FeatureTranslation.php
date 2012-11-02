@@ -97,4 +97,12 @@ class FeatureTranslation extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	
+	public function primaryKey() {
+		return array(
+			'FeatureID',
+			'LanguageID'
+		);
+	}
 }
