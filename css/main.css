@@ -58,3 +58,7 @@ body .navbar input[type="text"]
 {
 	color: #404040;
 }
+
+body .dropdown-menu {
+	min-width: 60px;
+}
