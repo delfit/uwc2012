@@ -9,6 +9,7 @@ return array(
 	'Exit' => 'Вийти',
 	'Language' => 'Мова',
 	'Login' => 'Увійти',
+	'Logined successful' => 'Вхід успішно виконано',
 	'Name' => 'Назва',
 	'Save' => 'Зберегти',
 	'Searсh' => 'Пошук',

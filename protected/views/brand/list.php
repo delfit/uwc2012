@@ -47,7 +47,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
 			'template' => '{delete}',
-			'deleteButtonUrl' => 'Yii::app()->createUrl( \'brand\delete\', array( \'id\' => $data->BrandID ) )',
+			'deleteButtonUrl' => 'Yii::app()->createUrl( \'brand/delete\', array( \'id\' => $data->BrandID ) )',
 		),
 	),
 )); ?>
