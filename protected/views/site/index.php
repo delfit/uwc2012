@@ -6,6 +6,21 @@ $this->pageTitle = Yii::app()->name;
 
 <h1>Welcome to <i><?php echo CHtml::encode( Yii::app()->name ); ?></i></h1>
 
+<?php
+$this->widget('bootstrap.widgets.TbAlert', array(
+	'block' => true,
+	'fade' => true, 
+	'closeText' => '×', 
+	'alerts' => array( 
+		'success',
+		'info',
+		'warning',
+		'error',
+		'danger'
+	),
+));
+?>
+
 <div class="row">
 	<div class="span12">
 	<?php

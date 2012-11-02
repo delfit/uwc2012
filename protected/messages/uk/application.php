@@ -6,6 +6,7 @@ return array(
 	'Edit' => 'Редагувати',
 	'Exit' => 'Вийти',
 	'Login' => 'Увійти',
+	'Logined successful' => 'Вхід успішно виконано',
 	'Name' => 'Назва',
 	'Save' => 'Зберегти',
 	'Searсh' => 'Пошук',

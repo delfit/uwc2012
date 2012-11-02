@@ -9,6 +9,8 @@ before_script:
   - ./protected/tests/travis/apache-setup.sh
   - ./protected/tests/travis/mysql-setup.sh
   - ./protected/tests/travis/phpunit-selenium-setup.sh
+  - firefox --version
+  - wget -O /tmp/test.uwc2012.delfit.loc_index.html http://test.uwc2012.delfit.loc && cat /tmp/test.uwc2012.delfit.loc_index.html
   - wget -O /tmp/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
   - java -jar /tmp/selenium-server-standalone.jar &
   - export DISPLAY=:99.0

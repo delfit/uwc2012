@@ -45,7 +45,7 @@ class BrandController extends Controller
 			}
 		}
 		
-		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand "' . $model->Name . '" created' ) );
+		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" created', array( ':brandName' => $model->Name ) ) );
 		$this->redirect( array( 'brand/list' ) );
 	}
 
@@ -75,7 +75,11 @@ class BrandController extends Controller
 	 * @param integer $id
 	 */
 	public function actionDelete( $id ) {
-		$this->loadModel( $id )->delete();
+		$model = $this->loadModel( $id );
+		$brandName = $model->Name;
+		$model->delete();
+		
+		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" was deleted', array( ':brandName' => $brandName ) ) );
 		$this->redirect( array( 'brand/list' ) );
 	}
 
