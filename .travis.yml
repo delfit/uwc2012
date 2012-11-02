@@ -12,16 +12,13 @@ before_script:
   - ./protected/tests/travis/mysql-setup.sh
   - ./protected/tests/travis/phpunit-selenium-setup.sh
   - firefox --version
-  - wget -O /tmp/test.uwc2012.delfit.loc_requirements.html http://test.uwc2012.delfit.loc/lib/yii-1.1.12/requirements/index.php
-  - cat /tmp/test.uwc2012.delfit.loc_requirements.html
-  - php -i
   - wget -O /tmp/test.uwc2012.delfit.loc_index.html http://test.uwc2012.delfit.loc 
   - cat /tmp/test.uwc2012.delfit.loc_index.html
-  - wget -O /tmp/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
-  - java -jar /tmp/selenium-server-standalone.jar &
-  - export DISPLAY=:99.0
-  - sudo sh -e /etc/init.d/xvfb start
+  - sudo apt-get install xvfb
+  - Xvfb :99 -ac &
   - sleep 3
+  - wget -O /tmp/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
+  - DISPLAY=:99 java -jar /tmp/selenium-server-standalone.jar &
   - cd protected/tests
 
 script: phpunit --colors --coverage-text ./
