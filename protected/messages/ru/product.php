@@ -16,7 +16,6 @@ return array(
 	'Product not found' => 'Товар не найден',
 	'Product created' => 'Товар добавлено',
 	'Product updated' => 'Товар обновлен',
-	'Products in comparison' => 'Товаров в сравнении',
-	'Product not deleted' => 'Товар не видалено',
+	'Products in comparison' => 'Товаров в сравнении'
 );
 ?>
