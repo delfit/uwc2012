@@ -2,36 +2,30 @@
 <h2>
 <?php 
 	echo $this->pageTitle;
-	//TODO сделать нормальное условие
-	if( true ) {
-		echo '&nbsp;<span class="comparison-text">(' . Yii::t( 'product', 'Products in comparison' ) . ':)</span>';
+	
+	
+	if( isset( $categoryID )  ) {
+		$comparisonProductsIDs = Yii::app()->session[ 'comparsion.' . $categoryID ];
+		
+		echo '&nbsp;';
+		echo CHtml::tag( 'a', array(
+			'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => $categoryID, 'lc' => Yii::app()->language ) ),
+			'class' => 'comparison-text' . ( count( $comparisonProductsIDs ) == 0 ? ' hidden' : '' ),
+		), Yii::t( 'product', ':count product(s) in comparison', array( ':count' => count( $comparisonProductsIDs ) ) ) );
 	}
 
 ?>
 </h2>
 
-<div class="row">
-	<div class="span2 pull-right comparison">
-		<p><?php echo Yii::t( 'application', 'Comparison list' ); ?></p>
-		<ul>
-			<li>1</li>
-			<li>2</li>
-			<li>3</li>
-			<li>4</li>
-		</ul>
-		<a href=""><?php echo Yii::t( 'application', 'Compare' ); ?> &rarr;</a>
-	</div>
-	
-	<?php
-	$this->widget( 'bootstrap.widgets.TbListView', array(
-		'dataProvider' => $products,
-		'itemView' => '_product', 
-		'enablePagination' => true, 
-		'ajaxUpdate' => false,
-		'pager' => array(
-			'class' => 'bootstrap.widgets.TbPager',
-			'pageSize' => 1
-		)
-	));
-	?>
-</div>
+<?php
+$this->widget( 'bootstrap.widgets.TbListView', array(
+	'dataProvider' => $products,
+	'itemView' => '_product', 
+	'enablePagination' => true, 
+	'ajaxUpdate' => false,
+	'pager' => array(
+		'class' => 'bootstrap.widgets.TbPager',
+		'pageSize' => 1
+	)
+));
+?>

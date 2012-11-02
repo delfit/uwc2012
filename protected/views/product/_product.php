@@ -1,25 +1,24 @@
 <?php
-	$fullProductName = $data->category->SingularName . ' ' . $data->brand->Name . ' ' . $data->Name;
-	if( isset( $data->productHasImages[0]->FileName ) ) {
-		$mainProductImageSrc = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $data->productHasImages[0]->FileName;
-	}
-	else {
-		// TODO уточнить размеры картинок
-		$mainProductImageSrc = 'http://placehold.it/300x200&text=Image+is+Not+Avaliable';
-	}
-	
-	
 	$productURL = Yii::app()->createUrl( 'product/view', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) );
 ?>
 
 <div class="row row-spacer">
 	<div class="span4">
-		<a href="<?php echo $productURL;?>" target="_self"><img src="<?php echo $mainProductImageSrc; ?>" alt="<?php echo $fullProductName; ?>" class="img-rounded" align="top" /></a><br />
+		<a href="<?php echo $productURL;?>" target="_self"><img src="<?php echo $data->mainImageURL; ?>" alt="<?php echo $data->fullProductName; ?>" class="img-rounded" align="top" /></a><br />
 		<?php
-		if( true ) {
+		// отрисовать ссылку на сравнение/добавление товара к сравнению
+		if( 
+			Yii::app()->session[ 'comparsion.' . $data->category->CategoryID ] && 
+			in_array( $data->ProductID, Yii::app()->session[ 'comparsion.' . $data->category->CategoryID ] ) 
+		) {
+			echo CHtml::tag( 'a', array(
+				'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => $data->category->CategoryID, 'lc' => Yii::app()->language ) ),
+			), Yii::t( 'product', 'Compare' ) );
+		}
+		else {
 			echo CHtml::tag( 'a', array(
 				'href' => Yii::app()->createUrl( 'product/comparsionAdd', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) ),
-				'class' => 'compare-link'
+				'class' => 'compare-link',
 			), Yii::t( 'product', 'Add to comparsion' ) );
 		}
 		?>
@@ -36,7 +35,7 @@
 				);
 			}
 			?>
-			<a href="<?php echo $productURL;?>"><?php echo $fullProductName; ?></a>
+			<a href="<?php echo $productURL;?>"><?php echo $data->fullProductName; ?></a>
 		</h4>
 		
 		

@@ -3,8 +3,9 @@
 		'Add category' => 'Добавить категорию',
 		'Category' => 'Категория',
 		'Category #:categoryID' => 'Категория #:categoryID',
+		'Category not found' => 'Категория не найдена',
 		'Category removed' => 'Категория удалена',
 		'New Category' => 'Новая категория',
-		'PluralName' => 'PluralName',
+		'PluralName' => 'Название во множественном числе',
 	);
 ?>

@@ -72,6 +72,10 @@ return array(
 				*/
 			),
 		),
+		
+		'session' => array (
+			'autoStart' => true,
+		),
 			
 		'urlManager' => array(
 			'urlFormat' => 'path',

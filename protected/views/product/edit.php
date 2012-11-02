@@ -1,4 +1,16 @@
-<h2><?php echo $this->pageTitle; ?></h2>
+
+<h3>
+	<?php
+	if( $product->getIsNewRecord() ) {
+		echo Yii::t( 'product', 'New Product' );
+	}
+	else {
+		echo CHtml::tag( 'a', array( 
+			'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ),
+		), $product->fullProductName );
+	}
+	?>
+</h3>
 
 <?php
 $this->widget('bootstrap.widgets.TbAlert', array(
@@ -17,7 +29,6 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 
 
 <center>
-	
 	<?php
 	
 		if( $product->getIsNewRecord() ) {
@@ -26,6 +37,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 		else {
 			$action = 'product/update';
 		}
+		
 		// TODO вынести в DHtml заменить <center>
 		$buttons = array();
 		foreach( $languages as $language ) {			
@@ -42,7 +54,6 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 			'buttons' => $buttons,
 		));
 	?>
-	
 </center>
 <br />
 

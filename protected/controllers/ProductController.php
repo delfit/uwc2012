@@ -34,6 +34,7 @@ class ProductController extends Controller
 		
 		$this->render( 'list', array(
 			'products' => $products,
+			'categoryID' => $cid,
 		));
 	}
 	
@@ -157,12 +158,16 @@ class ProductController extends Controller
 			$brandsDropDownList[ $brand->BrandID ] = $brand->Name;
 		}
 		
-				
+		
+		// FIXME неопределенная константа!
 		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
 		$languages = Language::model()->findAll();
 		
 		
-		$this->pageTitle = $this->pageTitle = Yii::t( 'product', 'New Product' );
+		$this->pageTitle = Yii::t( 'product', 'New Product' );
+		$this->breadcrumbs = array(
+			Yii::t( 'product', 'New Product' )
+		);
 		
 		
 		$this->render( 'edit', array(
@@ -252,7 +257,14 @@ class ProductController extends Controller
 		$languages = Language::model()->findAll();
 		
 		
+		// TODO возможно, вынести полное имя товара как свойство модели
 		$this->pageTitle = $product->category->SingularName . ' ' . $product->brand->Name . ' ' .$product->Name;
+		$this->breadcrumbs = array(
+			$product->category->parentCategory->PluralName,
+			$product->category->PluralName => Yii::app()->createUrl( 'product/list', array( 'cid' => $product->category->CategoryID, 'lc' => Yii::app()->language ) ),
+			$product->brand->Name,
+			$product->Name
+		);
 		
 		
 		$this->render( 'edit', array(
@@ -271,13 +283,88 @@ class ProductController extends Controller
 	}
 	
 	
-	public function actionComparsionAdd( $ProductID ) {
+	public function actionComparsionAdd( $id ) {
+		$id = null;
+		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
+			 $id = (integer) $_GET[ 'id' ];
+		}
+		
+		$product = Product::model()->findByPk( $id );
+		if( empty( $product ) ) {
+			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
+		}
+		
+		
+		$productCategoryID = $product->category->CategoryID;
+		
+		// сохранить товар в сравнении в его категории
+		if( !isset( Yii::app()->session[ 'comparsion.' . $productCategoryID ] ) ) {
+			$categoryCompareProductsIDs = array( $id );
+		}
+		else {
+			$categoryCompareProductsIDs = Yii::app()->session[ 'comparsion.' . $productCategoryID ];
+			if( !in_array( $id, $categoryCompareProductsIDs ) ) {
+				$categoryCompareProductsIDs[] = $id;
+			}
+		}
+		
+		Yii::app()->session[ 'comparsion.' . $productCategoryID ] = $categoryCompareProductsIDs;
+		
+		
 		echo CJSON::encode( array(
 			'text' => Yii::t( 'product', 'Compare' ),
-			'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => 1 ) ),
+			'totalText' => Yii::t( 'product', ':count product(s) in comparison', array( ':count' => count( $categoryCompareProductsIDs ) ) ),
+			'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => $productCategoryID, 'lc' => Yii::app()->language ) ),
 		));
 		
 		Yii::app()->end();
+	}
+	
+	
+	public function actionCompare() {
+		$cid = null;
+		if( isset( $_GET[ 'cid' ] ) && !empty( $_GET[ 'cid' ] ) ) {
+			 $cid = (integer) $_GET[ 'cid' ];
+		}
+		
+		$category = Category::model()->findByPk( $cid );
+		if( empty( $category ) ) {
+			throw new CHttpException( 404, Yii::t( 'category', 'Category not found' ) );
+		}
+		
+		$categoryCompareProductsIDs = Yii::app()->session[ 'comparsion.' . $cid ];
+		if( !$categoryCompareProductsIDs || count( $categoryCompareProductsIDs ) == 0 ) {
+			throw new CHttpException( 406, Yii::t( 'product', 'Comparison list is empty' ) );
+		}
+		
+		
+		$categoryFeatures = $category->features;
+		
+		$compareProducts = array();
+		foreach( $categoryCompareProductsIDs as $categoryCompareProductID ) {
+			$product = Product::model()->findByPk( $categoryCompareProductID );
+			
+			if( empty( $product ) ) {
+				continue;
+			}
+			
+			
+			$compareProducts[] = $product;
+		}
+		
+		
+		$this->pageTitle = Yii::t( 'product', ':categoryName : comparison', array( ':categoryName' => $category->PluralName ) );
+		$this->breadcrumbs = array(
+			$product->category->parentCategory->PluralName,
+			$product->category->PluralName => Yii::app()->createUrl( 'product/list', array( 'cid' => $product->category->CategoryID, 'lc' => Yii::app()->language ) ),
+			Yii::t( 'product', 'Comparison' )
+		);
+		
+		
+		$this->render( 'compare', array(
+			'categoryFeatures' => $categoryFeatures,
+			'compareProducts' => $compareProducts,
+		));
 	}
 }
 

@@ -5,7 +5,10 @@ return array(
 	'Category not defined' => 'Категорію не визначено',
 	'Category not found' => 'Категорію не найдено',
 	'Compare' => 'Порівняти',
+	'Comparison' => 'Порівняння',
 	'Comparison list' => 'Список порівняння',
+	'Comparison list is empty' => 'Список порівняння порожній',
+	'Description' => 'Опис',
 	'Features' => 'Характеристики',
 	'File Name' => 'Ім’я файлу',
 	'Images' => 'Зображення',
@@ -14,6 +17,7 @@ return array(
 	'Product not found' => 'Товар не знайдено',
 	'Product created' => 'Товар додано',
 	'Product updated' => 'Товар оновлено',
-	'Products in comparison' => 'Товарів у порівнянні'
+	':categoryName : comparison' => ':categoryName : порівняння',
+	':count product(s) in comparison' => ':count товар(и) у порівнянні',
 );
 ?>

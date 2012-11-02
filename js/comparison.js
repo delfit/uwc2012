@@ -10,16 +10,20 @@ $(document).ready(function(){
 			url: link.attr('href'),
 			type: "GET",
 			data: { 
-				'ProductID': productID 
+				'id': productID 
 			},
 			dataType: "json",
 			success: function( resultJSON ) {
-				console.log(resultJSON);
-				
 				// заменить ссылку
 				link.fadeOut('fast', function(){
 					link.attr('href', resultJSON.href ).text(resultJSON.text).removeClass('compare-link').fadeIn('fast');
 					link.unbind('click');
+				});
+				
+				// заменить общее количество товаров в сравнении
+				var totalCompareProductsLink = $( '.comparison-text' ).first();
+				totalCompareProductsLink.fadeOut('fast', function(){
+					totalCompareProductsLink.attr('href', resultJSON.href ).text(resultJSON.totalText).removeClass('hidden').fadeIn('fast');
 				});
 			}
 		});

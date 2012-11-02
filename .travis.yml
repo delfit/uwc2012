@@ -8,9 +8,13 @@ before_script:
   - chmod -R 0777 ./protected/runtime
   - ./protected/tests/travis/apache-setup.sh
   - ./protected/tests/travis/mysql-setup.sh
+  - ./protected/tests/travis/php-setup.sh
   - ./protected/tests/travis/phpunit-selenium-setup.sh
   - firefox --version
-  - wget -O /tmp/test.uwc2012.delfit.loc_index.html http://test.uwc2012.delfit.loc && cat /tmp/test.uwc2012.delfit.loc_index.html
+  - wget -O /tmp/test.uwc2012.delfit.loc_requirements.html http://test.uwc2012.delfit.loc/lib/yii-1.1.12/requirements/index.php
+  - cat /tmp/test.uwc2012.delfit.loc_requirements.html
+  - wget -O /tmp/test.uwc2012.delfit.loc_index.html http://test.uwc2012.delfit.loc 
+  - cat /tmp/test.uwc2012.delfit.loc_index.html
   - wget -O /tmp/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
   - java -jar /tmp/selenium-server-standalone.jar &
   - export DISPLAY=:99.0

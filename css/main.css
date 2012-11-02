@@ -7,16 +7,6 @@ body
 	padding: 45px 0 0 0;
 }
 
-.comparison {
-	background-color: whitesmoke;
-	border: 1px solid #404040;
-	display: none;
-	position: fixed;
-	right: 10%;
-	text-align: center;
-	top: 10%;
-}
-
 .comparison-text 
 {
 	font-size: 14px;
