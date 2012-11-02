@@ -12,17 +12,20 @@
 		
 		echo CHtml::tag( 'a', array( 
 			'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ),
-		), $product->fullProductName );
+		), $product->fullName );
 		?>
 	</h3>
 	
 	<div class="span4">
 		<ul class="thumbnails">
 			<?php
-				// TODO улучшить код
-				foreach( $product->productHasImages as $imageIndex => $productHasImage ) {
-					$currentElement = '<li class="span';
-					$currentImageSrc = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $productHasImage->FileName;
+			// отрисовать кнопки управления товаром
+			if( ! Yii::app()->user->isGuest ) {
+				echo DHtml::actionButtons( 
+					Yii::app()->createUrl( 'product/update', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ), 
+					Yii::app()->createUrl( 'product/delete', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) )
+				);
+			}
 
 					if ( $imageIndex == 0 ) {
 						$currentElement .=  '4';
@@ -31,8 +34,8 @@
 						$currentElement .=  '1';
 					}
 					$currentElement .= '">
-						<a href="' . $currentImageSrc . '" rel="lightbox-product" class="thumbnail" title="' . $product->fullProductName . '">
-							<img src="' . $currentImageSrc . '" alt="' . $product->fullProductName . '" class="img-rounded" align="top" />
+						<a href="' . $currentImageSrc . '" rel="lightbox-product" class="thumbnail" title="' . $product->fullName . '">
+							<img src="' . $currentImageSrc . '" alt="' . $product->fullName . '" class="img-rounded" align="top" />
 						</a>
 					</li>';
 					echo $currentElement;

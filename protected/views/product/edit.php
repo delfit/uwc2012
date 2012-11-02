@@ -30,7 +30,6 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 
 <center>
 	<?php
-	
 		if( $product->getIsNewRecord() ) {
 			$action = 'product/create';
 		}
@@ -58,12 +57,48 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 <br />
 
 
-<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm'); ?>
+<?php 
+	$form = $this->beginWidget( 
+		'bootstrap.widgets.TbActiveForm', 
+		array(
+			'id' => 'product-form',
+			'enableAjaxValidation' => false,
+			'htmlOptions' => array( 
+				'enctype' => 'multipart/form-data'
+			) 
+		) 
+	); 
+?>
 
 <div class="row">
 	<div class="span3">
-		<?php 
-			echo $form->dropDownListRow( $product, 'CategoryID', $categories );
+		<?php
+			
+			if( $product->getIsNewRecord() ) {
+				$baseUrl = Yii::app()->getBaseUrl( true );
+				$actionParams = $this->getActionParams();
+				if( key_exists( 'cid', $actionParams ) ) {
+					unset( $actionParams[ 'cid' ] );
+				}
+				$routeUrl = Yii::app()->createUrl( $this->getRoute(), $actionParams );
+			
+				$htmlOptions = array(
+					'disabled' => false,
+					'onChange' => 'window.location="' . $baseUrl . $routeUrl . '&cid=" + this.value',
+				);
+			}
+			else {
+				$htmlOptions = array( 
+					'disabled' => true
+				);
+			}
+	
+			echo $form->dropDownListRow( 
+				$product, 
+				'CategoryID',
+				$categories,
+				$htmlOptions
+			);
 		?>
 	</div>
 	<div class="span3">
@@ -77,86 +112,84 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 <div class="row">
 	<div class="span6">
 		<h4><?php echo Yii::t( 'product', 'Images' ) ?></h4>
-
-		<?php
-		if( $productImagesDataProvider->itemCount > 0 ) {
-			// таблица изображений
-			$this->widget( 'bootstrap.widgets.TbExtendedGridView', array(
-				'dataProvider' => $productImagesDataProvider,
-				
-				'afterSortableUpdate' => 'js:function(){}',
-				'ajaxUpdate' => false,
-				'sortableRows' => true,
-				'template' => '{items}',
-				'type' => 'striped bordered',
-				
-				'columns' => array(
-					array( 
-						'class' => 'CDataColumn',
-						'headerHtmlOptions' => array( 'style' => 'display:none' ),
-						'htmlOptions' => array( 'style' => 'display:none' ),
-						'type' => 'raw',
-						'value' => '\'<input type="hidden" name="ProductHasImagesID[]" value="\' . $data->ProductHasImagesID . \'" />\'',
-					),
-					array(
-						'class' => 'bootstrap.widgets.TbImageColumn',
-						'imagePathExpression' => 'Yii::app()->request->baseUrl . \'/\' . Yii::app()->params[ \'imagesFolder\' ] . \'/\' . $data->FileName',
-						'imageOptions' => array(
-							'width' => 100
-						)
-					),
-					array( 
-						'class' => 'CLinkColumn',
-						'header' => Yii::t( 'product', 'File Name' ), 
-						'labelExpression' => '$data->FileName',
-						'urlExpression' => 'Yii::app()->request->baseUrl . \'/\' . Yii::app()->params[ \'imagesFolder\' ] . \'/\' . $data->FileName',
-						'linkHtmlOptions' => array(
-							'rel' => 'lightbox'
-						)
-					),
-					array(
-						'class' => 'bootstrap.widgets.TbButtonColumn',
-						'template' => '{delete}',
-						'buttons' => array(
-							'delete' => array(
-								// удалить строку таблицы
-								'click' => 'function(){$(this).parent().parent().remove();}',
-								'url' => null
-							)
-						)
-					)
-				),
-			));
-		}
+		
+		<?php 		
+			echo $form->fileFieldRow( $product, 'Image' );
 		?>
 
-		<?php echo $form->fileFieldRow( $product, 'productHasImages.FileName' ); ?>
+		<?php
+		if( !$product->getIsNewRecord() ) {
+			if( ( $productImagesDataProvider->itemCount > 0 ) ) {
+				// таблица изображений
+				$this->widget( 'bootstrap.widgets.TbExtendedGridView', array(
+					'dataProvider' => $productImagesDataProvider,
+
+					'afterSortableUpdate' => 'js:function(){}',
+					'ajaxUpdate' => false,
+					'sortableRows' => true,
+					'template' => '{items}',
+					'type' => 'striped bordered',
+
+					'columns' => array(
+						array( 
+							'class' => 'CDataColumn',
+							'headerHtmlOptions' => array( 'style' => 'display:none' ),
+							'htmlOptions' => array( 'style' => 'display:none' ),
+							'type' => 'raw',
+							'value' => '\'<input type="hidden" name="ProductHasImagesID[]" value="\' . $data->ProductHasImagesID . \'" />\'',
+						),
+						array(
+							'class' => 'bootstrap.widgets.TbImageColumn',
+							'imagePathExpression' => 'Yii::app()->request->baseUrl . \'/\' . Yii::app()->params[ \'imagesFolder\' ] . \'/\' . $data->FileName',
+							'imageOptions' => array(
+								'width' => 100
+							)
+						),
+						array( 
+							'class' => 'CLinkColumn',
+							'header' => Yii::t( 'product', 'File Name' ), 
+							'labelExpression' => '$data->FileName',
+							'urlExpression' => 'Yii::app()->request->baseUrl . \'/\' . Yii::app()->params[ \'imagesFolder\' ] . \'/\' . $data->FileName',
+							'linkHtmlOptions' => array(
+								'rel' => 'lightbox'
+							)
+						),
+						array(
+							'class' => 'bootstrap.widgets.TbButtonColumn',
+							'template' => '{delete}',
+							'buttons' => array(
+								'delete' => array(
+									// удалить строку таблицы
+									'click' => 'function(){$(this).parent().parent().remove();}',
+									'url' => null
+								)
+							)
+						)
+					),
+				));
+			}
+		}
+		?>		
 	</div>
 	
 	<div class="span6">
 		<h4><?php echo Yii::t( 'product', 'Features' ) ?></h4>
 		
-		<?php 
-		// таблица характеристик
-		$this->widget('bootstrap.widgets.TbGridView', array(
-			'dataProvider' => $productFeaturesDataProvider,
+		<?php	
+		foreach( $features as $feature ) {
+			echo CHtml::openTag( 'div', array( 'class' => 'row' ) );
 			
-			'template' => '{items}',
-			'type' => 'striped bordered',
+			echo CHtml::openTag( 'div', array( 'class' => 'span2' ) );
+			echo CHtml::label( $feature[ 'Name' ], 'Feature_' . $feature[ 'FeatureID' ] );
+			echo CHtml::closeTag( 'div' );
 			
-			'columns' => array(
-				'feature.Name',
-				array(
-					'class' => 'bootstrap.widgets.TbEditableColumn',
-					'name' => 'Value',
-					'sortable' => false,
-					'editable' => array(
-						'url' => $this->createUrl('product/editable'),
-						'placement' => 'right',
-						'inputclass' => 'span2'
-					)
-				)),
-		));
+			echo CHtml::openTag( 'div', array( 'class' => 'span4' ) );
+			echo CHtml::textField( 'FeatureValues[]', $feature[ 'Value' ], array( 'id' => 'Feature_' . $feature[ 'FeatureID' ], 'class' => 'input-xlarge' ) );
+			echo CHtml::hiddenField( 'FeatureIDs[]', $feature[ 'FeatureID' ] );
+			echo CHtml::closeTag( 'div' );
+			
+			echo CHtml::closeTag( 'div' );
+		}
 	?>
 	</div>
 </div>

@@ -41,7 +41,7 @@ class ProductHasFeatures extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('ProductID, FeatureID, Index, Value', 'required'),
+			array('ProductID, FeatureID, Index', 'required'),
 			array('ProductID, FeatureID, Index', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -96,5 +96,76 @@ class ProductHasFeatures extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+	
+	
+	public function getEmptyList( $categoryID ) {
+		$featuresList = array();
+		$features = Feature::model()->findAll(
+			'CategoryID = :categoryID', 
+			array(
+				':categoryID' => $categoryID
+			)
+		);
+		
+		foreach( $features as $feature ) {
+			$featuresList[] = array(
+				'FeatureID' => $feature->FeatureID,
+				'Name' => $feature->Name,
+				'Value' => ''
+			);
+		}
+		
+		
+		return $featuresList;
+	}
+	
+	
+	public function getListWithValues( $product ) {
+		$sql = '
+			SELECT 
+				Feature.FeatureID,
+				FeatureTranslation.Name,
+				ProductHasFeatures.Value
+			FROM
+				Feature
+			LEFT JOIN
+				FeatureTranslation ON FeatureTranslation.FeatureID = Feature.FeatureID AND FeatureTranslation.LanguageID = :languageID
+			LEFT JOIN
+				ProductHasFeatures ON ProductHasFeatures.FeatureID = Feature.FeatureID AND ProductHasFeatures.ProductID = :productID
+			WHERE
+				Feature.CategoryID = :categoryID
+		';
+		
+		$command = Yii::app()->db->createCommand( $sql );
+		// TODO упростить связывание значений
+		$currentLanguageID = Language::model()->getCurrentLanguageID();
+		$productID = $product->ProductID;
+		$categoryID = $product->CategoryID;
+		
+		$command->bindParam( ':languageID', $currentLanguageID );
+		$command->bindParam( ':productID', $productID );
+		$command->bindParam( ':categoryID', $categoryID );
+		
+		$featuresList = $command->queryAll();
+		
+		
+		return $featuresList;
+	}
+	
+	
+	public function getNextIndex( $productID ) {
+		$feature = $this->find( array(
+			'condition' => 't.ProductID = :productID',
+			'params' => array(
+				':productID' => $productID
+			),
+			'order' => 't.Index DESC'
+		) );
+		if( !empty( $feature ) ) {
+			return $feature->Index + 1;
+		}
+		
+		return 1;
 	}
 }

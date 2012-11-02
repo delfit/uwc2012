@@ -2,7 +2,7 @@
 	$productURL = Yii::app()->createUrl( 'product/view', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) );
 ?>
 
-<div class="row row-spacer">
+<div class="row row-spacer" itemscope itemtype="http://data-vocabulary.org/Product">
 	<div class="span4">
 		<a href="<?php echo $productURL;?>" target="_self"><img src="<?php echo $data->mainImageURL; ?>" alt="<?php echo $data->fullProductName; ?>" class="img-rounded" align="top" /></a><br />
 		<?php

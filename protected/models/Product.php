@@ -22,6 +22,7 @@ class Product extends CActiveRecord
 
 	public $Description = '';
 	public $LanguageID = null;
+	public $Image = null;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -59,6 +60,8 @@ class Product extends CActiveRecord
                 array( 'CategoryID, BrandID, Name', 'required' ),
                 array( 'CategoryID, BrandID, IsDraft', 'numerical', 'integerOnly' => true ),
                 array( 'LanguageID, Description', 'safe' ),
+				array( 'Image', 'file', 'allowEmpty'=>true,'types'=>'jpg, gif, png' ),
+				array( 'Image', 'safe' ),
 				
                 array( 'Name', 'length', 'max' => 100 ),
                 // The following rule is used by search().
@@ -79,7 +82,7 @@ class Product extends CActiveRecord
 			'brand' => array( self::BELONGS_TO, 'Brand', 'BrandID' ),
 			//'features' => array( self::MANY_MANY, 'Feature', 'ProductHasFeatures(ProductID,FeatureID)' ),
 			'productHasFeatures' => array( self::HAS_MANY, 'ProductHasFeatures', 'ProductID' ),
-			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index DESC', 'limit' => Yii::app()->params[ 'default' ][ 'countImagesPerProduct' ] ),
+			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index ASC', 'limit' => Yii::app()->params[ 'default' ][ 'countImagesPerProduct' ] ),
 			'productTranslations' => array( self::HAS_MANY, 'ProductTranslation', 'ProductID' ),
 		);
 	}
@@ -95,6 +98,7 @@ class Product extends CActiveRecord
                 'BrandID' => 'Brand',
                 'Name' => 'Name',
                 'IsDraft' => 'Is Draft',
+				//'Image' => 'Image'
             );
 	}
 	
@@ -238,20 +242,201 @@ class Product extends CActiveRecord
 		return $products;
 	}
 	
-
-	public function getMainImageURL() {
-		// TODO уточнить размеры картинок
-		$mainImageUrl = 'http://placehold.it/300x200&text=Image+is+Not+Avaliable';
-		if( isset( $this->productHasImages[ 0 ] ) ) {
-			$mainImageUrl = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $data->productHasImages[0]->FileName;
+	
+	/**
+	 * Обновить характеристики товара
+	 * 
+	 * @param array $fraturesIDs  идентификаторы характеристик
+	 * @param array $featuresValues  значения характеристик
+	 * 
+	 * @return boolean
+	 */
+	public function updateFeatures( $fraturesIDs, $featuresValues ) {
+		$transactionProductHasFeatures = ProductHasFeatures::model()->dbConnection->beginTransaction();
+		try {
+			foreach( $fraturesIDs as $featureIndex => $fratureID ) {
+				$currentProductFeature = ProductHasFeatures::model()->find(
+					'FeatureID = :featureID AND ProductID = :productID',
+					array(
+						':featureID' => $fratureID,
+						':productID' => $this->ProductID,
+					)
+				);
+				
+				if( empty( $currentProductFeature ) ) {
+					$currentProductFeature = new ProductHasFeatures();
+					$currentProductFeature->FeatureID = $fratureID;
+					$currentProductFeature->ProductID = $this->ProductID;
+				}
+				
+				if( isset( $featuresValues[ $featureIndex ] ) ) {
+					$currentProductFeature->Index = ProductHasFeatures::model()->getNextIndex( $this->ProductID );
+					$currentProductFeature->Value = $featuresValues[ $featureIndex ];
+				}
+				
+				
+				if( !$currentProductFeature->save( true ) ) {
+					print_r($currentProductFeature->getErrors());
+					// TODO учитывать все атрибуты
+					$this->addError( 'Value', $currentProductFeature->getError( 'Value' ) );
+					break;
+				}
+			}
+			
+			$transactionProductHasFeatures->commit();
+			
+			return true;
 		}
-		
-		return $mainImageUrl;
+		catch( Exception $exception ) {
+			$transactionProductHasFeatures->rollback();
+			
+			return false;
+		}
 	}
 	
 	
-	public function getFullProductName() {
-		return $this->category->SingularName . ' ' . $this->brand->Name . ' ' . $this->Name;
-	}
+	/**
+	 * Добавить изображение товара
+	 * 
+	 * @return boolean
+	 */
+	public function saveImage() {
+		if( !empty( $this->Image ) ) {
+			$this->Image = CUploadedFile::getInstance( $this,'Image' );
+			
+			$maxIndexProductImage = ProductHasImages::model()->find( 
+				array(
+					'condition' => 't.ProductID = :productID',
+					'params' => array(
+						':productID' => $this->ProductID
+					),
+					'order' => 't.Index DESC'
+				)
+			);
+			
+			$maxIdProductImage = ProductHasImages::model()->find(
+				array(
+					'condition' => 't.ProductID = :productID',
+					'params' => array(
+						':productID' => $this->ProductID
+					),
+					'order' => 't.ProductHasImagesID DESC'
+				)
+			);
+			
+			$maxIndex = 1;
+			if( !empty( $maxIndexProductImage ) ) {
+				$maxIndex = $maxIndexProductImage->Index + 1;
+			}
+			
+			$nextID = 1;
+			if( !empty( $maxIdProductImage ) ) {
+				$nextID = $maxIdProductImage->ProductHasImagesID;
+			}
+			
+			$productImageAlias = '';
+			if( true ) {
+				$productImageAlias .= $this->Name;
+				$productImageAlias = str_replace( array( '+', '-', '*', '@', '#', '%', '=', '?', '!', ';', '.', '/', ' ', '(', ')' ), '_', $productImageAlias );
+			}
+			
+			$productImageFileName = $productImageAlias . $this->ProductID . '_' . $nextID . '.' . $this->Image->extensionName;
+			
+			
+			
+			$newProductImage = new ProductHasImages();
+			$newProductImage->Index = $maxIndex;
+			$newProductImage->ProductID = $this->ProductID;
+			$newProductImage->FileName = $productImageFileName;
 
+			if( $newProductImage->save( true ) ) {
+				$productImageFileName = Yii::app()->params[ 'imagesFolder' ] . '/' . $productImageFileName;
+				$this->Image->saveAs( $productImageFileName );
+				
+				return true;
+			}
+			else {
+				$this->addError( 'Image', $newProductImage->getError( 'FileName' ) );
+				return false;
+			}
+		}		
+
+		
+		return false;
+	}
+	
+	
+	/**
+	 * Обновить список изображений ( удалить, пересортировать )
+	 * 
+	 * @param array $productImagesIDs  идентификаторы изображений товара
+	 */
+	public function updateImages( $productImagesIDs ) {
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			$indexes = array_flip( $productImagesIDs );			
+			foreach( $this->productHasImages as $currentProductImage ) {
+				if( in_array( $currentProductImage->ProductHasImagesID, $productImagesIDs ) ) {
+					$currentProductImage->Index = $indexes[ $currentProductImage->ProductHasImagesID ];
+					if( !$currentProductImage->save( true ) ) {		
+						$error = Yii::t( 'product', 'Can not update images' );
+						$this->addError( 'Image', $error );
+						throw new Exception( $error );
+					}
+				}
+				else {
+					$currentImageFileName = Yii::app()->params[ 'imagesFolder' ] . '/' . $currentProductImage->FileName;
+					if( file_exists( $currentImageFileName ) ) {
+						unlink( $currentImageFileName );
+					}
+					
+					$currentProductImage->delete();
+				}
+			}
+			
+			$transaction->commit();
+		}
+		catch( Exception $exception ) {
+			$transaction->rollback();
+		}
+	}
+	
+	
+	/**
+	 * Удаление товара вместе с файлами изображений и характеристиками
+	 * 
+	 * @return boolean
+	 * 
+	 * @throws Exception
+	 */
+	public function delete() {
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+
+			// удалить все характеристики
+			ProductHasFeatures::model()->deleteAll( 'ProductID = :productID',  array( ':productID' => $this->ProductID ) );
+
+
+			// удалить прикрепленные изображения вместе с файлами
+			foreach( $this->productHasImages as $productHasImage ) {
+				$currentImageFileName = Yii::app()->params[ 'imagesFolder' ] . '/' . $productHasImage->FileName;
+				if( file_exists( $currentImageFileName ) ) {
+					unlink( $currentImageFileName );
+				}
+			}			
+			ProductHasImages::model()->deleteAll( 'ProductID = :productID',  array( ':productID' => $this->ProductID ) );
+			
+			// удалить товар
+			$success = parent::delete();
+			
+			$transaction->commit();
+	
+			return $success;
+		}
+		catch( Exception $exception ) {
+			$transaction->rollback();
+			
+			return false;
+		}
+	}
 }

@@ -2,7 +2,9 @@
 return array(
 	'Add product' => 'Добавить товар',
 	'Add to comparsion' => 'Добавить к сравнению',
-	'Category not defined' => 'Категория не определена',
+	'Category not defined' => 'Категория не определена',	
+	'Can not delete features' => 'Невозможно удалить характеристики',	
+	'Can not delete images' => 'Невозможно удалить изображения',	
 	'Category not found' => 'Категория не найдена',
 	'Compare' => 'Сравнить',
 	'Comparison' => 'Сравнение',
