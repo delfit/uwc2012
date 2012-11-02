@@ -341,6 +341,16 @@ class ProductController extends Controller
 		
 		Yii::app()->end();
 	}
+	
+	
+	public function actionComparsionAdd( $ProductID ) {
+		echo CJSON::encode( array(
+			'text' => Yii::t( 'product', 'Compare' ),
+			'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => 1 ) ),
+		));
+		
+		Yii::app()->end();
+	}
 }
 
 ?>
