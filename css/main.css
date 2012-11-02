@@ -7,9 +7,21 @@ body
 	padding: 45px 0 0 0;
 }
 
-.row-spacer
+.comparison {
+	background-color: whitesmoke;
+	border: 1px solid #404040;
+	display: none;
+	position: fixed;
+	right: 10%;
+	text-align: center;
+	top: 10%;
+}
+
+.comparison-text 
 {
-	padding: 10px 0;
+	font-size: 14px;
+	font-style: italic;
+	font-weight: normal;
 }
 
 #footer
@@ -31,6 +43,11 @@ body
 {
 	font-weight: bold;
 	margin-top: 2em;
+}
+
+.row-spacer
+{
+	padding: 10px 0;
 }
 
 .top-link
@@ -57,8 +74,4 @@ body .navbar .nav > li > a
 body .navbar input[type="text"]
 {
 	color: #404040;
-}
-
-body .dropdown-menu {
-	min-width: 60px;
 }

@@ -269,6 +269,16 @@ class ProductController extends Controller
 	public function actionDelete() {
 		echo "actionProductDelete";
 	}
+	
+	
+	public function actionComparsionAdd( $ProductID ) {
+		echo CJSON::encode( array(
+			'text' => Yii::t( 'product', 'Compare' ),
+			'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => 1 ) ),
+		));
+		
+		Yii::app()->end();
+	}
 }
 
 ?>
