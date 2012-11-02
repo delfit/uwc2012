@@ -10,7 +10,7 @@ before_script:
   - ./protected/tests/travis/apache-setup.sh
   - ./protected/tests/travis/mysql-setup.sh
   - dpkg -l | grep php5
-  - ./protected/tests/travis/php-setup.sh
+  - sudo apt-get install php5 php5-cli php5-mysql php5-mcrypt php5-xsl php5-xdebug php-apc
   - ./protected/tests/travis/phpunit-selenium-setup.sh
   - firefox --version
   - wget -O /tmp/test.uwc2012.delfit.loc_requirements.html http://test.uwc2012.delfit.loc/lib/yii-1.1.12/requirements/index.php
