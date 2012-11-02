@@ -1,5 +1,8 @@
 <?php
-	$fullProductName = $product->category->SingularName . ' ' . $product->brand->Name . ' ' . $product->Name;
+	$productName = $product->brand->Name . ' ' . $product->Name;
+	$fullProductName = '<span itemprop="category">' . $product->category->SingularName . 
+			'</span>&nbsp;<span itemprop="brand">' . $product->brand->Name . 
+			'</span>&nbsp;<span itemprop="name">' . $product->Name . '</span>';
 	if( isset( $product->productHasImages[0]->FileName ) ) {
 		$mainProductImageSrc = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $product->productHasImages[0]->FileName;
 	}
@@ -10,70 +13,73 @@
 	
 	$productURL = Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) );
 ?>
-<div class="span12">
-	<h3>
-		<?php
-		// отрисовать кнопки управления товаром
-		if( ! Yii::app()->user->isGuest ) {
-			echo DHtml::actionButtons( 
-				Yii::app()->createUrl( 'product/update', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ), 
-				Yii::app()->createUrl( 'product/delete', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) )
-			);
-		}
-		
-		echo $fullProductName;
-		?>
-	</h3>
-	
-	<div class="span4">
-		<ul class="thumbnails">
+
+<div class="product" itemscope itemtype="http://data-vocabulary.org/Product">
+	<div class="span12" >
+		<h3>
 			<?php
-				// TODO улучшить код
-				foreach( $product->productHasImages as $imageIndex => $productHasImage ) {
-					$currentElement = '<li class="span';
-					$currentImageSrc = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $productHasImage->FileName;
+			// отрисовать кнопки управления товаром
+			if( ! Yii::app()->user->isGuest ) {
+				echo DHtml::actionButtons( 
+					Yii::app()->createUrl( 'product/update', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ), 
+					Yii::app()->createUrl( 'product/delete', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) )
+				);
+			}
 
-					if ( $imageIndex == 0 ) {
-						$currentElement .=  '4';
-					}
-					else {
-						$currentElement .=  '1';
-					}
-					$currentElement .= '">
-						<a href="' . $currentImageSrc . '" rel="lightbox-product" class="thumbnail" title="' . $fullProductName . '">
-							<img src="' . $currentImageSrc . '" alt="' . $fullProductName . '" class="img-rounded" align="top" />
-						</a>
-					</li>';
-					echo $currentElement;
-				}
+			echo $fullProductName;
 			?>
-		</ul>
-	</div>
-	<div class="span4">
-		<h4>Технические характеристики</h4>
-	<?php
-		// TODO улучшить код
-		$features = '<dl>';
-		foreach( $product->productHasFeatures as $productHasFeature ) {
-			$features .= '<dt><b>' . $productHasFeature->feature->Name . ':</b></dt>' . ' <dd>' . $productHasFeature->Value . '</dd> ';
-		}
-		$features .= '</dl>';
-		echo $features;
-	?>
-	</div>
-</div>
+		</h3>
 
-<div class="tabbable span10">
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#tab1" data-toggle="tab"><b>Описание</b></a></li>
-    <li><a href="#tab2" data-toggle="tab"><b>Отзывы</b></a></li>
-  </ul>
-  <div class="tab-content">
-    <div class="tab-pane active description-text" id="tab1">
-      <?php echo $product->Description; ?>
-    </div>
-    <div class="tab-pane" id="tab2">
-      <p>Howdy, I'm in Section 2.</p>
-    </div>
-  </div>
+		<div class="span4">
+			<ul class="thumbnails">
+				<?php
+					// TODO улучшить код
+					foreach( $product->productHasImages as $imageIndex => $productHasImage ) {
+						$currentElement = '<li class="span';
+						$currentImageSrc = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $productHasImage->FileName;
+
+						if ( $imageIndex == 0 ) {
+							$currentElement .=  '4';
+						}
+						else {
+							$currentElement .=  '1';
+						}
+						$currentElement .= '">
+							<a href="' . $currentImageSrc . '" rel="lightbox-product" class="thumbnail" itemprop="image" title="' . $productName . '">
+								<img src="' . $currentImageSrc . '" alt="' . $productName . '" class="img-rounded" align="top" />
+							</a>
+						</li>';
+						echo $currentElement;
+					}
+				?>
+			</ul>
+		</div>
+		<div class="span4">
+			<h4>Технические характеристики</h4>
+		<?php
+			// TODO улучшить код
+			$features = '<dl>';
+			foreach( $product->productHasFeatures as $productHasFeature ) {
+				$features .= '<dt><b>' . $productHasFeature->feature->Name . ':</b></dt>' . ' <dd>' . $productHasFeature->Value . '</dd> ';
+			}
+			$features .= '</dl>';
+			echo $features;
+		?>
+		</div>
+	</div>
+
+	<div class="tabbable span10">
+	  <ul class="nav nav-tabs">
+		<li class="active"><a href="#tab1" data-toggle="tab"><b>Описание</b></a></li>
+		<li><a href="#tab2" data-toggle="tab"><b>Отзывы</b></a></li>
+	  </ul>
+	  <div class="tab-content">
+		<div class="tab-pane active description-text" id="tab1">
+		  <?php echo '<span itemprop="description">' . $product->Description . '</span>' ; ?>
+		</div>
+		<div class="tab-pane" id="tab2">
+		  <p>Howdy, I'm in Section 2.</p>
+		</div>
+	  </div>
+	</div>
 </div>
