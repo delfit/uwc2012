@@ -6,6 +6,8 @@ return array(
 	'Can not delete features' => 'Неможливо видалити характеристики',
 	'Can not delete images' => 'Неможливо видалити зображення',
 	'Category not found' => 'Категорію не найдено',
+	'Compare' => 'Порівняти',
+	'Comparison list' => 'Список порівняння',
 	'Features' => 'Характеристики',
 	'File Name' => 'Ім’я файлу',
 	'Images' => 'Зображення',
@@ -13,7 +15,7 @@ return array(
 	'Product code' => 'Код товару',
 	'Product not found' => 'Товар не знайдено',
 	'Product created' => 'Товар додано',
-	'Product not deleted' => 'Товар не видалено',
-	'Product updated' => 'Товар оновлено'
+	'Product updated' => 'Товар оновлено',
+	'Products in comparison' => 'Товарів у порівнянні'
 );
 ?>

@@ -331,6 +331,16 @@ class ProductController extends Controller
 			throw new CHttpException( 404, 'The requested page does not exist.' );
 		return $model;
 	}
+	
+	
+	public function actionComparsionAdd( $ProductID ) {
+		echo CJSON::encode( array(
+			'text' => Yii::t( 'product', 'Compare' ),
+			'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => 1 ) ),
+		));
+		
+		Yii::app()->end();
+	}
 }
 
 ?>

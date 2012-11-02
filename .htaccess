@@ -1,5 +1,17 @@
 RewriteEngine on
 
+
+# if URL is for testing 
+RewriteCond %{HTTP_HOST} ^test
+
+# if a directory or a file exists, use it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d 
+
+# forward request to index-test.php
+RewriteRule . index-test.php [L]
+
+
 # if a directory or a file exists, use it directly
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

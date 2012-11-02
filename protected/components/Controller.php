@@ -19,6 +19,11 @@ class Controller extends CController
 	public $mainMenu = array( );
 	
 	/**
+	 * @var array languages menu items
+	 */
+	public $languagesMenu = array( );
+	
+	/**
 	 * @var array context menu items. This property will be assigned to {@link CMenu::items}.
 	 */
 	public $menu = array( );
@@ -37,7 +42,9 @@ class Controller extends CController
 	
 		$this->mainMenu = Category::model()->getList();
 		
+		$this->languagesMenu = Language::model()->findAll();
 		
+				
 		return true;
 	}
 	

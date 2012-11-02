@@ -7,9 +7,11 @@ body
 	padding: 45px 0 0 0;
 }
 
-.row-spacer
+.comparison-text 
 {
-	padding: 10px 0;
+	font-size: 14px;
+	font-style: italic;
+	font-weight: normal;
 }
 
 #footer
@@ -31,6 +33,11 @@ body
 {
 	font-weight: bold;
 	margin-top: 2em;
+}
+
+.row-spacer
+{
+	padding: 10px 0;
 }
 
 .top-link

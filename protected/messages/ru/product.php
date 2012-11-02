@@ -6,6 +6,8 @@ return array(
 	'Can not delete features' => 'Невозможно удалить характеристики',	
 	'Can not delete images' => 'Невозможно удалить изображения',	
 	'Category not found' => 'Категория не найдена',
+	'Compare' => 'Сравнить',
+	'Comparison list' => 'Список сравнения',
 	'Features' => 'Характеристики',
 	'File Name' => 'Имя файла',
 	'Images' => 'Изображения',
@@ -13,8 +15,8 @@ return array(
 	'Product code' => 'Код товара',
 	'Product not found' => 'Товар не найден',
 	'Product created' => 'Товар добавлено',
-	'Product deleted' => 'Товар удалено',
-	'Product not deleted' => 'Товар не удалено',
-	'Product updated' => 'Товар обновлен'
+	'Product updated' => 'Товар обновлен',
+	'Products in comparison' => 'Товаров в сравнении',
+	'Product not deleted' => 'Товар не видалено',
 );
 ?>

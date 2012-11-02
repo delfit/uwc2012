@@ -17,7 +17,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/slimbox2.css" media="screen" />
 		
-		
+		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/comparison.js', CClientScript::POS_END ) ?>
 		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/topScroller.js', CClientScript::POS_END ) ?>
 		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/slimbox2.js', CClientScript::POS_END ) ?>
 
@@ -28,6 +28,20 @@
 		<div class="container" id="page">
 			<div id="header">
 				<?php
+				
+				
+				$languageMenuItem[] = array(
+					'icon' => 'globe',
+					'items' => array()
+				);
+				
+				foreach( $this->languagesMenu as $language ) {
+					$languageMenuItem[ 0 ][ 'items' ][] = array( 
+						'label' => $language->Code, 
+						'url' => Yii::app()->createUrl( $this->getRoute(), array_merge( $this->getActionParams(), array( 'lc' => $language->Code ) ) ) 
+					);
+				}
+				
 				
 				if( Yii::app()->user->isGuest ) {
 					$configMenuItem[] = array(
@@ -60,8 +74,17 @@
 					'items' => array(
 						array(
 							'class' => 'bootstrap.widgets.TbMenu',
-							'items' => array_merge( $configMenuItem ,$this->mainMenu ),
+							'items' => $this->mainMenu,
 						),
+						
+						array(
+							'class' => 'bootstrap.widgets.TbMenu',
+							'htmlOptions' => array(
+								'class' => 'pull-right'
+							),
+							'items' => array_merge( $languageMenuItem, $configMenuItem ),
+						),
+						
 						'<form class="navbar-search form-search pull-right" action="' . Yii::app()->request->baseUrl . '/search' . '">
 							<div class="input-append">
 								<input name="q" type="text" class="search-query" placeholder="' . Yii::t( 'application', 'Searсh' ) . '" />
