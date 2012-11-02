@@ -7,14 +7,15 @@ before_script:
   - chmod -R 0777 ./assets
   - chmod -R 0777 ./images
   - chmod -R 0777 ./protected/runtime
+  - dpkg -l | grep php5
+  - sudo apt-get install php5 php5-cli php5-mysql php5-mcrypt php5-xsl php5-xdebug php-apc php5-gd
   - ./protected/tests/travis/apache-setup.sh
   - ./protected/tests/travis/mysql-setup.sh
-  - dpkg -l | grep php5
-  - sudo apt-get install php5 php5-cli php5-mysql php5-mcrypt php5-xsl php5-xdebug php-apc
   - ./protected/tests/travis/phpunit-selenium-setup.sh
   - firefox --version
   - wget -O /tmp/test.uwc2012.delfit.loc_requirements.html http://test.uwc2012.delfit.loc/lib/yii-1.1.12/requirements/index.php
   - cat /tmp/test.uwc2012.delfit.loc_requirements.html
+  - php -i
   - wget -O /tmp/test.uwc2012.delfit.loc_index.html http://test.uwc2012.delfit.loc 
   - cat /tmp/test.uwc2012.delfit.loc_index.html
   - wget -O /tmp/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
