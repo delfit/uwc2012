@@ -17,6 +17,33 @@
 
 
 <?php
+	if( $model->getIsNewRecord() ) {
+		$action = 'category/create';
+	}
+	else {
+		$action = 'category/update';
+	}
+	
+	
+
+<?php
+	$this->widget('bootstrap.widgets.TbAlert', array(
+			'block' => true,
+			'fade' => true, 
+			'closeText' => '×', 
+			'alerts' => array( 
+				'success',
+				'info',
+				'warning',
+				'error',
+				'danger'
+			),
+		)
+	);
+?>
+
+
+<?php
 
 	$action	= $model->getIsNewRecord() ? 'category/create' : 'category/update';
 	
