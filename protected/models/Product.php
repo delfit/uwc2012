@@ -338,8 +338,10 @@ class Product extends CActiveRecord
 				$productImageAlias = str_replace( array( '+', '-', '*', '@', '#', '%', '=', '?', '!', ';', '.', '/', ' ', '(', ')' ), '_', $productImageAlias );
 			}
 			
-			$productImageFileName = $productImageAlias . $this->ProductID . '_' . $nextID . '.' . $this->Image->extensionName;
-
+			$productImageFileName = $productImageAlias . '_' . $this->ProductID . '_' . $nextID . '.' . $this->Image->extensionName;
+			
+			
+			
 			$newProductImage = new ProductHasImages();
 			$newProductImage->Index = $maxIndex;
 			$newProductImage->ProductID = $this->ProductID;

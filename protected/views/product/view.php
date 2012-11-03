@@ -50,7 +50,7 @@
 		</div>
 
 		<div class="span4">
-			<h4>Технические характеристики</h4>
+			<h4><?php echo Yii::t( 'product', 'Technical features' ); ?></h4>
 		<?php
 			// TODO улучшить код
 			$features = '<dl>';

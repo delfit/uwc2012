@@ -12,8 +12,8 @@
 		<?php
 		// отрисовать ссылку на сравнение/добавление товара к сравнению
 		if( 
-			Yii::app()->session[ 'comparsion.' . $data->category->CategoryID ] && 
-			in_array( $data->ProductID, Yii::app()->session[ 'comparsion.' . $data->category->CategoryID ] ) 
+			Yii::app()->session[ 'comparison.' . $data->category->CategoryID ] && 
+			in_array( $data->ProductID, Yii::app()->session[ 'comparison.' . $data->category->CategoryID ] ) 
 		) {
 			echo CHtml::tag( 'a', array(
 				'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => $data->category->CategoryID, 'lc' => Yii::app()->language ) ),
@@ -21,9 +21,9 @@
 		}
 		else {
 			echo CHtml::tag( 'a', array(
-				'href' => Yii::app()->createUrl( 'product/comparsionAdd', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) ),
+				'href' => Yii::app()->createUrl( 'product/comparisonAdd', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) ),
 				'class' => 'compare-link',
-			), Yii::t( 'product', 'Add to comparsion' ) );
+			), Yii::t( 'product', 'Add to comparison' ) );
 		}
 		?>
 	</div>

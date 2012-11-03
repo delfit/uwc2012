@@ -162,7 +162,7 @@ return array(
 		// this is used in contact page
 		'adminEmail' => 'webmaster@example.com',
 		'default' => array(
-			'pageSize' => 10,
+			'pageSize' => 2,
 			'countImagesPerProduct' => 5
 		),
 		

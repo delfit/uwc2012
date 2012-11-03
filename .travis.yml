@@ -4,21 +4,37 @@ php:
   - 5.3
 
 before_script:
+  # export virtual display
+  - export DISPLAY=:99
+
+  # change application working folders for write access
   - chmod -R 0777 ./assets
   - chmod -R 0777 ./images
   - chmod -R 0777 ./protected/runtime
+
+  # install required PHP stuff
   - sudo apt-get install php5 php5-cli php5-mysql php5-mcrypt php5-xsl php5-xdebug php-apc php5-gd
+
+  # launch apache, MySQL and PHPUnit Selenium installers
   - ./protected/tests/travis/apache-setup.sh
   - ./protected/tests/travis/mysql-setup.sh
   - ./protected/tests/travis/phpunit-selenium-setup.sh
+
+  # get HTML of main page (for debug)
   - firefox --version
   - wget -O /tmp/test.uwc2012.delfit.loc_index.html http://test.uwc2012.delfit.loc 
   - cat /tmp/test.uwc2012.delfit.loc_index.html
-  - sudo apt-get install xvfb
-  - Xvfb :99 -ac &
-  - sleep 3
+
+  # start virtual display
+  - sh -e /etc/init.d/xvfb start
+  - sleep 5
+
+  # download and launch Selenium
   - wget -O /tmp/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
-  - DISPLAY=:99 java -jar /tmp/selenium-server-standalone.jar &
+  - java -jar /tmp/selenium-server-standalone.jar > /dev/null &
+  - sleep 5
+
+  # goto test's folder
   - cd protected/tests
 
 script: phpunit --colors --coverage-text ./

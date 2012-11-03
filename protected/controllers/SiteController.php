@@ -60,7 +60,7 @@ class SiteController extends Controller
 			// validate user input and redirect to the previous page if valid
 			if( $model->validate() && $model->login() )
 				Yii::app()->user->setFlash( 'success', Yii::t( 'application', 'Logined successful' ) );
-				$this->redirect( Yii::app()->user->returnUrl );
+				$this->redirect( 'site/index', array( 'lc' => Yii::app()->language ) );
 		}
 		// display the login form
 		$this->render( 'login', array( 'model' => $model ) );
@@ -72,6 +72,6 @@ class SiteController extends Controller
 	 */
 	public function actionLogout() {
 		Yii::app()->user->logout();
-		$this->redirect( Yii::app()->homeUrl );
+		$this->redirect( 'site/index', array( 'lc' => Yii::app()->language ) );
 	}
 }

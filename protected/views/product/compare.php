@@ -1,6 +1,21 @@
 
 <h2><?php echo $this->pageTitle; ?></h2>
 
+<?php
+$this->widget('bootstrap.widgets.TbAlert', array(
+	'block' => true,
+	'fade' => true, 
+	'closeText' => '×', 
+	'alerts' => array( 
+		'success',
+		'info',
+		'warning',
+		'error',
+		'danger'
+	),
+));
+?>
+
 <table class="table table-hover">
 	<?php
 	
@@ -9,7 +24,21 @@
 	echo CHtml::openTag( 'tr' );
 	echo CHtml::tag( 'th', array(), '&nbsp;' );
 	foreach( $compareProducts as $compareProduct ) {
-		echo CHtml::tag( 'th', array(), $compareProduct->fullName );
+		echo CHtml::openTag( 'th' );
+		
+		// кнопка удаления из сравнения
+		echo CHtml::tag( 'a', array( 
+			'href' => Yii::app()->createUrl( 'product/comparisonDelete', array( 'id' => $compareProduct->ProductID, 'lc' => Yii::app()->language ) ) 
+		), '<i class="icon icon-remove"></i>' );
+		
+		echo '&nbsp;';
+		
+		// название товара ссылкой
+		echo CHtml::tag( 'a', array( 
+			'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $compareProduct->ProductID, 'lc' => Yii::app()->language ) ) 
+		), $compareProduct->fullName );
+		
+		echo CHtml::closeTag( 'th' );
 	}
 	echo CHtml::closeTag( 'tr' );
 	echo CHtml::closeTag( 'thead' );
