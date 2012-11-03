@@ -20,6 +20,7 @@ return array(
 	'Product created' => 'Товар добавлено',
 	'Product updated' => 'Товар обновлен',
 	'Product ":productName" removed from comparison' => 'Товар ":productName" убран из сравнения',
+	'Technical features' => 'Технические характеристики',
 	':categoryName : comparison' => ':categoryName : сравнение',
 	':count product(s) in comparison' => ':count товар(а) в сравнении',
 );

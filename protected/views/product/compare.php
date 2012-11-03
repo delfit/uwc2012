@@ -28,14 +28,14 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 		
 		// кнопка удаления из сравнения
 		echo CHtml::tag( 'a', array( 
-			'href' => Yii::app()->createUrl( 'product/comparisonDelete', array( 'id' => $compareProduct->ProductID ) ) 
+			'href' => Yii::app()->createUrl( 'product/comparisonDelete', array( 'id' => $compareProduct->ProductID, 'lc' => Yii::app()->language ) ) 
 		), '<i class="icon icon-remove"></i>' );
 		
 		echo '&nbsp;';
 		
 		// название товара ссылкой
 		echo CHtml::tag( 'a', array( 
-			'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $compareProduct->ProductID ) ) 
+			'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $compareProduct->ProductID, 'lc' => Yii::app()->language ) ) 
 		), $compareProduct->fullName );
 		
 		echo CHtml::closeTag( 'th' );
