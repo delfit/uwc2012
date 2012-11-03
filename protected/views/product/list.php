@@ -5,7 +5,7 @@
 	
 	
 	if( isset( $categoryID )  ) {
-		$comparisonProductsIDs = Yii::app()->session[ 'comparsion.' . $categoryID ];
+		$comparisonProductsIDs = Yii::app()->session[ 'comparison.' . $categoryID ];
 		
 		echo '&nbsp;';
 		echo CHtml::tag( 'a', array(

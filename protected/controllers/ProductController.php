@@ -348,7 +348,7 @@ class ProductController extends Controller
 	}
 	
 	
-	public function actionComparsionAdd( $id ) {
+	public function actionComparisonAdd() {
 		$id = null;
 		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
 			 $id = (integer) $_GET[ 'id' ];
@@ -363,17 +363,17 @@ class ProductController extends Controller
 		$productCategoryID = $product->category->CategoryID;
 		
 		// сохранить товар в сравнении в его категории
-		if( !isset( Yii::app()->session[ 'comparsion.' . $productCategoryID ] ) ) {
+		if( !isset( Yii::app()->session[ 'comparison.' . $productCategoryID ] ) ) {
 			$categoryCompareProductsIDs = array( $id );
 		}
 		else {
-			$categoryCompareProductsIDs = Yii::app()->session[ 'comparsion.' . $productCategoryID ];
+			$categoryCompareProductsIDs = Yii::app()->session[ 'comparison.' . $productCategoryID ];
 			if( !in_array( $id, $categoryCompareProductsIDs ) ) {
 				$categoryCompareProductsIDs[] = $id;
 			}
 		}
 		
-		Yii::app()->session[ 'comparsion.' . $productCategoryID ] = $categoryCompareProductsIDs;
+		Yii::app()->session[ 'comparison.' . $productCategoryID ] = $categoryCompareProductsIDs;
 		
 		
 		echo CJSON::encode( array(
@@ -383,6 +383,39 @@ class ProductController extends Controller
 		));
 		
 		Yii::app()->end();
+	}
+	
+	
+	public function actionComparisonDelete() {
+		$id = null;
+		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
+			 $id = (integer) $_GET[ 'id' ];
+		}
+		
+		$product = Product::model()->findByPk( $id );
+		if( empty( $product ) ) {
+			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
+		}
+		
+		
+		$productCategoryID = $product->category->CategoryID;
+		
+		// удалить товар из сравнения в его категории
+		if( isset( Yii::app()->session[ 'comparison.' . $productCategoryID ] ) ) {
+			$categoryCompareProductsIDs = Yii::app()->session[ 'comparison.' . $productCategoryID ];
+			if( ( $key = array_search( $id, $categoryCompareProductsIDs ) ) !== false ) {
+				unset( $categoryCompareProductsIDs[ $key ] );
+			}
+		}
+		
+		
+		Yii::app()->session[ 'comparison.' . $productCategoryID ] = $categoryCompareProductsIDs;
+		
+		
+		Yii::app()->user->setFlash( 'success', Yii::t( 'product', 'Product ":productName" removed from comparison', array( ':productName' => $product->fullName ) ) );
+		
+		
+		$this->redirect( Yii::app()->createUrl( 'product/compare', array( 'cid' => $productCategoryID ) ) );
 	}
 	
 	
@@ -397,7 +430,7 @@ class ProductController extends Controller
 			throw new CHttpException( 404, Yii::t( 'category', 'Category not found' ) );
 		}
 		
-		$categoryCompareProductsIDs = Yii::app()->session[ 'comparsion.' . $cid ];
+		$categoryCompareProductsIDs = Yii::app()->session[ 'comparison.' . $cid ];
 		if( !$categoryCompareProductsIDs || count( $categoryCompareProductsIDs ) == 0 ) {
 			throw new CHttpException( 406, Yii::t( 'product', 'Comparison list is empty' ) );
 		}

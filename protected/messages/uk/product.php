@@ -1,7 +1,7 @@
 <?php
 return array(
 	'Add product' => 'Додати товар',
-	'Add to comparsion' => 'Додати до порівняння',
+	'Add to comparison' => 'Додати до порівняння',
 	'Category not defined' => 'Категорію не визначено',
 	'Can not delete features' => 'Неможливо видалити характеристики',
 	'Can not delete images' => 'Неможливо видалити зображення',
@@ -19,6 +19,7 @@ return array(
 	'Product not found' => 'Товар не знайдено',
 	'Product created' => 'Товар додано',
 	'Product updated' => 'Товар оновлено',
+	'Product ":productName" removed from comparison' => 'Товар ":productName" прибрано з порівняння',
 	':categoryName : comparison' => ':categoryName : порівняння',
 	':count product(s) in comparison' => ':count товар(и) у порівнянні',
 );
