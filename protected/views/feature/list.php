@@ -29,7 +29,7 @@
 ?>
 
 <fieldset> 
-	<legend> <?php echo Yii::t( 'category', 'New Feature' ); ?> </legend>
+	<legend> <?php echo Yii::t( 'feature', 'New Feature' ); ?> </legend>
 	<?php 
 		$baseUrl = Yii::app()->getBaseUrl( true );
 		$actionParams = $this->getActionParams();
@@ -49,13 +49,17 @@
 			$categories,
 			array(
 				'onChange' => 'window.location="' . $baseUrl . $routeUrl . $separator .'cid=" + this.value',
-				'class' => 'span7'
+				'class' => 'span7',
+				'prompt' => Yii::t( 'category', 'Slect category...' )
 			)
 		);
 	?>
 	<?php echo $form->textFieldRow( $model, 'Name', array( 'class' => 'span7' ) ); ?>
 	<?php echo $form->textAreaRow( $model, 'Description', array( 'class' => 'span7' ) ); ?>
 	<?php echo $form->hiddenField( $model, 'LanguageID' ); ?>
+	<?php echo CHtml::hiddenField( 'tlid', $language->LanguageID ); ?>
+	<?php echo CHtml::hiddenField( 'cid', $model->CategoryID ); ?>
+	<?php echo DHtml::actionLanguageCode(); ?>
 
 </fieldset>
 
@@ -116,7 +120,7 @@
 				array(
 					'class'=>'bootstrap.widgets.TbButtonColumn',
 					'template' => '{delete}',
-					'deleteButtonUrl' => 'Yii::app()->createUrl( \'feature\delete\', array( \'id\' => $data->FeatureID, \'tlid\' => ' . $model->LanguageID . ', \'cid\' => ' . $model->CategoryID . ' ) )',
+					'deleteButtonUrl' => 'Yii::app()->createUrl( \'feature/delete\', array( \'id\' => $data->FeatureID, \'tlid\' => ' . $model->LanguageID . ', \'cid\' => ' . $model->CategoryID . ', \'lc\' => \'' . Yii::app()->language . '\' ) )',
 				),
 			),
 		));

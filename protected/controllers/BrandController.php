@@ -29,60 +29,8 @@ class BrandController extends Controller
 			),
 		);
 	}
-
 	
-	/**
-	 * Добавить новый бренд
-	 */
-	public function actionCreate() {
-		$model = new Brand;
-		
-		if( isset( $_POST[ 'Brand' ] ) ) {
-			$model->attributes = $_POST[ 'Brand' ];
-			if( !$model->save() ) {
-				Yii::app()->user->setFlash( 'error', $model->getError( 'Name' ) );
-				$this->redirect( array( 'brand/list' ) );
-			}
-		}
-		
-		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" created', array( ':brandName' => $model->Name ) ) );
-		$this->redirect( array( 'brand/list' ) );
-	}
-
-
-	/**
-	 * Редактировать бренд
-	 */
-	public function actionUpdate() {
-		$id = ( integer ) $_POST[ 'pk' ];
-		$name = ( string ) $_POST[ 'name' ];
-		$value = ( string ) $_POST[ 'value' ];
-		
-		$model = $this->loadModel( $_POST[ 'pk' ] );
-
-		if( !empty( $id ) && !empty( $name ) && !empty( $value ) ) {
-			$model->{$name} = $value;
-			if( ! $model->save() ) {
-				echo $model->getError( $name );
-			}
-		}
-	}
-
-
-	/**
-	 * Удалить бренд
-	 * 
-	 * @param integer $id
-	 */
-	public function actionDelete( $id ) {
-		$model = $this->loadModel( $id );
-		$brandName = $model->Name;
-		$model->delete();
-		
-		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" was deleted', array( ':brandName' => $brandName ) ) );
-		$this->redirect( array( 'brand/list' ) );
-	}
-
+	
 	/**
 	 * Получить список брендов
 	 */
@@ -102,6 +50,79 @@ class BrandController extends Controller
 		) );
 	}
 
+	
+	/**
+	 * Добавить новый бренд
+	 */
+	public function actionCreate() {
+		$model = new Brand;
+
+		if( isset( $_POST[ 'Brand' ] ) ) {
+			$model->attributes = $_POST[ 'Brand' ];
+			if( $model->save() ) {
+				Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" created', array( ':brandName' => $model->Name ) ) );
+			}
+			else {
+				Yii::app()->user->setFlash( 'error', $model->getError( 'Name' ) );
+			}
+		}
+		
+		$actionParams = array();
+		if( isset( $_POST[ 'lc' ] ) ) {
+			$actionParams[ 'lc' ] = $_POST[ 'lc' ];
+		}
+		
+		
+		$this->redirect( Yii::app()->createUrl( 'brand/list', $actionParams ) );
+	}
+
+
+	/**
+	 * Редактировать бренд
+	 */
+	public function actionUpdate() {
+		$id = isset( $_POST[ 'pk' ] ) ? ( integer ) $_POST[ 'pk' ] : null;
+		$name = isset( $_POST[ 'name' ] ) ? ( string ) $_POST[ 'name' ] : null;
+		$value = isset( $_POST[ 'value' ] ) ? ( string ) $_POST[ 'value' ] : null;
+				
+		$model = $this->loadModel( $_POST[ 'pk' ] );
+
+		if( !empty( $id ) && !empty( $name ) && !empty( $value ) ) {
+			$model->{$name} = $value;
+			if( ! $model->save() ) {
+				echo $model->getError( $name );
+			}
+		}
+	}
+
+
+	/**
+	 * Удалить бренд
+	 * 
+	 * @param integer $id
+	 */
+	public function actionDelete() {
+		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
+
+		$model = $this->loadModel( $id );
+		$brandName = $model->Name;
+		
+		if( $model->isUsed() ) {
+			Yii::app()->user->setFlash( 'error', Yii::t( 'brand', 'Brand ":brandName" used in products and can not be deleted', array( ':brandName' => $brandName ) ) );
+		}
+		else {			
+			$model->delete();
+			Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" was deleted', array( ':brandName' => $brandName ) ) );
+		}
+		
+		
+		$requestActionParams = $this->getActionParams();
+		if( key_exists( 'id', $requestActionParams ) ) {
+			unset( $requestActionParams[ 'id' ] );
+		}		
+		$this->redirect( Yii::app()->createUrl( 'brand/list', $requestActionParams ) );
+	}
+
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
@@ -111,7 +132,7 @@ class BrandController extends Controller
 	public function loadModel( $id ) {
 		$model = Brand::model()->findByPk( $id );
 		if( $model === null )
-			throw new CHttpException( 404, 'The requested page does not exist.' );
+			throw new CHttpException( 404, Yii::t( 'application', 'The requested page does not exist.' ) );
 		return $model;
 	}
 

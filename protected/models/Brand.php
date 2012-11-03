@@ -88,4 +88,19 @@ class Brand extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	
+	/**
+	 * Проверить используется ли бренд
+	 * 
+	 * @return boolean
+	 */
+	public function IsUsed() {
+		return Product::model()->exists( 
+			'BrandID = :brandID', 
+			array( 
+				':brandID' => $this->BrandID
+			)
+		);
+	}
 }

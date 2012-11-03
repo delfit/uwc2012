@@ -1,13 +1,7 @@
 <?php
-	if( $model->getIsNewRecord() ) {
-		$action = 'category/create';
-	}
-	else {
-		$action = 'category/update';
-	}
-	
-	
 
+	$action	= $model->getIsNewRecord() ? 'category/create' : 'category/update';
+	
 	$form = $this->beginWidget( 'bootstrap.widgets.TbActiveForm', array(
 			'id' => 'category-form',
 			'type' => 'horizontal',

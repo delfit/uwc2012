@@ -81,22 +81,29 @@ return array(
 			'urlFormat' => 'path',
 			
 			'rules' => array(
+				// index page
+				'<tag:.*?>', 'pattern' => 'site/index',
+				array( 'site/index', 'pattern' => '<lc:\w{2,3}>/', 'verb' => 'GET' ),
+				array( 'site/index', 'pattern' => '<lc:\w{2,3}>/site/index', 'verb' => 'GET' ),
+				
 				'brands/<tag:.*?>' => 'brand/list',
-				// REST categories
+				// brands
 				array( 'brand/list', 'pattern' => 'brands', 'verb' => 'GET' ),
-				array( 'brand/view', 'pattern' => 'brand/<id:\d+>', 'verb' => 'GET' ),
+				array( 'brand/list', 'pattern' => '<lc:\w+>/brands', 'verb' => 'GET' ),
+				array( 'brand/delete', 'pattern' => '<lc:\w+>/brand/delete/<id:\w+>' ),
+				
+				'features/<tag:.*?>' => 'feature/list',
+				// features
+				array( 'feature/list', 'pattern' => 'features', 'verb' => 'GET' ),
+				array( 'feature/list', 'pattern' => '<lc:\w+>/features', 'verb' => 'GET' ),
+				array( 'feature/delete', 'pattern' => '<lc:\w+>/feature/delete/<id:\w+>' ),
 				
 				
-				'categories/<tag:.*?>' => 'category/list',
-				// REST categories
-				array( 'category/list', 'pattern' => '<lc:\w+>/categories', 'verb' => 'GET' ),
-				array( 'category/view', 'pattern' => '<lc:\w+>/category/<id:\d+>', 'verb' => 'GET' ),
-				     
-                array( 'category/list', 'pattern' => 'categories', 'verb' => 'GET' ),
-				array( 'category/view', 'pattern' => 'category/<id:\d+>', 'verb' => 'GET' ),
+				// categories   
+				array( 'feature/delete', 'pattern' => '<lc:\w+>/category/delete/<id:\d+>' ),
 				
 				'products/<tag:.*?>' => 'product/list',
-				// REST products
+				//  products
                 array( 'product/search', 'pattern' => '<lc:\w+>/search', 'verb' => 'GET' ),
 				array( 'product/list', 'pattern' => '<lc:\w+>/products', 'verb' => 'GET' ),
 				array( 'product/view', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'GET' ),

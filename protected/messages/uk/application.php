@@ -11,8 +11,10 @@ return array(
 	'Login' => 'Увійти',
 	'Logined successful' => 'Вхід успішно виконано',
 	'Name' => 'Назва',
+	'The requested page does not exist.' => 'Сторінку не знайдено',
 	'Save' => 'Зберегти',
 	'Searсh' => 'Пошук',
 	'Searсh results for' => 'Результати пошуку',
+	'Welcome to' => 'Ласкаво просимо в'
 );
 ?>

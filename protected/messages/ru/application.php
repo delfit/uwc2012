@@ -14,5 +14,7 @@ return array(
 	'Save' => 'Сохранить',
 	'Searсh' => 'Поиск',
 	'Searсh results for' => 'Результаты поиска',
+	'The requested page does not exist.' => 'Страница не найдена',
+	'Welcome to' => 'Добро пожаловать в'
 );
 ?>

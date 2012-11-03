@@ -1,10 +1,12 @@
 <?php
 /* @var $this SiteController */
 
-$this->pageTitle = Yii::app()->name;
+$this->pageTitle = Yii::t( 'application', Yii::app()->name );
 ?>
 
-<h1>Welcome to <i><?php echo CHtml::encode( Yii::app()->name ); ?></i></h1>
+<h1> 
+	<?php echo Yii::t( 'application', 'Welcome to' ) ?><i>&nbsp<?php echo CHtml::encode( $this->pageTitle ); ?> </i>
+</h1>
 
 <?php
 $this->widget('bootstrap.widgets.TbAlert', array(

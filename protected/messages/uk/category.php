@@ -7,5 +7,6 @@
 		'Category removed' => 'Категорія видалена',
 		'New Category' => 'Новая категория',
 		'PluralName' => 'Назва в множині',
+		'Slect category...' => 'Вкажіть категорію...'
 	);
 ?>

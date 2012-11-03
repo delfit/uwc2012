@@ -51,16 +51,13 @@ class Controller extends CController
 	
 	public function beforeAction( $action ) {
 		parent::beforeAction( $action );
-		
-		
 		// применить язык запроса
 		if( isset( $_REQUEST[ 'lc' ] ) && !empty( $_REQUEST[ 'lc' ] ) ) {
 			$languageCode = $_REQUEST[ 'lc' ];
 			Yii::app()->language = $languageCode;
 		}
-		
+
 		
 		return true;
 	}
-
 }

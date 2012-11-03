@@ -48,12 +48,11 @@ class Feature extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('CategoryID', 'required'),
-			array('CategoryID', 'numerical', 'integerOnly'=>true),
+			array('CategoryID', 'numerical', 'integerOnly'=>true, 'allowEmpty' => false ),
 			array('Name, Description, LanguageID', 'safe' ),
+			
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('FeatureID, CategoryID', 'safe', 'on'=>'search'),
@@ -65,8 +64,6 @@ class Feature extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'category' => array(self::BELONGS_TO, 'Category', 'CategoryID'),
 			'featureTranslations' => array(self::HAS_MANY, 'FeatureTranslation', 'FeatureID'),
@@ -91,9 +88,6 @@ class Feature extends CActiveRecord
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('FeatureID',$this->FeatureID);
@@ -110,6 +104,12 @@ class Feature extends CActiveRecord
 		) );
 	}
 	
+	/**
+	 * Проверяет включает ли AR указанный атрибут с учетом атрибутов определенных в модели
+	 * 
+	 * @param string $name  название атрибута
+	 * @return boolean
+	 */
 	public function hasAttribute( $name ) {
 		if( property_exists( $this, $name ) ) {
 			return true;
@@ -119,6 +119,11 @@ class Feature extends CActiveRecord
 	}
 	
 	
+	/**
+	 * Проверить используется ли характеристика
+	 * 
+	 * @return boolean
+	 */
 	public function IsUsed() {
 		return ProductHasFeatures::model()->exists( 
 			'FeatureID = :featureID', 

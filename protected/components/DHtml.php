@@ -43,4 +43,8 @@ class DHtml
 			),
 		), true );
 	}
+	
+	public static function actionLanguageCode() {
+		return CHtml::hiddenField( 'lc', Yii::app()->language );
+	}
 }
