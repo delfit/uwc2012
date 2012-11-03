@@ -41,12 +41,12 @@ class BrandController extends Controller
 			$model->attributes = $_POST[ 'Brand' ];
 			if( !$model->save() ) {
 				Yii::app()->user->setFlash( 'error', $model->getError( 'Name' ) );
-				$this->redirect( array( 'brand/list' ) );
+				$this->redirect( Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ) );
 			}
 		}
 		
 		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" created', array( ':brandName' => $model->Name ) ) );
-		$this->redirect( array( 'brand/list' ) );
+		$this->redirect( Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ) );
 	}
 
 
@@ -80,7 +80,7 @@ class BrandController extends Controller
 		$model->delete();
 		
 		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" was deleted', array( ':brandName' => $brandName ) ) );
-		$this->redirect( array( 'brand/list' ) );
+		$this->redirect( Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ) );
 	}
 
 	/**

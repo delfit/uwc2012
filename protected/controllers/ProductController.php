@@ -336,7 +336,7 @@ class ProductController extends Controller
 		}
 		
 		
-		$this->redirect( Yii::app()->createUrl( 'product/list', array( 'cid' => $categoryID ) ) );
+		$this->redirect( Yii::app()->createUrl( 'product/list', array( 'cid' => $categoryID, 'lc' => Yii::app()->language ) ) );
 	}
 	
 	
@@ -415,7 +415,7 @@ class ProductController extends Controller
 		Yii::app()->user->setFlash( 'success', Yii::t( 'product', 'Product ":productName" removed from comparison', array( ':productName' => $product->fullName ) ) );
 		
 		
-		$this->redirect( Yii::app()->createUrl( 'product/compare', array( 'cid' => $productCategoryID ) ) );
+		$this->redirect( Yii::app()->createUrl( 'product/compare', array( 'cid' => $productCategoryID, 'lc' => Yii::app()->language ) ) );
 	}
 	
 	

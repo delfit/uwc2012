@@ -113,7 +113,7 @@ class CategoryController extends Controller
 		$model->delete();
 		
 		Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category ":categoryName" was deleted', array( ':categoryName' => $categoryName ) ) );
-		$this->redirect( array( 'site/index' ) );
+		$this->redirect( Yii::app()->createUrl( 'site/index', array( 'lc' => Yii::app()->language ) ) );
 	}
 	
 	

@@ -41,11 +41,7 @@ class FeatureController extends Controller
 			$model->attributes = $_POST[ 'Feature' ];
 			if( !$model->save() ) {
 				Yii::app()->user->setFlash( 'error', $model->getError( 'CategoryID' ) );
-				$this->redirect(
-					array(
-						'feature/list'
-					)
-				);
+				$this->redirect( Yii::app()->createUrl( 'feature/list', array( 'lc' => Yii::app()->language ) ) );
 			}
 		}
 		
