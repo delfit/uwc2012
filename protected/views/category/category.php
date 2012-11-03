@@ -1,3 +1,21 @@
+
+<?php
+	$this->widget('bootstrap.widgets.TbAlert', array(
+			'block' => true,
+			'fade' => true, 
+			'closeText' => '×', 
+			'alerts' => array( 
+				'success',
+				'info',
+				'warning',
+				'error',
+				'danger'
+			),
+		)
+	);
+?>
+
+
 <?php
 	if( $model->getIsNewRecord() ) {
 		$action = 'category/create';
@@ -63,26 +81,9 @@
 				'bootstrap.widgets.TbButton', 
 				array( 
 					'buttonType' => 'submit',
-					'label' => $model->getIsNewRecord() ? Yii::t( 'application', 'Create' ) : Yii::t( 'application', 'Save' ) 
+					'label' => $model->getIsNewRecord() ? Yii::t( 'application', 'Add' ) : Yii::t( 'application', 'Save' ) 
 				) 
 		);?>
 	</div>
 
 <?php $this->endWidget(); ?>
-
-
-<?php
-	$this->widget('bootstrap.widgets.TbAlert', array(
-			'block' => true,
-			'fade' => true, 
-			'closeText' => '×', 
-			'alerts' => array( 
-				'success',
-				'info',
-				'warning',
-				'error',
-				'danger'
-			),
-		)
-	);
-?>

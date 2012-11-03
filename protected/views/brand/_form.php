@@ -28,7 +28,7 @@
 		<?php echo $form->label( $model, Yii::t( 'brand', 'Name' ) ); ?>
 		<?php echo $form->textField( $model, 'Name', array( 'class' => 'span10' ) ); ?>
 		<?php echo $form->error( $model, 'Name' ); ?>
-		<?php $this->widget( 'bootstrap.widgets.TbButton', array( 'buttonType' => 'submit', 'label' => Yii::t( 'brand', 'Add' ) ) ); ?>
+		<?php $this->widget( 'bootstrap.widgets.TbButton', array( 'buttonType' => 'submit', 'label' => Yii::t( 'application', 'Add' ) ) ); ?>
 	</div>
 
 	<?php $this->endWidget(); ?>

@@ -59,7 +59,7 @@
 							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create' ), 'icon' => 'plus' ),
 							array( 'label' => Yii::t( 'brand', 'Brands' ), 'url' => Yii::app()->createUrl( '/brand/list' ), 'icon' => 'list' ),
 							'---',
-							array( 'label' => Yii::t( 'application', 'Exit' ), 'url' => Yii::app()->createUrl( '/site/logout' ), 'icon' => 'off' ),
+							array( 'label' => Yii::t( 'application', 'Logout' ), 'url' => Yii::app()->createUrl( '/site/logout' ), 'icon' => 'off' ),
 						)
 					);
 				}
