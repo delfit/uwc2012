@@ -29,59 +29,8 @@ class BrandController extends Controller
 			),
 		);
 	}
+
 	
-	/**
-	 * Добавить новый бренд
-	 */
-	public function actionCreate() {
-		$model = new Brand;
-		
-		if( isset( $_POST[ 'Brand' ] ) ) {
-			$model->attributes = $_POST[ 'Brand' ];
-			if( !$model->save() ) {
-				Yii::app()->user->setFlash( 'error', $model->getError( 'Name' ) );
-				$this->redirect( Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ) );
-			}
-		}
-		
-		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" created', array( ':brandName' => $model->Name ) ) );
-		$this->redirect( Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ) );
-	}
-
-
-	/**
-	 * Редактировать бренд
-	 */
-	public function actionUpdate() {
-		$id = ( integer ) $_POST[ 'pk' ];
-		$name = ( string ) $_POST[ 'name' ];
-		$value = ( string ) $_POST[ 'value' ];
-		
-		$model = $this->loadModel( $_POST[ 'pk' ] );
-
-		if( !empty( $id ) && !empty( $name ) && !empty( $value ) ) {
-			$model->{$name} = $value;
-			if( ! $model->save() ) {
-				echo $model->getError( $name );
-			}
-		}
-	}
-
-
-	/**
-	 * Удалить бренд
-	 * 
-	 * @param integer $id
-	 */
-	public function actionDelete( $id ) {
-		$model = $this->loadModel( $id );
-		$brandName = $model->Name;
-		$model->delete();
-		
-		Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" was deleted', array( ':brandName' => $brandName ) ) );
-		$this->redirect( Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ) );
-	}
-
 	/**
 	 * Получить список брендов
 	 */

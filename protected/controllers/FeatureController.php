@@ -103,7 +103,6 @@ class FeatureController extends Controller
 			}
 			else {
 				Yii::app()->user->setFlash( 'error', $model->getError( 'CategoryID' ) );
-				$this->redirect( Yii::app()->createUrl( 'feature/list', array( 'lc' => Yii::app()->language ) ) );
 			}
 		}
 		
