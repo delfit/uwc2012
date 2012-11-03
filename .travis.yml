@@ -4,6 +4,7 @@ php:
   - 5.3
 
 before_script:
+  - export DISPLAY=:99
   - chmod -R 0777 ./assets
   - chmod -R 0777 ./images
   - chmod -R 0777 ./protected/runtime
@@ -14,11 +15,10 @@ before_script:
   - firefox --version
   - wget -O /tmp/test.uwc2012.delfit.loc_index.html http://test.uwc2012.delfit.loc 
   - cat /tmp/test.uwc2012.delfit.loc_index.html
-  - sudo apt-get install xvfb
-  - Xvfb :99 -ac &
-  - sleep 3
+  - sh -e /etc/init.d/xvfb start
+  - sleep 5
   - wget -O /tmp/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
-  - DISPLAY=:99 java -jar /tmp/selenium-server-standalone.jar &
+  - java -jar /tmp/selenium-server-standalone.jar &
   - cd protected/tests
 
 script: phpunit --colors --coverage-text ./
