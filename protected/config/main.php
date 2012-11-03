@@ -44,6 +44,7 @@ return array(
 		),
 		
 		'cache' => array(
+			// TODO изменить на CFileCache
 			'class' => 'system.caching.CDummyCache'
 		),
 		
@@ -86,8 +87,14 @@ return array(
 			
 			'rules' => array(
 				// index page
-				array( 'site/index', 'pattern' => '<lc:\w{2,3}>/site/index', 'verb' => 'GET' ),
 				array( 'site/index', 'pattern' => '<lc:\w{2,3}>/', 'verb' => 'GET' ),
+				
+				// login page
+				array( 'site/login', 'pattern' => '<lc:\w{2,3}>/login' ),
+				array( 'site/login', 'pattern' => 'login' ),
+				
+				array( 'site/logout', 'pattern' => '<lc:\w{2,3}>/logout' ),
+				array( 'site/logout', 'pattern' => 'logout' ),
 				
 
 				// brands
@@ -127,8 +134,10 @@ return array(
 				array( 'product/view', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'GET' ),
 				array( 'product/view', 'pattern' => 'product/<id:\d+>', 'verb' => 'GET' ),
 				
-				array( 'product/create', 'pattern' => '<lc:\w+>/product' ),
-				array( 'product/create', 'pattern' => 'product' ),
+				array( 'product/create', 'pattern' => '<lc:\w+>/product/create/<cid:\d+>' ),
+				array( 'product/create', 'pattern' => '<lc:\w+>/product/create' ),
+				array( 'product/create', 'pattern' => 'product/create/<cid:\d+>' ),
+				array( 'product/create', 'pattern' => 'product/create' ),
 				
 				array( 'product/update', 'pattern' => '<lc:\w+>/product/update/<id:\d+>' ),
 				array( 'product/update', 'pattern' => 'product/update/<id:\d+>' ),

@@ -127,7 +127,7 @@ class Language extends CActiveRecord
 		$languages = $this->findAll();
 		$currentLanguageCacheKey = 'application.language.getCurrentLanguage.LanguageCode.';
 		foreach( $languages as $language ) {
-			$cacheKeys[] = $currentLanguageCacheKey . $language->LanguageCode;
+			$cacheKeys[] = $currentLanguageCacheKey . $language->Code;
 		}
 		
 		foreach( $cacheKeys as $cacheKey ) {

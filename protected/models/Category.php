@@ -154,10 +154,10 @@ class Category extends CActiveRecord
 		);
 		
 		// добавить динамические ключи
-		$languages = $this->getAll();
+		$languages = Language::model()->getAll();
 		$categoryLanguageCacheKey = 'application.category.getList.LanguageCode.';
 		foreach( $languages as $language ) {
-			$cacheKeys[] = $categoryLanguageCacheKey . $language->LanguageCode;
+			$cacheKeys[] = $categoryLanguageCacheKey . $language->Code;
 		}
 		
 		foreach( $cacheKeys as $cacheKey ) {

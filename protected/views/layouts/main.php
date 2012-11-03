@@ -59,7 +59,7 @@
 							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create', array( 'lc' => Yii::app()->language ) ), 'icon' => 'plus' ),
 							array( 'label' => Yii::t( 'brand', 'Brands' ), 'url' => Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ), 'icon' => 'list' ),
 							'---',
-							array( 'label' => Yii::t( 'application', 'Logout' ), 'url' => Yii::app()->createUrl( '/site/logout', array( 'lc' => Yii::app()->language ) ), 'icon' => 'off' ),
+							array( 'label' => Yii::t( 'application', 'Logout' ), 'url' => Yii::app()->createUrl( 'site/logout', array( 'lc' => Yii::app()->language ) ), 'icon' => 'off' ),
 						)
 					);
 				}
@@ -68,7 +68,7 @@
 				// главное меню
 				$this->widget( 'bootstrap.widgets.TbNavbar', array(
 					'brand' => CHtml::encode( Yii::app()->name ), 
-					'brandUrl' => Yii::app()->createUrl( '/site/index', array( 'lc' => Yii::app()->language ) ), 
+					'brandUrl' => Yii::app()->homeUrl, 
 					'collapse' => true, 
 					'fluid' => true,
 					'items' => array(
@@ -85,7 +85,7 @@
 							'items' => array_merge( $languageMenuItem, $configMenuItem ),
 						),
 						
-						'<form class="navbar-search form-search pull-right" action="' . Yii::app()->request->baseUrl . '/search' . '">
+						'<form class="navbar-search form-search pull-right" action="' . Yii::app()->createUrl( 'product/search', array( 'lc' => Yii::app()->language ) ) . '">
 							<div class="input-append">
 								<input name="q" type="text" class="search-query" placeholder="' . Yii::t( 'application', 'Searсh' ) . '" />
 								<button type="submit" class="btn"><i class="icon-search"></i></button>

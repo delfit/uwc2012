@@ -52,7 +52,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 		echo CHtml::openTag( 'td' );
 		// TODO улучшить код
 		echo '<a href="' . $compareProduct->mainImageURL . '" rel="lightbox-product" class="span3 thumbnail" title="' . $compareProduct->fullName . '">
-			<img src="' . $compareProduct->mainImageURL . '" alt="' . $compareProduct->fullName . '" class="img-rounded" align="top" />
+			<img src="' . $compareProduct->mainImageURL . '" width="200" alt="' . $compareProduct->fullName . '" class="img-rounded" align="top" />
 		</a>';
 		echo CHtml::closeTag( 'td' );
 	}

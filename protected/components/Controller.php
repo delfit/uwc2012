@@ -38,9 +38,10 @@ class Controller extends CController
 	
 	public function beforeRender( $view ) {
 		parent::beforeRender( $view );
-		Yii::app()->cache->flush();
+		
 		$this->mainMenu = Category::model()->getList();
 		$this->languagesMenu = Language::model()->getAll();
+		
 				
 		return true;
 	}
@@ -48,10 +49,12 @@ class Controller extends CController
 	
 	public function beforeAction( $action ) {
 		parent::beforeAction( $action );
+		
 		// применить язык запроса
 		if( isset( $_REQUEST[ 'lc' ] ) && !empty( $_REQUEST[ 'lc' ] ) ) {
 			$languageCode = $_REQUEST[ 'lc' ];
 			Yii::app()->language = $languageCode;
+			Yii::app()->homeUrl = Yii::app()->createUrl( 'site/index', array( 'lc' => $languageCode ) );
 		}
 
 		

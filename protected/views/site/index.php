@@ -5,7 +5,7 @@ $this->pageTitle = Yii::t( 'application', Yii::app()->name );
 ?>
 
 <h1> 
-	<?php echo Yii::t( 'application', 'Welcome to' ) ?><i>&nbsp<?php echo CHtml::encode( $this->pageTitle ); ?> </i>
+	<?php echo Yii::t( 'application', 'Welcome to' ) ?> <i><?php echo CHtml::encode( $this->pageTitle ); ?> </i>
 </h1>
 
 <?php

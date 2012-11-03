@@ -120,11 +120,7 @@ class CategoryController extends Controller
 		}
 		
 		
-		$requestActionParams = $this->getActionParams();
-		if( key_exists( 'id', $requestActionParams ) ) {
-			unset( $requestActionParams[ 'id' ] );
-		}
-		$this->redirect( Yii::app()->createUrl( 'site/index', $requestActionParams ) );
+		$this->redirect( Yii::app()->homeUrl );
 	}
 	
 	

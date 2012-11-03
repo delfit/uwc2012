@@ -20,11 +20,10 @@
 	$action	= $model->getIsNewRecord() ? 'category/create' : 'category/update';
 	
 	$form = $this->beginWidget( 'bootstrap.widgets.TbActiveForm', array(
-			'id' => 'category-form',
-			'type' => 'horizontal',
-			'htmlOptions'=>array('class'=>'well'),
-		)
-	);
+		'id' => 'category-form',
+		'type' => 'horizontal',
+		'htmlOptions'=>array('class'=>'well'),
+	));
 
 ?>
 
@@ -63,14 +62,14 @@
 	</fieldset>
 	<?php 
 		echo $form->dropDownListRow(
-				$model, 'ParentCategoryID', 
-				$categories, 
-				array( 
-					'class' => 'span7',
-					'prompt' => Yii::t( 'category', 'Root' ),
-					'disabled' => !$model->getIsNewRecord()
-				)
-			);
+			$model, 'ParentCategoryID', 
+			$categories, 
+			array( 
+				'class' => 'span7',
+				'prompt' => Yii::t( 'category', '[Root]' ),
+				'disabled' => !$model->getIsNewRecord()
+			)
+		);
 	?>
 
 	<?php echo $form->textFieldRow( $model, 'PluralName', array( 'class' => 'span7' ) ); ?>

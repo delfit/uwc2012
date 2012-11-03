@@ -67,13 +67,13 @@ class BrandController extends Controller
 			}
 		}
 		
-		$actionParams = array();
+		$requestActionParams = $this->getActionParams();
 		if( isset( $_POST[ 'lc' ] ) ) {
-			$actionParams[ 'lc' ] = $_POST[ 'lc' ];
+			$requestActionParams[ 'lc' ] = $_POST[ 'lc' ];
 		}
 		
 		
-		$this->redirect( Yii::app()->createUrl( 'brand/list', $actionParams ) );
+		$this->redirect( Yii::app()->createUrl( 'brand/list', $requestActionParams ) );
 	}
 
 

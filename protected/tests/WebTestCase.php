@@ -30,7 +30,9 @@ class WebTestCase extends CWebTestCase
 	 * 
 	 */
 	protected function login() {
-		$this->open( '/site/login' );
+		$this->open( '' );
+		$this->clickAndWait( "css=.navbar a:contains('" . Yii::t( 'application', 'Login' ) . "')" );
+		
 		$this->assertElementPresent( 'name=LoginForm[username]' );
 		$this->type( 'name=LoginForm[username]', 'admin' );
 		$this->type( 'name=LoginForm[password]', 'admin' );

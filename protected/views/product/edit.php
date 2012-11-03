@@ -84,17 +84,14 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 				if( key_exists( 'cid', $actionParams ) ) {
 					unset( $actionParams[ 'cid' ] );
 				}
-				$routeUrl = Yii::app()->createUrl( $this->getRoute(), $actionParams );
 				
-				$separator = '&';
-				if( empty( $actionParams ) ) {
-					$separator = '?';
-				}
+				$routeUrl = Yii::app()->createUrl( $this->getRoute(), $actionParams );
 			
 				$htmlOptions = array(
 					'disabled' => false,
-					'onChange' => 'window.location="' . $baseUrl . $routeUrl . $separator . 'cid=" + this.value',
-					'prompt' => Yii::t( 'category', 'Slect category...' )
+					// перезагрузить страницу при выборе категории
+					'onChange' => 'window.location="' . $baseUrl . $routeUrl . '/" + this.value',
+					'prompt' => Yii::t( 'category', 'Select category...' )
 				);
 			}
 			else {
@@ -211,8 +208,8 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	<div class="pull-right">
 		<?php 
 		$this->widget( 'bootstrap.widgets.TbButton', array(
-			'label' => Yii::t( 'application', 'Save' ),
-			'icon' => 'ok white',
+			'label' => ( $product->getIsNewRecord() ? Yii::t( 'application', 'Add' ) : Yii::t( 'application', 'Save' ) ),
+			'icon' => ( $product->getIsNewRecord() ? 'plus' : 'ok' ) . ' white',
 			'type' => 'primary',
 			'buttonType' => 'submit',
 		));

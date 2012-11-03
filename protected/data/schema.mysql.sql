@@ -190,11 +190,12 @@ CREATE TABLE `Product` (
   `BrandID` int(11) NOT NULL,
   `Name` varchar(100) NOT NULL,
   `IsDraft` tinyint(1) NOT NULL DEFAULT '1',
+  `LastModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ProductID`),
   KEY `FK_ProductHasCategory_idx` (`CategoryID`),
   KEY `fk_Product_1_idx` (`BrandID`),
-  CONSTRAINT `FK_ProductHasCategory` FOREIGN KEY (`CategoryID`) REFERENCES `Category` (`CategoryID`),
-  CONSTRAINT `FK_ProductHasBrand` FOREIGN KEY (`BrandID`) REFERENCES `Brand` (`BrandID`)
+  CONSTRAINT `FK_ProductHasBrand` FOREIGN KEY (`BrandID`) REFERENCES `Brand` (`BrandID`),
+  CONSTRAINT `FK_ProductHasCategory` FOREIGN KEY (`CategoryID`) REFERENCES `Category` (`CategoryID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='таблица товаров';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -204,7 +205,7 @@ CREATE TABLE `Product` (
 
 LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `Product` DISABLE KEYS */;
-INSERT INTO `Product` (`ProductID`, `CategoryID`, `BrandID`, `Name`, `IsDraft`) VALUES (1,3,3,'U31SD (U31SD-RX130R) Silver',0),(2,3,6,'ProBook 4540s (B6N43EA)',0),(3,4,11,'Kindle Fire HD',1),(4,4,3,'PadFone A66 32GB (A66-1A088WWE)',1),(5,4,4,'Galaxy Tab 2 10.1 3G (GT-P5100ZWASEK)',1);
+INSERT INTO `Product` (`ProductID`, `CategoryID`, `BrandID`, `Name`, `IsDraft`, `LastModified`) VALUES (1,3,3,'U31SD (U31SD-RX130R) Silver',0,'2012-11-03 17:58:38'),(2,3,6,'ProBook 4540s (B6N43EA)',0,'2012-11-03 17:58:51'),(3,4,11,'Kindle Fire HD',0,'2012-11-03 17:58:59'),(4,4,3,'PadFone A66 32GB (A66-1A088WWE)',0,'2012-11-03 17:59:06'),(5,4,4,'Galaxy Tab 2 10.1 3G (GT-P5100ZWASEK)',0,'2012-11-03 17:59:13');
 /*!40000 ALTER TABLE `Product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -304,4 +305,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-11-03 14:45:22
+-- Dump completed on 2012-11-03 20:00:15

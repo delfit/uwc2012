@@ -5,21 +5,12 @@
 ?>
 
 <div class="form">
-	
-
 	<?php
-//		$form = $this->beginWidget( 'CActiveForm', array(
-//			'id' => 'brand-form',
-//			'enableAjaxValidation' => false,
-//			'action' => Yii::app()->createUrl( 'brand/create' )
-//		) );
-	
-		$form = $this->beginWidget( 'bootstrap.widgets.TbActiveForm', array(
-			'id' => 'brand-form',
-			'htmlOptions' => array( 'class' => 'well' ),
-			'action' => Yii::app()->createUrl( 'brand/create' )
-		) );
-
+	$form = $this->beginWidget( 'bootstrap.widgets.TbActiveForm', array(
+		'id' => 'brand-form',
+		'htmlOptions' => array( 'class' => 'well' ),
+		'action' => Yii::app()->createUrl( 'brand/create', array( 'lc' => Yii::app()->language ) )
+	) );
 	?>
 
 	<?php echo $form->errorSummary( $model ); ?>

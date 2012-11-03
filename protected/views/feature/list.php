@@ -50,7 +50,7 @@
 			array(
 				'onChange' => 'window.location="' . $baseUrl . $routeUrl . $separator .'cid=" + this.value',
 				'class' => 'span7',
-				'prompt' => Yii::t( 'category', 'Slect category...' )
+				'prompt' => Yii::t( 'category', 'Select category...' )
 			)
 		);
 	?>

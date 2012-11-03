@@ -28,7 +28,7 @@ class CategoryTest extends WebTestCase
 		// создать категорию
 		$this->assertTextPresent( Yii::t( 'category', 'New Category' ) );
 		$this->assertElementPresent( 'name=Category[ParentCategoryID]' );
-		$this->select( 'name=Category[ParentCategoryID]', $this->сategoryTranslations[ 'tvPhotoAndVideo' ][ 'PluralName' ] );
+		$this->select( 'name=Category[ParentCategoryID]', 'value=' . $this->categories[ 'tvPhotoAndVideo' ][ 'CategoryID' ] );
 		$this->type( 'name=Category[PluralName]', $dummyCategoryCreate[ 'SingularName' ] );
 		$this->type( 'name=Category[SingularName]', $dummyCategoryCreate[ 'PluralName' ] );
 		$this->clickAndWait( "css=button:contains('" . Yii::t( 'application', 'Add' ) . "')" );
@@ -38,8 +38,6 @@ class CategoryTest extends WebTestCase
 		
 		
 		// обновить категорию
-		// TODO удалить sleep
-		sleep(10);
 		$this->assertElementPresent( "css=button:contains('" . Yii::t( 'application', 'Save' ) . "')" );
 		$this->type( 'name=Category[PluralName]', $dummyCategoryUpdate[ 'SingularName' ] );
 		$this->type( 'name=Category[SingularName]', $dummyCategoryUpdate[ 'PluralName' ] );

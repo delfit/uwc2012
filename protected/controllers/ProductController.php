@@ -296,15 +296,16 @@ class ProductController extends Controller
 		$product = $this->loadModel( $id );
 		
 		$categoryID = $product->CategoryID;
+		$productFullName = $product->fullName;
 		
 		// удалить товар, вместе с изображениями и характеристиками
 		$success = $product->delete();
 		
 		if( $success ) {
-			Yii::app()->user->setFlash( 'success', Yii::t( 'product', 'Product deleted' ) );
+			Yii::app()->user->setFlash( 'success', Yii::t( 'product', 'Product ":productFullName" was deleted', array( ':productFullName' => $productFullName ) ) );
 		}
 		else {
-			Yii::app()->user->setFlash( 'error', Yii::t( 'product', 'Product not deleted' ) );
+			Yii::app()->user->setFlash( 'error', Yii::t( 'product', 'Product ":productFullName" was not deleted', array( ':productFullName' => $productFullName ) ) );
 		}
 		
 		$requestActionParams = $this->getActionParams();

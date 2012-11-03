@@ -50,8 +50,26 @@
 		</div>
 
 		<div class="span4">
+			<?php
+			// отрисовать ссылку на сравнение/добавление товара к сравнению
+			if( 
+				Yii::app()->session[ 'comparison.' . $product->category->CategoryID ] && 
+				in_array( $product->ProductID, Yii::app()->session[ 'comparison.' . $product->category->CategoryID ] ) 
+			) {
+				echo CHtml::tag( 'a', array(
+					'href' => Yii::app()->createUrl( 'product/compare', array( 'cid' => $product->category->CategoryID, 'lc' => Yii::app()->language ) ),
+				), Yii::t( 'product', 'Compare' ) );
+			}
+			else {
+				echo CHtml::tag( 'a', array(
+					'href' => Yii::app()->createUrl( 'product/comparisonAdd', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ),
+					'class' => 'compare-link',
+				), Yii::t( 'product', 'Add to comparison' ) );
+			}
+			?>
+			
 			<h4><?php echo Yii::t( 'product', 'Technical features' ); ?></h4>
-		<?php
+			<?php
 			// TODO улучшить код
 			$features = '<dl>';
 			foreach( $product->productHasFeatures as $productHasFeature ) {
@@ -59,7 +77,7 @@
 			}
 			$features .= '</dl>';
 			echo $features;
-		?>
+			?>
 		</div>
 	</div>
 

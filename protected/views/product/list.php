@@ -26,6 +26,21 @@
 </h2>
 
 <?php
+$this->widget('bootstrap.widgets.TbAlert', array(
+	'block' => true,
+	'fade' => true, 
+	'closeText' => '×', 
+	'alerts' => array( 
+		'success',
+		'info',
+		'warning',
+		'error',
+		'danger'
+	),
+));
+?>
+
+<?php
 $this->widget( 'bootstrap.widgets.TbListView', array(
 	'dataProvider' => $products,
 	'itemView' => '_product', 
