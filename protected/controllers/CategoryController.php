@@ -101,30 +101,8 @@ class CategoryController extends Controller
 	public function actionDelete() {
 		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
 		
-		$model = $this->loadModel( $id );		
-		$categoryName = $model->PluralName;
-		
-		if( $model->isUsed() ) {
-			Yii::app()->user->setFlash( 'error', Yii::t( 'category', 'Category ":categoryName" used in products and can not be deleted', array( ':categoryName' => $categoryName ) ) );
-		}
-		else if( count( $model->subCategories ) > 0 ) {
-			Yii::app()->user->setFlash( 'error', Yii::t( 'category', 'Category ":categoryName" has subcategories and can not be deleted', array( ':categoryName' => $categoryName ) ) );
-		}
-		else {
-			if( $model->delete() ) {
-				Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category ":categoryName" was deleted', array( ':categoryName' => $categoryName ) ) );
-			}
-			else {
-				Yii::app()->user->setFlash( 'error', Yii::t( 'category', 'Category ":categoryName" not deleted', array( ':categoryName' => $categoryName ) ) );
-			}
-		}
-		
-		
-		$requestActionParams = $this->getActionParams();
-		if( key_exists( 'id', $requestActionParams ) ) {
-			unset( $requestActionParams[ 'id' ] );
-		}
-		$this->redirect( Yii::app()->createUrl( 'site/index', $requestActionParams ) );
+		Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category ":categoryName" was deleted', array( ':categoryName' => $categoryName ) ) );
+		$this->redirect( Yii::app()->createUrl( 'site/index', array( 'lc' => Yii::app()->language ) ) );
 	}
 	
 	

@@ -315,9 +315,7 @@ class ProductController extends Controller
 			unset( $requestActionParams[ 'cid' ] );
 		}		
 		
-		$requestActionParams[ 'cid' ] = $categoryID;
-		
-		$this->redirect( Yii::app()->createUrl( 'product/list', $requestActionParams ) );
+		$this->redirect( Yii::app()->createUrl( 'product/list', array( 'cid' => $categoryID, 'lc' => Yii::app()->language ) ) );
 	}
 	
 	
