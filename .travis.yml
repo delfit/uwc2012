@@ -19,6 +19,7 @@ before_script:
   - sleep 5
   - wget -O /tmp/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
   - java -jar /tmp/selenium-server-standalone.jar &
+  - sleep 10
   - cd protected/tests
 
 script: phpunit --colors --coverage-text ./
