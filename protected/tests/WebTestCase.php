@@ -34,7 +34,7 @@ class WebTestCase extends CWebTestCase
 		$this->assertElementPresent( 'name=LoginForm[username]' );
 		$this->type( 'name=LoginForm[username]', 'admin' );
 		$this->type( 'name=LoginForm[password]', 'admin' );
-		$this->clickAndWait( "//input[@value='Login']" );
+		$this->clickAndWait( "//input[@value='" . Yii::t( 'application', 'Login' ) . "']" );
 		$this->assertTextPresent( Yii::t( 'application', 'Logined successful' ) );
 	}
 

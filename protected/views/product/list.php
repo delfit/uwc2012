@@ -1,6 +1,14 @@
 
 <h2>
 <?php 
+	if( isset( $categoryID ) && ! Yii::app()->user->isGuest ) {
+		echo DHtml::actionButtons( 
+			Yii::app()->createUrl( 'category/update', array( 'id' => $categoryID, 'lc' => Yii::app()->language ) ), 
+			Yii::app()->createUrl( 'category/delete', array( 'id' => $categoryID, 'lc' => Yii::app()->language ) )
+		);
+	}
+	
+
 	echo $this->pageTitle;
 	
 	
