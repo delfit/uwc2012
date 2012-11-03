@@ -142,7 +142,7 @@ class ProductTest extends WebTestCase
 		$this->assertElementNotPresent( "css=h4:contains('" . $this->products[ 'hp_probook_4540s' ][ 'Name' ] . "')" );
 		
 		// найти товар по описанию
-		$keywords = split( ' ', $this->productTranslations[ 'hp_probook_4540s' ][ 'Description' ] );
+		$keywords = explode( ' ', $this->productTranslations[ 'hp_probook_4540s' ][ 'Description' ] );
 		$this->type( 'css=.navbar form.form-search input.search-query', $keywords[ 0 ]. ' '. $keywords[ 2 ] );
 		$this->clickAndWait( "css=.navbar form.form-search button i.icon-search" );
 		$this->assertElementPresent( "css=h4:contains('" . $this->products[ 'hp_probook_4540s' ][ 'Name' ] . "')" );
