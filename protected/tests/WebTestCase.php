@@ -23,5 +23,19 @@ class WebTestCase extends CWebTestCase
 		parent::setUp();
 		$this->setBrowserUrl( TEST_BASE_URL );
 	}
+	
+	
+	/**
+	 * Выполняет вход на сайт
+	 * 
+	 */
+	protected function login() {
+		$this->open( '/site/login' );
+		$this->assertElementPresent( 'name=LoginForm[username]' );
+		$this->type( 'name=LoginForm[username]', 'admin' );
+		$this->type( 'name=LoginForm[password]', 'admin' );
+		$this->clickAndWait( "//input[@value='Login']" );
+		$this->assertTextPresent( Yii::t( 'application', 'Logined successful' ) );
+	}
 
 }

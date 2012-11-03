@@ -47,7 +47,7 @@
 					$configMenuItem[] = array(
 						'icon' => 'cog',
 						'items' => array(
-							array( 'label' => Yii::t( 'application', 'Login' ), 'url' => Yii::app()->createUrl( '/site/login' ), 'icon' => 'user' ),
+							array( 'label' => Yii::t( 'application', 'Login' ), 'url' => Yii::app()->createUrl( '/site/login', array( 'lc' => $language->Code ) ), 'icon' => 'user' ),
 						)
 					);
 				}
@@ -55,11 +55,11 @@
 					$configMenuItem[] = array(
 						'icon' => 'cog',
 						'items' => array(
-							array( 'label' => Yii::t( 'product', 'Add product' ), 'url' => Yii::app()->createUrl( 'product/create' ), 'icon' => 'plus' ),
-							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create' ), 'icon' => 'plus' ),
-							array( 'label' => Yii::t( 'brand', 'Brands' ), 'url' => Yii::app()->createUrl( '/brand/list' ), 'icon' => 'list' ),
+							array( 'label' => Yii::t( 'product', 'Add product' ), 'url' => Yii::app()->createUrl( 'product/create', array( 'lc' => $language->Code ) ), 'icon' => 'plus' ),
+							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create', array( 'lc' => $language->Code ) ), 'icon' => 'plus' ),
+							array( 'label' => Yii::t( 'brand', 'Brands' ), 'url' => Yii::app()->createUrl( 'brand/list', array( 'lc' => $language->Code ) ), 'icon' => 'list' ),
 							'---',
-							array( 'label' => Yii::t( 'application', 'Exit' ), 'url' => Yii::app()->createUrl( '/site/logout' ), 'icon' => 'off' ),
+							array( 'label' => Yii::t( 'application', 'Logout' ), 'url' => Yii::app()->createUrl( '/site/logout', array( 'lc' => $language->Code ) ), 'icon' => 'off' ),
 						)
 					);
 				}
@@ -68,7 +68,7 @@
 				// главное меню
 				$this->widget( 'bootstrap.widgets.TbNavbar', array(
 					'brand' => CHtml::encode( Yii::app()->name ), 
-					'brandUrl' => Yii::app()->homeUrl, 
+					'brandUrl' => Yii::app()->createUrl( '/site/index', array( 'lc' => $language->Code ) ), 
 					'collapse' => true, 
 					'fluid' => true,
 					'items' => array(

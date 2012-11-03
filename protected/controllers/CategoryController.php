@@ -35,7 +35,7 @@ class CategoryController extends Controller
 			$model->attributes = $_POST[ 'Category' ];
 			
 			if( $model->save() ) {
-				Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category updated' ) );
+				Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category ":categoryName" created', array( ':categoryName' => $model->PluralName ) ) );
 				$id = $model->getPrimaryKey();
 				$this->redirect( 
 					Yii::app()->createUrl( 
@@ -108,8 +108,11 @@ class CategoryController extends Controller
 	
 	
 	public function actionDelete( $id ) {
-		$this->loadModel( $id )->delete();
-		Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category removed' ) );
+		$model = $this->loadModel( $id );
+		$categoryName = $model->PluralName;
+		$model->delete();
+		
+		Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category ":categoryName" was deleted', array( ':categoryName' => $categoryName ) ) );
 		$this->redirect( array( 'site/index' ) );
 	}
 	
