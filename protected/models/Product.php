@@ -61,9 +61,9 @@ class Product extends CActiveRecord
                 array( 'CategoryID, BrandID, IsDraft', 'numerical', 'integerOnly' => true ),
                 array( 'LanguageID, Description', 'safe' ),
 				array( 'Image', 'file', 'allowEmpty'=>true,'types'=>'jpg, gif, png' ),
-				array( 'Image', 'safe' ),
-				
+				array( 'Image', 'safe' ),				
                 array( 'Name', 'length', 'max' => 100 ),
+				array( 'Name', 'match', 'pattern' => '([a-zA-Z0-9_() ])', 'allowEmpty' => false ),
                 // The following rule is used by search().
                 // Please remove those attributes that should not be searched.
                 array( 'ProductID, CategoryID, BrandID, Name, IsDraft', 'safe', 'on' => 'search' ),
@@ -82,7 +82,7 @@ class Product extends CActiveRecord
 			'brand' => array( self::BELONGS_TO, 'Brand', 'BrandID' ),
 			//'features' => array( self::MANY_MANY, 'Feature', 'ProductHasFeatures(ProductID,FeatureID)' ),
 			'productHasFeatures' => array( self::HAS_MANY, 'ProductHasFeatures', 'ProductID' ),
-			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index ASC', 'limit' => Yii::app()->params[ 'default' ][ 'countImagesPerProduct' ] ),
+			'productHasImages' => array( self::HAS_MANY, 'ProductHasImages', 'ProductID', 'order' => 'productHasImages.Index ASC' ),
 			'productTranslations' => array( self::HAS_MANY, 'ProductTranslation', 'ProductID' ),
 		);
 	}
@@ -276,9 +276,7 @@ class Product extends CActiveRecord
 				
 				
 				if( !$currentProductFeature->save( true ) ) {
-					print_r($currentProductFeature->getErrors());
-					// TODO учитывать все атрибуты
-					$this->addError( 'Value', $currentProductFeature->getError( 'Value' ) );
+					$this->addErrors(  $currentProductFeature->getErrors() );
 					break;
 				}
 			}
@@ -341,9 +339,7 @@ class Product extends CActiveRecord
 			}
 			
 			$productImageFileName = $productImageAlias . $this->ProductID . '_' . $nextID . '.' . $this->Image->extensionName;
-			
-			
-			
+
 			$newProductImage = new ProductHasImages();
 			$newProductImage->Index = $maxIndex;
 			$newProductImage->ProductID = $this->ProductID;
@@ -395,9 +391,12 @@ class Product extends CActiveRecord
 			}
 			
 			$transaction->commit();
+			
+			return true;
 		}
 		catch( Exception $exception ) {
 			$transaction->rollback();
+			return false;
 		}
 	}
 	
@@ -441,6 +440,11 @@ class Product extends CActiveRecord
 	}
 	
 	
+	/**
+	 * Определить адрес основного изображения товара
+	 * 
+	 * @return string
+	 */
 	public function getMainImageURL() {
 		// TODO уточнить размеры картинок
 		$mainImageUrl = 'http://placehold.it/300x200&text=Image+is+Not+Avaliable';
@@ -452,7 +456,31 @@ class Product extends CActiveRecord
 	}
 	
 	
+	/**
+	 * Получить полное название товара
+	 * 
+	 * @return string
+	 */
 	public function getFullName() {
 		return $this->category->SingularName . ' ' . $this->brand->Name . ' ' . $this->Name;
+	}
+	
+	
+	/**
+	 * Список ошибок одной строкой
+	 * 
+	 * @return string
+	 */
+	public function getErrorsAsString() {
+		$strErrors = '';
+		$errors = $this->getErrors();
+		if( !empty( $errors ) ) {
+			foreach( $errors as $attributeErrors ) {
+				$strErrors .= implode( ' <br/> ', $attributeErrors );
+			}
+		}
+		
+		
+		return $strErrors;
 	}
 }

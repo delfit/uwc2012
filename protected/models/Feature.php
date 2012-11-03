@@ -52,6 +52,7 @@ class Feature extends CActiveRecord
 			array('CategoryID', 'required'),
 			array('CategoryID', 'numerical', 'integerOnly'=>true, 'allowEmpty' => false ),
 			array('Name, Description, LanguageID', 'safe' ),
+			array( 'Name', 'length', 'max' => 100 ),
 			
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

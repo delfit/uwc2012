@@ -15,6 +15,7 @@
  */
 class Language extends CActiveRecord
 {
+	const CACHE_DURATION = 3600;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -96,6 +97,44 @@ class Language extends CActiveRecord
 		));
 	}
 	
+	public function beforeSave() {
+		// очищаем кеш при сохранении языка
+		$this->clearCache();
+		
+		return parent::beforeSave();
+	}
+	
+	
+	public function beforeDelete() {
+		// очищаем кеш при удалении языка
+		$this->clearCache();
+		
+		return parent::beforeDelete();
+	}
+	
+	
+	// TODO вынести в поведение в модели оставить только название ключей
+	/**
+	 * Очищает кеш языков
+	 */
+	public function clearCache() {
+		$cacheKeys = array(
+			'application.language.getAll',
+			'application.language.getSingularList',
+		);
+		
+		// добавить динамические ключи
+		$languages = $this->findAll();
+		$currentLanguageCacheKey = 'application.language.getCurrentLanguage.LanguageCode.';
+		foreach( $languages as $language ) {
+			$cacheKeys[] = $currentLanguageCacheKey . $language->LanguageCode;
+		}
+		
+		foreach( $cacheKeys as $cacheKey ) {
+			Yii::app()->cache->delete( $cacheKey );
+		}
+	}
+		
 	
 	/**
 	 * Получить список языков
@@ -108,10 +147,22 @@ class Language extends CActiveRecord
 		) );
 	}
 	
-	public function getCurrentLanguage() {
+	
+	/**
+	 * Определить текщий язык
+	 * 
+	 * @return object Language
+	 */
+	public function getCurrentLanguage() {		
 		return $this->findByCode( Yii::app()->language );
 	}
 	
+	
+	/**
+	 * Определить идентификатор текущего языка
+	 * 
+	 * @return integer
+	 */
 	public function getCurrentLanguageID() {
 		$currentLanguage =  $this->getCurrentLanguage();
 		if( isset( $currentLanguage->LanguageID ) ) {
@@ -130,25 +181,68 @@ class Language extends CActiveRecord
 	 * @return object
 	 */
 	public function findByCode( $languageCode ) {
-		$languageModel = $this->find( 
-			'Code = :languageCode', 
-			array( 
-				':languageCode' => $languageCode 
-			)
-		);
+		$cacheKey = 'application.language.getCurrentLanguage.LanguageCode.' . $languageCode;
+		$language = Yii::app()->cache->get( $cacheKey );
 		
-		return $languageModel;
-	}
-	
-	
-	public function getSingularList() {
-		$singularList = array();
-		$languages = $this->findAll();
-		foreach( $languages as $language ) {
-			$singularList[ $language->LanguageID ] = $language->Code . ' ' . $language->Name;
+		if( $language === false ) {
+			$language = $this->find( 
+				'Code = :languageCode', 
+				array( 
+					':languageCode' => $languageCode 
+				)
+			);
+		
+			
+			Yii::app()->cache->set( $cacheKey, $language, self::CACHE_DURATION );
 		}
 		
 		
+		return $language;
+	}
+	
+	
+	/**
+	 * Получить список языков в виде простого списка
+	 * 
+	 * @return string
+	 */
+	public function getSingularList() {
+		$cacheKey = 'application.language.getSingularList';
+		$singularList = Yii::app()->cache->get( $cacheKey );
+		
+		if( $singularList === false ) {
+			$singularList = array();
+			$languages = $this->findAll();
+			foreach( $languages as $language ) {
+				$singularList[ $language->LanguageID ] = $language->Code . ' ' . $language->Name;
+			}
+			
+			
+			Yii::app()->cache->set( $cacheKey, $singularList, self::CACHE_DURATION );
+		}
+
+		
 		return $singularList;
+	}
+	
+	
+	/**
+	 * Список всех языков из кеша
+	 * 
+	 * @return type
+	 */
+	public function getAll() {
+		$cacheKey = 'application.language.getAll';
+		$languages = Yii::app()->cache->get( $cacheKey );
+		
+		if( $languages === false ) {
+			$languages = $this->findAll();
+			
+			
+			Yii::app()->cache->set( $cacheKey, $languages, self::CACHE_DURATION );
+		}
+		
+		
+		return $languages;
 	}
 }

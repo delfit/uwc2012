@@ -38,12 +38,9 @@ class Controller extends CController
 	
 	public function beforeRender( $view ) {
 		parent::beforeRender( $view );
-		
-	
+		Yii::app()->cache->flush();
 		$this->mainMenu = Category::model()->getList();
-		
-		$this->languagesMenu = Language::model()->findAll();
-		
+		$this->languagesMenu = Language::model()->getAll();
 				
 		return true;
 	}

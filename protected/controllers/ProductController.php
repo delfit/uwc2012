@@ -6,44 +6,15 @@
  */
 class ProductController extends Controller
 {
-	public function actionList() {	
-		$cid = null;
-		if( isset( $_GET[ 'cid' ] ) && !empty( $_GET[ 'cid' ] ) ) {
-			$cid = (integer) $_GET[ 'cid' ];
-		}
-		
-		if( empty( $cid ) ) {
-			throw new CHttpException( 404, Yii::t( 'product', 'Category not defined' ) );
-		}
-		
-		$category = Category::model()->findByPk( $cid );
-		if( empty( $category ) ) {
-			throw new CHttpException( 404, Yii::t( 'product', 'Category not found' ) );
-		}
-		
-		
-		$products = Product::model()->getList( $cid );
-		
-		$this->pageTitle = $category->PluralName;
-		$this->breadcrumbs = array(
-			$category->parentCategory->parentCategory->PluralName,
-			$category->parentCategory->PluralName,
-			$category->PluralName
-		);
-		
-		
-		$this->render( 'list', array(
-			'products' => $products,
-			'categoryID' => $cid,
-		));
-	}
-	
-        
+	/**
+	 * Поиск по товарам
+	 * 
+	 * @return null
+	 */
 	public function actionSearch() {
 		if( !isset( $_GET[ 'q' ] ) || empty( $_GET[ 'q' ] ) ) {
 			return;
 		}
-		
 		
 		$query = htmlspecialchars( $_GET[ 'q' ] );
 
@@ -65,6 +36,40 @@ class ProductController extends Controller
 			'searchQuery' => $query
 		));
 	}
+	
+	
+	/**
+	 * Список товаров
+	 * 
+	 * @throws CHttpException
+	 */
+	public function actionList() {
+		$cid = isset( $_GET[ 'cid' ] ) ? (integer) $_GET[ 'cid' ] : null;
+
+		if( empty( $cid ) ) {
+			throw new CHttpException( 404, Yii::t( 'product', 'Category not defined' ) );
+		}
+		
+		$category = Category::model()->findByPk( $cid );
+		if( empty( $category ) ) {
+			throw new CHttpException( 404, Yii::t( 'product', 'Category not found' ) );
+		}
+		
+		$products = Product::model()->getList( $cid );
+		
+		$this->pageTitle = $category->PluralName;
+		$this->breadcrumbs = array(
+			$category->parentCategory->parentCategory->PluralName,
+			$category->parentCategory->PluralName,
+			$category->PluralName
+		);
+		
+		
+		$this->render( 'list', array(
+			'products' => $products,
+			'categoryID' => $cid,
+		));
+	}
      
 	
 	/**
@@ -73,10 +78,7 @@ class ProductController extends Controller
 	 * @throws CHttpException
 	 */
 	public function actionView() {
-		$id = null;
-		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
-			 $id = (integer) $_GET[ 'id' ];
-		}
+		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
 		
 		$product = Product::model()->findByPk( $id );
 		if( empty( $product ) ) {
@@ -104,17 +106,8 @@ class ProductController extends Controller
 	 */
 	public function actionCreate() {
 		// определить язык редактирования
-		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
-			$currentTranslationLanguageID = (integer) $_GET[ 'tlid' ];
-		}
-		else {
-			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
-		}
-		
-		$cid = null;
-		if( isset( $_GET[ 'cid' ] ) ) {
-			$cid = (integer) $_GET[ 'cid' ];
-		}
+		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();		
+		$cid = isset( $_GET[ 'cid' ] ) ? (integer) $_GET[ 'cid' ] : null;
 		
 		$product = new Product();
 		$product->LanguageID = $currentTranslationLanguageID;
@@ -136,43 +129,34 @@ class ProductController extends Controller
 						Yii::app()->user->setFlash( 'success', Yii::t( 'product', 'Product created' ) );
 						
 						$id = $product->getPrimaryKey();
+						
+						$actionParams = array(
+							'tlid' => $currentTranslationLanguageID,
+							'id' => $id
+						);
+						
+						if( isset( $_POST[ 'lc' ] ) ) { 
+							$actionParams[ 'lc' ] = $_POST[ 'lc' ];							
+						}
+						
 						$this->redirect( 
 							Yii::app()->createUrl( 
 								"product/update",
-								array( 
-									'id' => $id,
-									'lc' => $currentTranslationLanguageID
-								)
+								$actionParams
 						));
 					}
 					else {
-						Yii::app()->user->setFlash( 'error', $product->getError( 'ProductID' ) );
+						Yii::app()->user->setFlash( 'error', $product->getErrorsAsString() );
 					}
 				}
 			}
 			else{
-				Yii::app()->user->setFlash( 'error', $product->getError( 'ProductID' ) );
+				//Yii::app()->user->setFlash( 'error', $product->getErrorsAsString() );
 			}
 		}
-		
-//		// TODO убрать
-//		$productImagesDataProvider = new CActiveDataProvider( 'ProductHasImages', array(
-//			'criteria' => array(
-//				'condition' => 'ProductID = :productID',
-//				'params' => array(
-//					':productID' => $product->getPrimaryKey()
-//				),
-//			),
-//			'pagination' => false
-//		));
-		
-		
-		$brands = Brand::model()->findAll();
-		$brandsDropDownList = array();
-		foreach( $brands as $brand) {
-			$brandsDropDownList[ $brand->BrandID ] = $brand->Name;
-		}
-		
+	
+		// список брендов
+		$brandsSingularList = Brand::model()->getSingularList();	
 				
 		// получаем категории игнорируя первый два уровня
 		$categoriesSingularList = Category::model()->getSingularList( 
@@ -183,21 +167,21 @@ class ProductController extends Controller
 			) 
 		);
 		
-		$languages = Language::model()->findAll();
+		$languages = Language::model()->getAll();
 		$features =  ProductHasFeatures::model()->getEmptyList( $cid );
 		
 		
-		$this->pageTitle = Yii::t( 'product', 'New Product' );
+		$title = Yii::t( 'product', 'New Product' );
+		$this->pageTitle = $title;
 		$this->breadcrumbs = array(
-			Yii::t( 'product', 'New Product' )
+			$title
 		);
 		
 		
 		$this->render( 'edit', array(
 			'product' => $product,
-			//'productImagesDataProvider' => $productImagesDataProvider,
 			'categories' => $categoriesSingularList,
-			'brands' => $brandsDropDownList,
+			'brands' => $brandsSingularList,
 			'languages' => $languages,
 			'features' =>$features
 		));
@@ -210,22 +194,14 @@ class ProductController extends Controller
 	 * @throws CHttpException
 	 */
 	public function actionUpdate() {
-		$id = null;
-		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
-			 $id = (integer) $_GET[ 'id' ];
-		}
-
 		// определить язык редактирования
-		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
-			$currentTranslationLanguageID = (integer) $_GET[ 'tlid' ];
-		}
-		else {
-			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
-		}
+		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();
+		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
 		
 		Yii::app()->user->setState( 'CurrentTranslationLanguageID', $currentTranslationLanguageID );	
 		$product = Product::model()->findByPk( $id );
 		Yii::app()->user->setState( 'CurrentTranslationLanguageID', null );	
+		
 		if( empty( $product ) ) {
 			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
 		}
@@ -273,11 +249,8 @@ class ProductController extends Controller
 		));
 		
 		
-		$brands = Brand::model()->findAll();
-		$brandsDropDownList = array();
-		foreach( $brands as $brand) {
-			$brandsDropDownList[ $brand->BrandID ] = $brand->Name;
-		}
+		// список брендов
+		$brandsSingularList = Brand::model()->getSingularList();	
 		
 		// получаем категории игнорируя первый два уровня
 		$categoriesSingularList = Category::model()->getSingularList( 
@@ -288,11 +261,9 @@ class ProductController extends Controller
 			) 
 		);
 	
-		$languages = Language::model()->findAll();
+		$languages = Language::model()->getAll();
 		
-		// TODO 
 		$features =  ProductHasFeatures::model()->getListWithValues( $product );
-		
 		
 		// TODO возможно, вынести полное имя товара как свойство модели
 		$this->pageTitle = $product->fullName;
@@ -308,7 +279,7 @@ class ProductController extends Controller
 			'product' => $product,
 			'productImagesDataProvider' => $productImagesDataProvider,
 			'categories' => $categoriesSingularList,
-			'brands' => $brandsDropDownList,
+			'brands' => $brandsSingularList,
 			'languages' => $languages,
 			'features' => $features
 		));
@@ -318,9 +289,10 @@ class ProductController extends Controller
 	/**
 	 * Удалить товар
 	 * 
-	 * @param integer $id  идентификатор товара
 	 */
-	public function actionDelete( $id ) {		
+	public function actionDelete() {
+		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
+		
 		$product = $this->loadModel( $id );
 		
 		$categoryID = $product->CategoryID;
@@ -335,15 +307,24 @@ class ProductController extends Controller
 			Yii::app()->user->setFlash( 'error', Yii::t( 'product', 'Product not deleted' ) );
 		}
 		
+		$requestActionParams = $this->getActionParams();
+		if( key_exists( 'id', $requestActionParams ) ) {
+			unset( $requestActionParams[ 'id' ] );
+		}
+		if( key_exists( 'cid', $requestActionParams ) ) {
+			unset( $requestActionParams[ 'cid' ] );
+		}		
 		
-		$this->redirect( Yii::app()->createUrl( 'product/list', array( 'cid' => $categoryID ) ) );
+		$requestActionParams[ 'cid' ] = $categoryID;
+		
+		$this->redirect( Yii::app()->createUrl( 'product/list', $requestActionParams ) );
 	}
 	
 	
 	public function loadModel( $id ) {
 		$model = Product::model()->findByPk( $id );
 		if( $model === null )
-			throw new CHttpException( 404, 'The requested page does not exist.' );
+			throw new CHttpException( 404, Yii::t( 'application', 'The requested page does not exist.' ) );
 		return $model;
 	}
 	

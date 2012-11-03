@@ -1,6 +1,6 @@
 <?php
 /**
- * Description of ProductController
+ * Обработка категорий
  *
  * @author ivan
  */
@@ -8,25 +8,11 @@ class CategoryController extends Controller
 {
 	const PERENT_CATEGORY_COUNT_LEVELS = 2;
 	
-	public function actionList() {
-		
-	}
-	
-	public function actionView() {
-		echo "actionCategoryView";
-	}
-	
-	
 	/**
 	 * Создать категорию
 	 */
 	public function actionCreate() {
-		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
-			$currentTranslationLanguageID = (integer) $_GET[ 'tlid' ];
-		}
-		else {
-			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
-		}
+		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();
 		
 		$model = new Category();
 		$model->LanguageID = $currentTranslationLanguageID;
@@ -37,22 +23,29 @@ class CategoryController extends Controller
 			if( $model->save() ) {
 				Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category ":categoryName" created', array( ':categoryName' => $model->PluralName ) ) );
 				$id = $model->getPrimaryKey();
+				
+				$actionParams = array(
+					'id' => $id,
+					'tlid' => $currentTranslationLanguageID
+				);
+				
+				if( isset( $_POST[ 'lc' ] ) ) {
+					$actionParams[ 'lc' ] = $_POST[ 'lc' ];
+				}
+				
 				$this->redirect( 
 					Yii::app()->createUrl( 
 						"category/update", 
-						array( 
-							'id' => $id,
-							'lc' => $currentTranslationLanguageID
-						)
+						$actionParams
 				));
 			}
 			else{
-				Yii::app()->user->setFlash( 'error', $model->getErrors() );
+				Yii::app()->user->setFlash( 'error', $model->getErrorsAsString() );
 			}
 		}
 		
 		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
-		$languages = Language::model()->findAll();
+		$languages = Language::model()->getAll();
 		
 		$this->render(
 			'category', 
@@ -69,12 +62,7 @@ class CategoryController extends Controller
 	 * Редактировать категорию
 	 */
 	public function actionUpdate( $id ) {		
-		if( isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ) {
-			$currentTranslationLanguageID = (integer) $_GET[ 'tlid' ];
-		}
-		else {
-			$currentTranslationLanguageID = Language::model()->getCurrentLanguageID();
-		}
+		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();
 		
 		Yii::app()->user->setState( 'CurrentTranslationLanguageID', $currentTranslationLanguageID );	
 		$model = $this->loadModel( $id );
@@ -88,13 +76,13 @@ class CategoryController extends Controller
 				Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category updated' ) );
 			}
 			else{
-				Yii::app()->user->setFlash( 'error', $model->getErrors() );
+				Yii::app()->user->setFlash( 'error', $model->getErrorsAsString() );
 			}
 		}
 		
 		
 		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
-		$languages = Language::model()->findAll();
+		$languages = Language::model()->getAll();
 		
 		$this->render(
 			'category', 
@@ -107,13 +95,36 @@ class CategoryController extends Controller
 	}
 	
 	
-	public function actionDelete( $id ) {
-		$model = $this->loadModel( $id );
-		$categoryName = $model->PluralName;
-		$model->delete();
+	/**
+	 * Удалить категорию
+	 */
+	public function actionDelete() {
+		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
 		
-		Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category ":categoryName" was deleted', array( ':categoryName' => $categoryName ) ) );
-		$this->redirect( array( 'site/index' ) );
+		$model = $this->loadModel( $id );		
+		$categoryName = $model->PluralName;
+		
+		if( $model->isUsed() ) {
+			Yii::app()->user->setFlash( 'error', Yii::t( 'category', 'Category ":categoryName" used in products and can not be deleted', array( ':categoryName' => $categoryName ) ) );
+		}
+		else if( count( $model->subCategories ) > 0 ) {
+			Yii::app()->user->setFlash( 'error', Yii::t( 'category', 'Category ":categoryName" has subcategories and can not be deleted', array( ':categoryName' => $categoryName ) ) );
+		}
+		else {
+			if( $model->delete() ) {
+				Yii::app()->user->setFlash( 'success', Yii::t( 'category', 'Category ":categoryName" was deleted', array( ':categoryName' => $categoryName ) ) );
+			}
+			else {
+				Yii::app()->user->setFlash( 'error', Yii::t( 'category', 'Category ":categoryName" not deleted', array( ':categoryName' => $categoryName ) ) );
+			}
+		}
+		
+		
+		$requestActionParams = $this->getActionParams();
+		if( key_exists( 'id', $requestActionParams ) ) {
+			unset( $requestActionParams[ 'id' ] );
+		}
+		$this->redirect( Yii::app()->createUrl( 'site/index', $requestActionParams ) );
 	}
 	
 	
@@ -125,7 +136,7 @@ class CategoryController extends Controller
 	public function loadModel( $id ) {
 		$model = Category::model()->findByPk( $id );
 		if( $model === null )
-			throw new CHttpException( 404, 'The requested page does not exist.' );
+			throw new CHttpException( 404, Yii::t( 'application', 'The requested page does not exist.' ) );
 		return $model;
 	}
 

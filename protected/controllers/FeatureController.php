@@ -53,7 +53,7 @@ class FeatureController extends Controller
 			Yii::t( 'feature', 'Features' )
 		);
 		
-		$languages = Language::model()->findAll();
+		$languages = Language::model()->getAll();
 		
 		// получаем категории игнорируя первых два уровня
 		$categoriesSingularList = Category::model()->getSingularList( 

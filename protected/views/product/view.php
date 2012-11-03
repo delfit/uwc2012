@@ -26,6 +26,7 @@
 			<ul class="thumbnails">
 				<?php
 					// TODO улучшить код
+					$productPreviewImages = $product->productHasImages( array( 'limit' => Yii::app()->params[ 'default' ][ 'countImagesPerProduct' ] ) );
 					foreach( $product->productHasImages as $imageIndex => $productHasImage ) {
 						$currentElement = '<li class="span';
 						$currentImageSrc = Yii::app()->request->baseUrl . '/' . Yii::app()->params[ 'imagesFolder' ] . '/' . $productHasImage->FileName;

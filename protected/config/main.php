@@ -43,6 +43,10 @@ return array(
 			'responsiveCss' => true,
 		),
 		
+		'cache' => array(
+			'class' => 'system.caching.CDummyCache'
+		),
+		
 		'db' => array(
 			'connectionString' => 'mysql:host=localhost;dbname=uwc2012',
 			'emulatePrepare' => true,
@@ -82,38 +86,59 @@ return array(
 			
 			'rules' => array(
 				// index page
-				'<tag:.*?>', 'pattern' => 'site/index',
-				array( 'site/index', 'pattern' => '<lc:\w{2,3}>/', 'verb' => 'GET' ),
 				array( 'site/index', 'pattern' => '<lc:\w{2,3}>/site/index', 'verb' => 'GET' ),
+				array( 'site/index', 'pattern' => '<lc:\w{2,3}>/', 'verb' => 'GET' ),
 				
-				'brands/<tag:.*?>' => 'brand/list',
+
 				// brands
-				array( 'brand/list', 'pattern' => 'brands', 'verb' => 'GET' ),
 				array( 'brand/list', 'pattern' => '<lc:\w+>/brands', 'verb' => 'GET' ),
+				array( 'brand/list', 'pattern' => 'brands', 'verb' => 'GET' ),
+				'brands/<tag:.*?>' => 'brand/list',
+				
 				array( 'brand/delete', 'pattern' => '<lc:\w+>/brand/delete/<id:\w+>' ),
 				
-				'features/<tag:.*?>' => 'feature/list',
+
 				// features
-				array( 'feature/list', 'pattern' => 'features', 'verb' => 'GET' ),
 				array( 'feature/list', 'pattern' => '<lc:\w+>/features', 'verb' => 'GET' ),
+				array( 'feature/list', 'pattern' => 'features', 'verb' => 'GET' ),
+				'features/<tag:.*?>' => 'feature/list',
+				
 				array( 'feature/delete', 'pattern' => '<lc:\w+>/feature/delete/<id:\w+>' ),
 				
 				
-				// categories   
-				array( 'feature/delete', 'pattern' => '<lc:\w+>/category/delete/<id:\d+>' ),
+				// categories 
+				array( 'category/create', 'pattern' => '<lc:\w+>/category' ),
+				array( 'category/create', 'pattern' => 'category' ),
 				
-				'products/<tag:.*?>' => 'product/list',
+				array( 'category/update', 'pattern' => '<lc:\w+>/category/update/<id:\d+>' ),
+				array( 'category/update', 'pattern' => 'category/<id:\d+>' ),
+				
+				array( 'category/delete', 'pattern' => '<lc:\w+>/category/delete/<id:\d+>' ),
+				
+				
 				//  products
                 array( 'product/search', 'pattern' => '<lc:\w+>/search', 'verb' => 'GET' ),
-				array( 'product/list', 'pattern' => '<lc:\w+>/products', 'verb' => 'GET' ),
+				array( 'product/search', 'pattern' => 'search', 'verb' => 'GET' ),
+				
+				array( 'product/list', 'pattern' => '<lc:\w+>/products/<cid:\d+>', 'verb' => 'GET' ),
+				array( 'product/list', 'pattern' => 'products/<cid:\d+>', 'verb' => 'GET' ),
+				'products' => 'product/list',
+				
 				array( 'product/view', 'pattern' => '<lc:\w+>/product/<id:\d+>', 'verb' => 'GET' ),
-                            
-                array( 'product/search', 'pattern' => 'search', 'verb' => 'GET' ),
-				array( 'product/list', 'pattern' => 'products', 'verb' => 'GET' ),
 				array( 'product/view', 'pattern' => 'product/<id:\d+>', 'verb' => 'GET' ),
 				
-				'languages/<tag:.*?>' => 'language/list',
-				array( 'language/list', 'pattern' => 'languages', 'verb' => 'GET' ),
+				array( 'product/create', 'pattern' => '<lc:\w+>/product' ),
+				array( 'product/create', 'pattern' => 'product' ),
+				
+				array( 'product/update', 'pattern' => '<lc:\w+>/product/update/<id:\d+>' ),
+				array( 'product/update', 'pattern' => 'product/update/<id:\d+>' ),
+
+				array( 'product/delete', 'pattern' => '<lc:\w+>/product/delete/<id:\d+>' ),
+				array( 'product/delete', 'pattern' => 'product/delete/<id:\d+>' ),
+				
+				array( 'product/compare', 'pattern' => '<lc:\w+>/product/compare/<cid:\d+>' ),
+				array( 'product/compare', 'pattern' => 'product/compare/<cid:\d+>' ),
+				
 				
 				// Other controllers
 				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',

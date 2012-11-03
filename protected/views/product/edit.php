@@ -30,20 +30,24 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 
 <center>
 	<?php
-		if( $product->getIsNewRecord() ) {
-			$action = 'product/create';
-		}
-		else {
-			$action = 'product/update';
-		}
-		
+		$action = $product->getIsNewRecord() ? $action = 'product/create' : 'product/update';
+				
 		// TODO вынести в DHtml заменить <center>
 		$buttons = array();
-		foreach( $languages as $language ) {			
+		foreach( $languages as $language ) {
+			$actionParams = array(
+				'lc' => Yii::app()->language,	
+				'tlid' => $language->LanguageID
+			);
+			
+			if( !$product->getIsNewRecord() ) {
+				$actionParams[ 'id' ] = $product->ProductID;
+			}
+
 			$buttons[] = array(
 				'label' => $language->Name . ' [' . $language->Code . ']',
 				'active' => $language->LanguageID == $product->LanguageID ? true : false,
-				'url' => Yii::app()->createUrl( $action, array( 'id' => $product->ProductID, 'lc' => Yii::app()->language, 'tlid' => $language->LanguageID ) )
+				'url' => Yii::app()->createUrl( $action, $actionParams )
 			);
 		}
 
@@ -81,10 +85,16 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 					unset( $actionParams[ 'cid' ] );
 				}
 				$routeUrl = Yii::app()->createUrl( $this->getRoute(), $actionParams );
+				
+				$separator = '&';
+				if( empty( $actionParams ) ) {
+					$separator = '?';
+				}
 			
 				$htmlOptions = array(
 					'disabled' => false,
-					'onChange' => 'window.location="' . $baseUrl . $routeUrl . '&cid=" + this.value',
+					'onChange' => 'window.location="' . $baseUrl . $routeUrl . $separator . 'cid=" + this.value',
+					'prompt' => Yii::t( 'category', 'Slect category...' )
 				);
 			}
 			else {
@@ -106,6 +116,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	</div>
 	<div class="span6">
 		<?php echo $form->textFieldRow( $product, 'Name', array( 'class' => 'input-xlarge' ) ); ?>
+		<?php echo DHtml::actionLanguageCode(); ?>
 	</div>
 </div>
 
@@ -118,7 +129,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 		?>
 
 		<?php
-		if( !$product->getIsNewRecord() ) {
+		if( !$product->getIsNewRecord() && isset( $productImagesDataProvider ) ) {
 			if( ( $productImagesDataProvider->itemCount > 0 ) ) {
 				// таблица изображений
 				$this->widget( 'bootstrap.widgets.TbExtendedGridView', array(

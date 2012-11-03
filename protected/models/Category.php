@@ -16,6 +16,8 @@
  */
 class Category extends CActiveRecord
 {
+	const CACHE_DURATION = 3600;
+	
 	// поддерживаются категории трех уровней
 	const CATEGORY_FIRST_LEVEL = 1;
 	const CATEGORY_SECOND_LEVEL = 2;
@@ -63,6 +65,7 @@ class Category extends CActiveRecord
 		return array(
 			array( 'ParentCategoryID', 'numerical', 'integerOnly' => true ),
 			array( 'SingularName, LanguageID, PluralName', 'required' ),
+			array( 'SingularName, PluralName', 'length', 'max'=>100 ),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array( 'CategoryID, ParentCategoryID', 'safe', 'on' => 'search' ),
@@ -122,17 +125,60 @@ class Category extends CActiveRecord
 		) );
 	}
 	
-	
 	public function beforeSave() {
-		parent::beforeSave();
-		
 		if( $this->hasErrors() ) {
 			return false;
 		}
 		
+		// очищаем кеш при сохранении категории
+		$this->clearCache();
 		
-		return true;
+		return parent::beforeSave();
 	}	
+	
+	public function beforeDelete() {
+		// очищаем кеш при удалении катерогии
+		$this->clearCache();
+		
+		return parent::beforeDelete();
+	}
+	
+	
+	// TODO вынести в поведение в модели оставить только название ключей
+	/**
+	 * Очищает кеш категорий
+	 */
+	public function clearCache() {
+		$cacheKeys = array(
+			
+		);
+		
+		// добавить динамические ключи
+		$languages = $this->getAll();
+		$categoryLanguageCacheKey = 'application.category.getList.LanguageCode.';
+		foreach( $languages as $language ) {
+			$cacheKeys[] = $categoryLanguageCacheKey . $language->LanguageCode;
+		}
+		
+		foreach( $cacheKeys as $cacheKey ) {
+			Yii::app()->cache->delete( $cacheKey );
+		}
+	}
+	
+	
+	/**
+	 * Проверить используется ли категория
+	 * 
+	 * @return boolean
+	 */
+	public function IsUsed() {
+		return Product::model()->exists( 
+			'CategoryID = :categoryID', 
+			array( 
+				':categoryID' => $this->CategoryID
+			)
+		);
+	}
 	
 	/**
 	 * Список категорий
@@ -143,45 +189,53 @@ class Category extends CActiveRecord
 	 * 
 	 * @return array
 	 */
-	public function getList() {		
-		$categoriesAttr = array();
+	public function getList() {
+		$cacheKey = 'application.category.getList.LanguageCode.' . Yii::app()->language;
+		$categoriesAttr = Yii::app()->cache->get( $cacheKey );
 		
-		$categories = $this->findAll( 
-			array(
-				'condition' => '
-					t.ParentCategoryID IS NULL
-				'
-			)
-		);
-	
-		foreach( $categories as $category ) {
-			$items = array();
-			foreach( $category->subCategories as $subCategory ) {
-				$items[] = array(
-					'id' => $subCategory->CategoryID,
-					'label' => $subCategory->PluralName,
-				);
-			
-				foreach( $subCategory->subCategories as $lastLevelCategory ) {
+		if( $categoriesAttr === false ) {
+			$categoriesAttr = array();
+		
+			$categories = $this->findAll( 
+				array(
+					'condition' => '
+						t.ParentCategoryID IS NULL
+					'
+				)
+			);
+
+			foreach( $categories as $category ) {
+				$items = array();
+				foreach( $category->subCategories as $subCategory ) {
 					$items[] = array(
-						'id' => $lastLevelCategory->CategoryID,
-						'label' => $lastLevelCategory->PluralName,
-						'url' => Yii::app()->createUrl( 'product/list', array( 'cid' => $lastLevelCategory->getPrimaryKey(), 'lc' => Yii::app()->language ) )
+						'id' => $subCategory->CategoryID,
+						'label' => $subCategory->PluralName,
 					);
+
+					foreach( $subCategory->subCategories as $lastLevelCategory ) {
+						$items[] = array(
+							'id' => $lastLevelCategory->CategoryID,
+							'label' => $lastLevelCategory->PluralName,
+							'url' => Yii::app()->createUrl( 'product/list', array( 'cid' => $lastLevelCategory->getPrimaryKey(), 'lc' => Yii::app()->language ) )
+						);
+					}
+
+					$items[] = '---';
 				}
-								
-				$items[] = '---';
+
+
+				// убрать последний разделитель
+				unset( $items[ count( $items ) - 1 ] );
+
+				$categoriesAttr[] = array(
+					'id' => $category->CategoryID,
+					'label' => $category->PluralName,
+					'items' => $items
+				);
 			}
 			
 			
-			// убрать последний разделитель
-			unset( $items[ count( $items ) - 1 ] );
-			
-			$categoriesAttr[] = array(
-				'id' => $category->CategoryID,
-				'label' => $category->PluralName,
-				'items' => $items
-			);
+			Yii::app()->cache->set( $cacheKey, $categoriesAttr, self::CACHE_DURATION );
 		}
 		
 		
@@ -248,10 +302,21 @@ class Category extends CActiveRecord
 		return $this->generateSingularList( $levelCount, $skipLevels );
 	}
 	
-	
-	public function getErrors( $attribute = null ) {
-		$errors = parent::getErrors( $attribute );
+	/**
+	 * Список ошибок одной строкой
+	 * 
+	 * @return string
+	 */
+	public function getErrorsAsString() {
+		$strErrors = '';
+		$errors = $this->getErrors();
+		if( !empty( $errors ) ) {
+			foreach( $errors as $attributeErrors ) {
+				$strErrors .= implode( ' <br/> ', $attributeErrors );
+			}
+		}
 		
-		return print_r( $errors, true );
+		
+		return $strErrors;
 	}
 }

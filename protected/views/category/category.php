@@ -62,11 +62,20 @@
 
 	</fieldset>
 	<?php 
-		echo $form->dropDownListRow( $model, 'ParentCategoryID', $categories	, array( 'class' => 'span7' ) );
+		echo $form->dropDownListRow(
+				$model, 'ParentCategoryID', 
+				$categories, 
+				array( 
+					'class' => 'span7',
+					'prompt' => Yii::t( 'category', 'Root' ),
+					'disabled' => !$model->getIsNewRecord()
+				)
+			);
 	?>
 
 	<?php echo $form->textFieldRow( $model, 'PluralName', array( 'class' => 'span7' ) ); ?>
 	<?php echo $form->textFieldRow( $model, 'SingularName', array( 'class' => 'span7' ) ); ?>
+	<?php echo DHtml::actionLanguageCode(); ?>
 
 	<div class="form-actions">
 		<?php 

@@ -12,6 +12,8 @@
  */
 class Brand extends CActiveRecord
 {
+	const CACHE_DURATION = 3600;
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -90,6 +92,37 @@ class Brand extends CActiveRecord
 	}
 	
 	
+	public function beforeSave() {
+		// очищаем кеш при сохранении производителя
+		$this->clearCache();
+		
+		return parent::beforeSave();
+	}
+	
+	
+	public function beforeDelete() {
+		// очищаем кеш при удалении производителя
+		$this->clearCache();
+		
+		return parent::beforeDelete();
+	}
+	
+	
+	// TODO вынести в поведение в модели оставить только название ключей
+	/**
+	 * Очищает кеш производителей
+	 */
+	public function clearCache() {
+		$cacheKeys = array(
+			'application.brand.getSingularList'
+		);
+		
+		foreach( $cacheKeys as $cacheKey ) {
+			Yii::app()->cache->delete( $cacheKey );
+		}
+	}
+	
+	
 	/**
 	 * Проверить используется ли бренд
 	 * 
@@ -102,5 +135,30 @@ class Brand extends CActiveRecord
 				':brandID' => $this->BrandID
 			)
 		);
+	}
+	
+	
+	/**
+	 * Получить список брендов в виде простого списка
+	 * 
+	 * @return string
+	 */
+	public function getSingularList() {
+		$cacheKey = 'application.brand.getSingularList';
+		$singularList = Yii::app()->cache->get( $cacheKey );
+		
+		if( $singularList === false ) {
+			$singularList = array();
+			$brands = $this->findAll();
+			foreach( $brands as $brand ) {
+				$singularList[ $brand->BrandID ] = $brand->Name;
+			}
+			
+			
+			Yii::app()->cache->set( $cacheKey, $singularList, self::CACHE_DURATION );
+		}
+
+		
+		return $singularList;
 	}
 }
