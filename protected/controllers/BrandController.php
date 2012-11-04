@@ -7,8 +7,7 @@ class BrandController extends Controller
 	 */
 	public function filters() {
 		return array(
-			'accessControl',
-			'postOnly + delete',
+			'accessControl'
 		);
 	}
 

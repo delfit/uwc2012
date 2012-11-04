@@ -9,6 +9,32 @@ class CategoryController extends Controller
 	const PERENT_CATEGORY_COUNT_LEVELS = 2;
 	
 	/**
+	 * @return array action filters
+	 */
+	public function filters() {
+		return array(
+			'accessControl',
+		);
+	}
+	
+	/**
+	 * Определяет правила доступа
+	 * Используется в 'accessControl' фильтре.
+	 * @return array правила доступа
+	 */
+	public function accessRules() {
+		return array(
+			array( 'allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions' => array( 'create', 'update', 'delete' ),
+				'users' => array( 'admin' ),
+			),
+			array( 'deny', // deny all users
+				'users' => array( '*' ),
+			),
+		);
+	}
+	
+	/**
 	 * Создать категорию
 	 */
 	public function actionCreate() {
@@ -47,6 +73,12 @@ class CategoryController extends Controller
 		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
 		$languages = Language::model()->getAll();
 		
+		$title = Yii::t( 'category', 'New Category' );
+		$this->pageTitle = $title;
+		$this->breadcrumbs = array(
+			$title
+		);
+		
 		$this->render(
 			'category', 
 			array(
@@ -83,6 +115,12 @@ class CategoryController extends Controller
 		
 		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
 		$languages = Language::model()->getAll();
+		
+		$title = Yii::t( 'category', 'New Category' );
+		$this->pageTitle = $title;
+		$this->breadcrumbs = array(
+			$title
+		);
 		
 		$this->render(
 			'category', 
