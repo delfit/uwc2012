@@ -15,58 +15,58 @@
  */
 class ProductHasFeatures extends CActiveRecord
 {
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
 	 * @return ProductHasFeatures the static model class
 	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
+	public static function model( $className = __CLASS__ ) {
+		return parent::model( $className );
 	}
+
 
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
+	public function tableName() {
 		return 'ProductHasFeatures';
 	}
+
 
 	/**
 	 * @return array validation rules for model attributes.
 	 */
-	public function rules()
-	{
+	public function rules() {
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('ProductID, FeatureID, Index', 'required'),
-			array('ProductID, FeatureID, Index', 'numerical', 'integerOnly'=>true),
+			array( 'ProductID, FeatureID, Index', 'required' ),
+			array( 'ProductID, FeatureID, Index', 'numerical', 'integerOnly' => true ),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ProductHasFeatureID, ProductID, FeatureID, Index, Value', 'safe', 'on'=>'search'),
+			array( 'ProductHasFeatureID, ProductID, FeatureID, Index, Value', 'safe', 'on' => 'search' ),
 		);
 	}
+
 
 	/**
 	 * @return array relational rules.
 	 */
-	public function relations()
-	{
+	public function relations() {
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'product' => array(self::BELONGS_TO, 'Product', 'ProductID'),
-			'feature' => array(self::BELONGS_TO, 'Feature', 'FeatureID'),
+			'product' => array( self::BELONGS_TO, 'Product', 'ProductID' ),
+			'feature' => array( self::BELONGS_TO, 'Feature', 'FeatureID' ),
 		);
 	}
+
 
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
-	public function attributeLabels()
-	{
+	public function attributeLabels() {
 		return array(
 			'ProductHasFeatureID' => 'ProductHasFeatureID',
 			'ProductID' => 'Product',
@@ -76,51 +76,50 @@ class ProductHasFeatures extends CActiveRecord
 		);
 	}
 
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search()
-	{
+	public function search() {
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('ProductHasFeatureID',$this->ProductHasFeatureID);
-		$criteria->compare('ProductID',$this->ProductID);
-		$criteria->compare('FeatureID',$this->FeatureID);
-		$criteria->compare('Index',$this->Index);
-		$criteria->compare('Value',$this->Value,true);
+		$criteria->compare( 'ProductHasFeatureID', $this->ProductHasFeatureID );
+		$criteria->compare( 'ProductID', $this->ProductID );
+		$criteria->compare( 'FeatureID', $this->FeatureID );
+		$criteria->compare( 'Index', $this->Index );
+		$criteria->compare( 'Value', $this->Value, true );
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+		return new CActiveDataProvider( $this, array(
+			'criteria' => $criteria,
 		));
 	}
-	
-	
+
+
 	public function getEmptyList( $categoryID ) {
-		$featuresList = array();
+		$featuresList = array( );
 		$features = Feature::model()->findAll(
-			'CategoryID = :categoryID', 
-			array(
+			'CategoryID = :categoryID', array(
 				':categoryID' => $categoryID
 			)
 		);
-		
+
 		foreach( $features as $feature ) {
-			$featuresList[] = array(
+			$featuresList[ ] = array(
 				'FeatureID' => $feature->FeatureID,
 				'Name' => $feature->Name,
 				'Value' => ''
 			);
 		}
-		
-		
+
+
 		return $featuresList;
 	}
-	
-	
+
+
 	public function getListWithValues( $product ) {
 		$sql = '
 			SELECT 
@@ -136,24 +135,25 @@ class ProductHasFeatures extends CActiveRecord
 			WHERE
 				Feature.CategoryID = :categoryID
 		';
-		
+
 		$command = Yii::app()->db->createCommand( $sql );
-		// TODO упростить связывание значений
+		
+		
 		$currentLanguageID = Language::model()->getCurrentLanguageID();
 		$productID = $product->ProductID;
 		$categoryID = $product->CategoryID;
-		
+
 		$command->bindParam( ':languageID', $currentLanguageID );
 		$command->bindParam( ':productID', $productID );
 		$command->bindParam( ':categoryID', $categoryID );
-		
+
 		$featuresList = $command->queryAll();
-		
-		
+
+
 		return $featuresList;
 	}
-	
-	
+
+
 	public function getNextIndex( $productID ) {
 		$feature = $this->find( array(
 			'condition' => 't.ProductID = :productID',
@@ -161,11 +161,13 @@ class ProductHasFeatures extends CActiveRecord
 				':productID' => $productID
 			),
 			'order' => 't.Index DESC'
-		) );
+		));
+		
 		if( !empty( $feature ) ) {
 			return $feature->Index + 1;
 		}
-		
+
 		return 1;
 	}
+
 }

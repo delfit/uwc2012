@@ -5,6 +5,7 @@ return array(
 	'Back to top' => 'Наверх',
 	'Delete' => 'Удалить',
 	'Edit' => 'Редактировать',
+	'Error' => 'Ошибка',
 	'Language' => 'Язык',
 	'Login' => 'Войти',
 	'Logined successful' => 'Вход успешно выполнен',

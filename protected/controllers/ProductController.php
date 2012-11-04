@@ -1,9 +1,5 @@
 <?php
-/**
- * Product Controller
- *
- * @author ivan
- */
+
 class ProductController extends Controller
 {
 	/**
@@ -15,9 +11,11 @@ class ProductController extends Controller
 		);
 	}
 	
+	
 	/**
 	 * Определяет правила доступа
 	 * Используется в 'accessControl' фильтре.
+	 * 
 	 * @return array правила доступа
 	 */
 	public function accessRules() {
@@ -32,14 +30,14 @@ class ProductController extends Controller
 		);
 	}
 	
+	
 	/**
 	 * Поиск по товарам
 	 * 
-	 * @return null
 	 */
 	public function actionSearch() {
 		if( !isset( $_GET[ 'q' ] ) || empty( $_GET[ 'q' ] ) ) {
-			return;
+			$this->redirect( Yii::app()->homeUrl );
 		}
 		
 		$query = htmlspecialchars( $_GET[ 'q' ] );
@@ -50,6 +48,7 @@ class ProductController extends Controller
 		}
 
 		$products = Product::model()->searchList( $query, $cid );
+		
 		
 		$this->pageTitle = Yii::t( 'application', 'Searсh results for' ) . ' «' . $query . '»';
 		$this->breadcrumbs = array(
@@ -83,6 +82,7 @@ class ProductController extends Controller
 		
 		$products = Product::model()->getList( $cid );
 		
+		
 		$this->pageTitle = $category->PluralName;
 		$this->breadcrumbs = array(
 			$category->parentCategory->parentCategory->PluralName,
@@ -101,18 +101,14 @@ class ProductController extends Controller
 	/**
 	 * Просмотр товара
 	 * 
-	 * @throws CHttpException
 	 */
 	public function actionView() {
 		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
 		
-		$product = Product::model()->findByPk( $id );
-		if( empty( $product ) ) {
-			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
-		}
+		$product = $this->loadModel( $id );
 		
 		
-		$this->pageTitle = $product->category->SingularName . ' ' . $product->brand->Name . ' ' .$product->Name;
+		$this->pageTitle = $product->fullName;
 		$this->breadcrumbs = array(
 			$product->category->parentCategory->PluralName,
 			$product->category->PluralName => Yii::app()->createUrl( 'product/list', array( 'cid' => $product->category->CategoryID, 'lc' => Yii::app()->language ) ),
@@ -129,6 +125,7 @@ class ProductController extends Controller
 	
 	/**
 	 * Создание товара
+	 * 
 	 */
 	public function actionCreate() {
 		// определить язык редактирования
@@ -165,11 +162,7 @@ class ProductController extends Controller
 							$actionParams[ 'lc' ] = $_POST[ 'lc' ];							
 						}
 						
-						$this->redirect( 
-							Yii::app()->createUrl( 
-								"product/update",
-								$actionParams
-						));
+						$this->redirect( Yii::app()->createUrl( 'product/update', $actionParams ) );
 					}
 					else {
 						Yii::app()->user->setFlash( 'error', $product->getErrorsAsString() );
@@ -177,10 +170,12 @@ class ProductController extends Controller
 				}
 			}
 			else{
-				//Yii::app()->user->setFlash( 'error', $product->getErrorsAsString() );
+				// обработка ошибок валидации происходит в модели
+				// дополнительную обработку можно написать здесь
 			}
 		}
 	
+		
 		// список брендов
 		$brandsSingularList = Brand::model()->getSingularList();	
 				
@@ -197,10 +192,9 @@ class ProductController extends Controller
 		$features =  ProductHasFeatures::model()->getEmptyList( $cid );
 		
 		
-		$title = Yii::t( 'product', 'New Product' );
-		$this->pageTitle = $title;
+		$this->pageTitle = Yii::t( 'product', 'New Product' );
 		$this->breadcrumbs = array(
-			$title
+			$this->pageTitle
 		);
 		
 		
@@ -217,20 +211,16 @@ class ProductController extends Controller
 	/**
 	 * Обновление товара
 	 * 
-	 * @throws CHttpException
 	 */
 	public function actionUpdate() {
 		// определить язык редактирования
 		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) && !empty( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();
 		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
 		
+		// получить модель без автоматического перевода атрибутов
 		Yii::app()->user->setState( 'CurrentTranslationLanguageID', $currentTranslationLanguageID );	
-		$product = Product::model()->findByPk( $id );
+		$product = $this->loadModel( $id );
 		Yii::app()->user->setState( 'CurrentTranslationLanguageID', null );	
-		
-		if( empty( $product ) ) {
-			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
-		}
 		
 		if( isset( $_POST[ 'Product' ] ) && !empty( $_POST[ 'Product' ] ) ) {		
 			$product->attributes = $_POST[ 'Product' ];
@@ -259,7 +249,8 @@ class ProductController extends Controller
 				}
 			}
 			else{
-				Yii::app()->user->setFlash( 'error', $product->getError( 'ProductID' ) );
+				// обработка ошибок валидации происходит в модели
+				// дополнительную обработку можно написать здесь
 			}
 		}
 		
@@ -278,7 +269,7 @@ class ProductController extends Controller
 		// список брендов
 		$brandsSingularList = Brand::model()->getSingularList();	
 		
-		// получаем категории игнорируя первый два уровня
+		// получаем категории игнорируя первые два уровня
 		$categoriesSingularList = Category::model()->getSingularList( 
 			Category::CATEGORY_MAX_LEVEL, 
 			array(
@@ -291,7 +282,7 @@ class ProductController extends Controller
 		
 		$features =  ProductHasFeatures::model()->getListWithValues( $product );
 		
-		// TODO возможно, вынести полное имя товара как свойство модели
+		
 		$this->pageTitle = $product->fullName;
 		$this->breadcrumbs = array(
 			$product->category->parentCategory->PluralName,
@@ -334,6 +325,8 @@ class ProductController extends Controller
 			Yii::app()->user->setFlash( 'error', Yii::t( 'product', 'Product ":productFullName" was not deleted', array( ':productFullName' => $productFullName ) ) );
 		}
 		
+		
+		// перенаправить на страницу с такими же параметрами, как и были
 		$requestActionParams = $this->getActionParams();
 		if( key_exists( 'id', $requestActionParams ) ) {
 			unset( $requestActionParams[ 'id' ] );
@@ -348,26 +341,17 @@ class ProductController extends Controller
 	}
 	
 	
-	public function loadModel( $id ) {
-		$model = Product::model()->findByPk( $id );
-		if( $model === null )
-			throw new CHttpException( 404, Yii::t( 'application', 'The requested page does not exist.' ) );
-		return $model;
-	}
-	
-	
+	/**
+	 * Добавить товар в список сравнения для категории
+	 * 
+	 */
 	public function actionComparisonAdd() {
 		$id = null;
 		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
 			 $id = (integer) $_GET[ 'id' ];
 		}
 		
-		$product = Product::model()->findByPk( $id );
-		if( empty( $product ) ) {
-			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
-		}
-		
-		
+		$product = $this->loadModel( $id );
 		$productCategoryID = $product->category->CategoryID;
 		
 		// сохранить товар в сравнении в его категории
@@ -394,18 +378,17 @@ class ProductController extends Controller
 	}
 	
 	
+	/**
+	 * Удалить товар из списка сравнения для категории
+	 * 
+	 */
 	public function actionComparisonDelete() {
 		$id = null;
 		if( isset( $_GET[ 'id' ] ) && !empty( $_GET[ 'id' ] ) ) {
 			 $id = (integer) $_GET[ 'id' ];
 		}
 		
-		$product = Product::model()->findByPk( $id );
-		if( empty( $product ) ) {
-			throw new CHttpException( 404, Yii::t( 'product', 'Product not found' ) );
-		}
-		
-		
+		$product = $this->loadModel( $id );
 		$productCategoryID = $product->category->CategoryID;
 		
 		// удалить товар из сравнения в его категории
@@ -427,6 +410,10 @@ class ProductController extends Controller
 	}
 	
 	
+	/**
+	 * Сравнить добавленные в список сравнения для категории товары
+	 * 
+	 */
 	public function actionCompare() {
 		$cid = null;
 		if( isset( $_GET[ 'cid' ] ) && !empty( $_GET[ 'cid' ] ) ) {
@@ -471,6 +458,73 @@ class ProductController extends Controller
 			'categoryFeatures' => $categoryFeatures,
 			'compareProducts' => $compareProducts,
 		));
+	}
+	
+	
+	/**
+	 * Экспорт товаров в CSV с поддержкой огромного количества товаров
+	 * 
+	 */
+	public function actionExport() {
+		$fileName = 'products_' . Yii::app()->language . '.csv';
+		
+		// заголовки для загрузки файла в формате csv
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename=' . $fileName );
+		
+		// создать указатель файла на выходной поток
+		$output = fopen( 'php://output', 'w' );
+		
+		// записать заголовки
+		fputcsv( 
+			$output, 
+			array( 
+				Yii::t( 'product', 'ProductID' ), 
+				Yii::t( 'product', 'Category' ), 
+				Yii::t( 'product', 'Brand' ), 
+				Yii::t( 'product', 'Name' )
+			),
+			';'
+		);
+		
+		// записать данные
+		// ... определить количество товаров
+		$totalCount = Product::model()->count();
+		
+		// ... товары обрабатываются страницами
+		$countProductsPerPage = 25;
+		for( $pageIndex = 0; $pageIndex < ( ceil( $totalCount / $countProductsPerPage ) ); $pageIndex++ ) {
+			// получить страницу товаров для експорта
+			$exportProducts = Product::model()->getExportProducts( array( 
+				'limit' => $countProductsPerPage,
+				'offset' => ( $pageIndex * $countProductsPerPage )
+			) );
+			
+			foreach( $exportProducts as $exportProduct ) {
+				fputcsv( $output, $exportProduct, ';' );
+			}
+		}
+
+		
+		// закрыть поток
+		fclose( $output );
+	}
+	
+	
+	/**
+	 * Returns the data model based on the primary key given in the GET variable.
+	 * If the data model is not found, an HTTP exception will be raised.
+	 * 
+	 * @param integer the ID of the model to be loaded
+	 */
+	public function loadModel( $id ) {
+		$model = Product::model()->findByPk( $id );
+		if( $model === null ) {
+			throw new CHttpException( 404, Yii::t( 'application', 'The requested page does not exist.' ) );
+		}
+		
+		
+		return $model;
 	}
 }
 

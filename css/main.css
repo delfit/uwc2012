@@ -7,13 +7,6 @@ body
 	padding: 45px 0 0 0;
 }
 
-.comparison-text 
-{
-	font-size: 14px;
-	font-style: italic;
-	font-weight: normal;
-}
-
 #footer
 {
 	
@@ -24,9 +17,43 @@ body
 	text-align: center;
 }
 
+
+.action-buttons
+{
+	display: inline; 
+	padding-right: 10px;
+}
+
+.bold 
+{
+	font-weight: bold;
+}
+
+.carousel .item img
+{
+	min-height: 400px;
+	max-height: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.comparison-text 
+{
+	font-size: 14px;
+	font-style: italic;
+	font-weight: normal;
+}
+
 .description-text 
 {
 	text-align: justify;
+}
+
+.grid-view table td.extrarow
+{
+	color: #333;
+	font-size: 3em; 
+	padding:10px;
 }
 
 .product-code
@@ -38,6 +65,12 @@ body
 .row-spacer
 {
 	padding: 10px 0;
+}
+
+.thumbnail > img.comparison-image 
+{
+	max-width: 200px; 
+	width: 200px;
 }
 
 .top-link

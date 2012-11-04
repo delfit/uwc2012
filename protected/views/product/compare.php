@@ -1,6 +1,4 @@
 
-<h2><?php echo $this->pageTitle; ?></h2>
-
 <?php
 $this->widget('bootstrap.widgets.TbAlert', array(
 	'block' => true,
@@ -15,6 +13,8 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	),
 ));
 ?>
+
+<h2><?php echo $this->pageTitle; ?></h2>
 
 <table class="table table-hover">
 	<?php
@@ -50,10 +50,21 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	echo CHtml::tag( 'td', array(), '&nbsp;' );
 	foreach( $compareProducts as $compareProduct ) {
 		echo CHtml::openTag( 'td' );
-		// TODO улучшить код
-		echo '<a href="' . $compareProduct->mainImageURL . '" rel="lightbox-product" class="thumbnail" title="' . $compareProduct->fullName . '">
-			<img src="' . $compareProduct->mainImageURL . '" style="max-width: 200px; width: 200px;" alt="' . $compareProduct->fullName . '" class="img-rounded" align="top" />
-		</a>';
+		echo CHtml::openTag( 'a', array(
+			'href' => $compareProduct->mainImageURL,
+			'title' => $compareProduct->fullName,
+			'class' => 'thumbnail',
+			'rel' => 'lightbox-product',
+		));
+		
+		echo CHtml::tag( 'img', array(
+			'src' => $compareProduct->mainImageURL,
+			'alt' => $compareProduct->fullName,
+			'class' => 'comparison-image img-rounded',
+			'align' => 'top',
+		));
+		
+		echo CHtml::closeTag( 'a' );
 		echo CHtml::closeTag( 'td' );
 	}
 	echo CHtml::closeTag( 'tr' );
@@ -61,7 +72,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	// вывести названия характеристик и их значения для каждого товара
 	foreach( $categoryFeatures as $key => $categoryFeature ) {
 		echo CHtml::openTag( 'tr' );
-		echo CHtml::tag( 'td', array( 'style' => 'font-weight: bold;' ), $categoryFeature->Name );
+		echo CHtml::tag( 'td', array( 'class' => 'bold' ), $categoryFeature->Name );
 		foreach( $compareProducts as $compareProduct ) {
 			echo CHtml::tag( 'td', array(), isset( $compareProduct->productHasFeatures[ $key ] ) ? $compareProduct->productHasFeatures[ $key ]->Value : '&nbsp;' );
 		}

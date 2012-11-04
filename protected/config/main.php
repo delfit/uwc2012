@@ -1,6 +1,7 @@
 <?php
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
+// 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 return array(
@@ -24,16 +25,16 @@ return array(
 	),
 	
 	'modules' => array(
-		'gii' => array(
-			'class' => 'system.gii.GiiModule',
-			'password' => 'uwc2012',
-			 // If removed, Gii defaults to localhost only. Edit carefully to taste.
-			'ipFilters' => array('127.0.0.1', '::1'),
-			
-			'generatorPaths' => array(
-				'bootstrap.gii'
-			),
-		),
+//		'gii' => array(
+//			'class' => 'system.gii.GiiModule',
+//			'password' => 'uwc2012',
+//			 // If removed, Gii defaults to localhost only. Edit carefully to taste.
+//			'ipFilters' => array('127.0.0.1', '::1'),
+//			
+//			'generatorPaths' => array(
+//				'bootstrap.gii'
+//			),
+//		),
 	),
 	
 	// application components
@@ -105,6 +106,8 @@ return array(
 				
 
 				// features
+				array( 'feature/list', 'pattern' => '<lc:\w+>/features/<cid:\d+>', 'verb' => 'GET' ),
+				array( 'feature/list', 'pattern' => 'features/<cid:\d+>', 'verb' => 'GET' ),
 				array( 'feature/list', 'pattern' => '<lc:\w+>/features', 'verb' => 'GET' ),
 				array( 'feature/list', 'pattern' => 'features', 'verb' => 'GET' ),
 				'features/<tag:.*?>' => 'feature/list',
@@ -149,6 +152,9 @@ return array(
 				array( 'product/compare', 'pattern' => '<lc:\w+>/product/compare/<cid:\d+>' ),
 				array( 'product/compare', 'pattern' => 'product/compare/<cid:\d+>' ),
 				
+				array( 'product/export', 'pattern' => '<lc:\w+>/product/export' ),
+				array( 'product/export', 'pattern' => 'product/export' ),
+				
 				
 				// Other controllers
 				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
@@ -169,14 +175,18 @@ return array(
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params' => array(
-		// this is used in contact page
-		'adminEmail' => 'webmaster@example.com',
 		'default' => array(
+			// количество товаров на странице
 			'pageSize' => 2,
+			
+			// количество отображаемых изображений при просмотре товара
 			'countImagesPerProduct' => 5,
-			'countImagesPerCarousel' => 3
+			
+			// количество отображаемых товаров в карусели на главной странице
+			'countImagesPerCarousel' => 5
 		),
 		
+		// папка для хранения изображений товаров (относительно главной папки приложения)
 		'imagesFolder' => 'images',
 		
 		// количество колонок на главной странице

@@ -1,7 +1,6 @@
-<h2><?php echo $this->pageTitle; ?></h2>
 
 <?php
-$this->widget('bootstrap.widgets.TbAlert', array(
+$this->widget( 'bootstrap.widgets.TbAlert', array(
 	'block' => true,
 	'fade' => true, 
 	'closeText' => '×', 
@@ -15,24 +14,26 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 ));
 ?>
 
+<h2><?php echo $this->pageTitle; ?></h2>
+
 <?php echo $this->renderPartial( '_form', array( 'model' => $model ) ); ?>
 
-<?php $this->widget( 'bootstrap.widgets.TbGroupGridView',  array(
+<?php 
+$this->widget( 'bootstrap.widgets.TbGroupGridView',  array(
 	'dataProvider' => $model->search(),
 	
 	'ajaxUpdate' => false,
 	'type' => 'striped bordered',
 	'extraRowColumns' => array( 'firstLetter' ),
 	// FIXME исправить отображение русских названий производителей
-	'extraRowExpression' => '"<b style=\"font-size: 3em; color: #333;\">" . substr( $data->Name, 0, 1 ) . "</b>"',
-	'extraRowHtmlOptions' => array( 'style' => 'padding:10px' ),
+	'extraRowExpression' => 'mb_substr( $data->Name, 0, 1 )', // function( $data ){ return $data->Name{0};}
 	
 	'columns' => array(
 		array(
 			'name' => 'firstLetter',
-			'value' => 'substr( $data->Name, 0, 1 )',
-			'headerHtmlOptions' => array( 'style' => 'display:none' ),
-			'htmlOptions' => array( 'style' => 'display:none' )
+			'value' => 'mb_substr( $data->Name, 0, 1 )',
+			'headerHtmlOptions' => array( 'class' => 'hidden' ),
+			'htmlOptions' => array( 'class' => 'hidden' )
 		),
 		array(
 			'class' => 'bootstrap.widgets.TbEditableColumn',

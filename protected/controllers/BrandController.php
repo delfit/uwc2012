@@ -15,6 +15,7 @@ class BrandController extends Controller
 	/**
 	 * Определяет правила доступа
 	 * Используется в 'accessControl' фильтре.
+	 * 
 	 * @return array правила доступа
 	 */
 	public function accessRules() {
@@ -32,32 +33,39 @@ class BrandController extends Controller
 	
 	/**
 	 * Получить список брендов
+	 * 
 	 */
 	public function actionList() {
 		$model = new Brand( 'search' );
 		$model->unsetAttributes();  // clear any default values
-		if( isset( $_GET[ 'Brand' ] ) )
+		
+		if( isset( $_GET[ 'Brand' ] ) ) {
 			$model->attributes = $_GET[ 'Brand' ];
-
+		}
+		
+		
 		$this->pageTitle = Yii::t( 'brand', 'Brands' );
 		$this->breadcrumbs = array(
 			Yii::t( 'brand', 'Brands' )
 		);
 		
+		
 		$this->render( 'list', array(
 			'model' => $model,
-		) );
+		));
 	}
 
 	
 	/**
 	 * Добавить новый бренд
+	 * 
 	 */
 	public function actionCreate() {
 		$model = new Brand;
 
 		if( isset( $_POST[ 'Brand' ] ) ) {
 			$model->attributes = $_POST[ 'Brand' ];
+			
 			if( $model->save() ) {
 				Yii::app()->user->setFlash( 'success', Yii::t( 'brand', 'Brand ":brandName" created', array( ':brandName' => $model->Name ) ) );
 			}
@@ -66,6 +74,8 @@ class BrandController extends Controller
 			}
 		}
 		
+		
+		// добавить язык в параметры запроса
 		$requestActionParams = $this->getActionParams();
 		if( isset( $_POST[ 'lc' ] ) ) {
 			$requestActionParams[ 'lc' ] = $_POST[ 'lc' ];
@@ -78,6 +88,7 @@ class BrandController extends Controller
 
 	/**
 	 * Редактировать бренд
+	 * 
 	 */
 	public function actionUpdate() {
 		$id = isset( $_POST[ 'pk' ] ) ? ( integer ) $_POST[ 'pk' ] : null;
@@ -115,10 +126,12 @@ class BrandController extends Controller
 		}
 		
 		
+		// перенаправить на страницу с такими же параметрами, как и были
 		$requestActionParams = $this->getActionParams();
 		if( key_exists( 'id', $requestActionParams ) ) {
 			unset( $requestActionParams[ 'id' ] );
-		}		
+		}
+		
 		$this->redirect( Yii::app()->createUrl( 'brand/list', $requestActionParams ) );
 	}
 
@@ -126,18 +139,23 @@ class BrandController extends Controller
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
+	 * 
 	 * @param integer the ID of the model to be loaded
 	 */
 	public function loadModel( $id ) {
 		$model = Brand::model()->findByPk( $id );
-		if( $model === null )
+		if( $model === null ) {
 			throw new CHttpException( 404, Yii::t( 'application', 'The requested page does not exist.' ) );
+		}
+		
+		
 		return $model;
 	}
 
 
 	/**
 	 * Performs the AJAX validation.
+	 * 
 	 * @param CModel the model to be validated
 	 */
 	protected function performAjaxValidation( $model ) {

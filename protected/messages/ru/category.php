@@ -2,7 +2,7 @@
 	return array(
 		'Add category' => 'Добавить категорию',
 		'Category' => 'Категория',
-		'Category #:categoryID' => 'Категория #:categoryID',
+		'Category ":categoryName"' => 'Категория ":categoryName"',
 		'Category ":categoryName" created' => 'Категория ":categoryName" создана',
 		'Category not found' => 'Категория не найдена',
 		'Category ":categoryName" used in products and can not be deleted' => 'Категория ":categoryName" используется в товарах и не может быть удалена',

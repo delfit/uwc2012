@@ -39,7 +39,10 @@ class Controller extends CController
 	public function beforeRender( $view ) {
 		parent::beforeRender( $view );
 		
+		// создать главное меню сайта из категорий
 		$this->mainMenu = Category::model()->getList();
+		
+		// создать меню для выбора языка сайта
 		$this->languagesMenu = Language::model()->getAll();
 		
 				
@@ -53,17 +56,18 @@ class Controller extends CController
 		// применить язык запроса
 		if( isset( $_REQUEST[ 'lc' ] ) && !empty( $_REQUEST[ 'lc' ] ) ) {
 			$languageCode = $_REQUEST[ 'lc' ];
-			Yii::app()->language = $languageCode;
 			
+			Yii::app()->language = $languageCode;
 			Yii::app()->homeUrl = Yii::app()->createUrl( 'site/index', array( 'lc' => Yii::app()->language ) );
 		}
-		// применить язык определенный в браузера пользователя при первом входе
+		// применить язык браузера пользователя при первом входе
 		else if( !Yii::app()->user->hasState( 'DetectPreferredLanguage' ) ) {
 			$preferredLanguage = Yii::app()->request->preferredLanguage;
 			if( !empty( $preferredLanguage ) ) {
 				$preferredLanguageCode = strstr( $preferredLanguage, '_', true );
 				Yii::app()->language = $preferredLanguageCode;
 				Yii::app()->homeUrl = Yii::app()->createUrl( 'site/index', array( 'lc' => Yii::app()->language ) );
+				
 				Yii::app()->user->setState( 'DetectPreferredLanguage', 1 );
 				
 				$this->redirect( Yii::app()->createUrl( $this->getRoute(), array_merge( $this->getActionParams(), array( 'lc' => Yii::app()->language ) ) ) );

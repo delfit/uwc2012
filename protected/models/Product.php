@@ -55,20 +55,20 @@ class Product extends CActiveRecord
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules() {
-            // NOTE: you should only define rules for those attributes that
-            // will receive user inputs.
-            return array(
-                array( 'CategoryID, BrandID, Name', 'required' ),
-                array( 'CategoryID, BrandID, IsDraft', 'numerical', 'integerOnly' => true ),
-                array( 'LanguageID, Description', 'safe' ),
-				array( 'Image', 'file', 'allowEmpty'=>true,'types'=>'jpg, gif, png' ),
-				array( 'Image, LastModified', 'safe' ),				
-                array( 'Name', 'length', 'max' => 100 ),
-				array( 'Name', 'match', 'pattern' => '([a-zA-Z0-9_() ])', 'allowEmpty' => false ),
-                // The following rule is used by search().
-                // Please remove those attributes that should not be searched.
-                array( 'ProductID, CategoryID, BrandID, Name, IsDraft, LastModified', 'safe', 'on' => 'search' ),
-            );
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			array( 'CategoryID, BrandID, Name', 'required' ),
+			array( 'CategoryID, BrandID, IsDraft', 'numerical', 'integerOnly' => true ),
+			array( 'LanguageID, Description', 'safe' ),
+			array( 'Image', 'file', 'allowEmpty' => true, 'types' => 'jpg, gif, png' ),
+			array( 'Image, LastModified', 'safe' ),				
+			array( 'Name', 'length', 'max' => 100 ),
+			array( 'Name', 'match', 'pattern' => '([a-zA-Z0-9_() ])', 'allowEmpty' => false ),
+			// The following rule is used by search().
+			// Please remove those attributes that should not be searched.
+			array( 'ProductID, CategoryID, BrandID, Name, IsDraft, LastModified', 'safe', 'on' => 'search' ),
+		);
 	}
 	
 
@@ -93,15 +93,15 @@ class Product extends CActiveRecord
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels() {
-            return array(
-                'ProductID' => 'Product',
-                'CategoryID' => 'Category',
-                'BrandID' => 'Brand',
-                'Name' => 'Name',
-                'IsDraft' => 'Is Draft',
-				'LastModified' => 'LastModified',
-				'Image' => 'Image'
-            );
+		return array(
+			'ProductID' => 'Product',
+			'CategoryID' => 'Category',
+			'BrandID' => 'Brand',
+			'Name' => 'Name',
+			'IsDraft' => 'Is Draft',
+			'LastModified' => 'LastModified',
+			'Image' => 'Image'
+		);
 	}
 	
 
@@ -224,13 +224,15 @@ class Product extends CActiveRecord
 			$criteria->condition .= ' t.CategoryID = :categoryID ';
 			$criteria->params[ ':categoryID' ] = $categoryID;
 		}
-
+		
+		
 		$products = new CActiveDataProvider( $this, array( 
 			'criteria' => $criteria,
 			'pagination' => array(
 				'pageSize' => Yii::app()->params[ 'default' ][ 'pageSize' ],
 			),
 		));
+		
 
 		return $products;
 	}
@@ -378,6 +380,7 @@ class Product extends CActiveRecord
 			}
 			else {
 				$this->addError( 'Image', $newProductImage->getError( 'FileName' ) );
+				
 				return false;
 			}
 		}		
@@ -421,6 +424,7 @@ class Product extends CActiveRecord
 		}
 		catch( Exception $exception ) {
 			$transaction->rollback();
+			
 			return false;
 		}
 	}
@@ -436,10 +440,8 @@ class Product extends CActiveRecord
 	public function delete() {
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
-
 			// удалить все характеристики
 			ProductHasFeatures::model()->deleteAll( 'ProductID = :productID',  array( ':productID' => $this->ProductID ) );
-
 
 			// удалить прикрепленные изображения вместе с файлами
 			foreach( $this->productHasImages as $productHasImage ) {
@@ -447,7 +449,8 @@ class Product extends CActiveRecord
 				if( file_exists( $currentImageFileName ) ) {
 					unlink( $currentImageFileName );
 				}
-			}			
+			}
+			
 			ProductHasImages::model()->deleteAll( 'ProductID = :productID',  array( ':productID' => $this->ProductID ) );
 			
 			// удалить товар
@@ -531,6 +534,31 @@ class Product extends CActiveRecord
 				'limit' => Yii::app()->params[ 'default' ][ 'countImagesPerCarousel' ]
 			)			
 		);
+	}
+	
+	
+	/**
+	 * Получить список товаров для експорта
+	 * 
+	 * @param array $criteria  условия получения товаров
+	 * 
+	 * @return array
+	 */
+	public function getExportProducts( $criteria ) {
+		$products = $this->findAll( $criteria );
+		
+		$exportProducts = array();
+		foreach( $products as $product ) {
+			$exportProducts[] = array(
+				$product->ProductID,
+				$product->category->getFullName(),
+				$product->brand->Name,
+				$product->Name
+			);
+		}
+		
+		
+		return $exportProducts;
 	}
 	
 	

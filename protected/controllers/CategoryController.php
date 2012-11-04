@@ -1,9 +1,5 @@
 <?php
-/**
- * Обработка категорий
- *
- * @author ivan
- */
+
 class CategoryController extends Controller
 {
 	const PERENT_CATEGORY_COUNT_LEVELS = 2;
@@ -20,6 +16,7 @@ class CategoryController extends Controller
 	/**
 	 * Определяет правила доступа
 	 * Используется в 'accessControl' фильтре.
+	 * 
 	 * @return array правила доступа
 	 */
 	public function accessRules() {
@@ -34,8 +31,10 @@ class CategoryController extends Controller
 		);
 	}
 	
+	
 	/**
 	 * Создать категорию
+	 * 
 	 */
 	public function actionCreate() {
 		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();
@@ -59,19 +58,19 @@ class CategoryController extends Controller
 					$actionParams[ 'lc' ] = $_POST[ 'lc' ];
 				}
 				
-				$this->redirect( 
-					Yii::app()->createUrl( 
-						"category/update", 
-						$actionParams
-				));
+				
+				// перенаправить на страницу с такими же параметрами, как и были
+				$this->redirect( Yii::app()->createUrl( 	'category/update', $actionParams ) );
 			}
 			else{
 				Yii::app()->user->setFlash( 'error', $model->getErrorsAsString() );
 			}
 		}
 		
+		
 		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
 		$languages = Language::model()->getAll();
+		
 		
 		$title = Yii::t( 'category', 'New Category' );
 		$this->pageTitle = $title;
@@ -79,8 +78,9 @@ class CategoryController extends Controller
 			$title
 		);
 		
+		
 		$this->render(
-			'category', 
+			'edit', 
 			array(
 				'languages' => $languages,
 				'categories' => $categoriesSingularList,
@@ -92,10 +92,12 @@ class CategoryController extends Controller
 	
 	/**
 	 * Редактировать категорию
+	 * 
 	 */
 	public function actionUpdate( $id ) {		
 		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();
 		
+		// получить модель без автоматического перевода атрибутов
 		Yii::app()->user->setState( 'CurrentTranslationLanguageID', $currentTranslationLanguageID );	
 		$model = $this->loadModel( $id );
 		Yii::app()->user->setState( 'CurrentTranslationLanguageID', null );
@@ -116,14 +118,15 @@ class CategoryController extends Controller
 		$categoriesSingularList = Category::model()->getSingularList( self::PERENT_CATEGORY_COUNT_LEVELS );
 		$languages = Language::model()->getAll();
 		
-		$title = Yii::t( 'category', 'New Category' );
-		$this->pageTitle = $title;
+		
+		$this->pageTitle = Yii::t( 'category', 'Category ":categoryName"', array( ':categoryName' => $model->fullName ) );
 		$this->breadcrumbs = array(
-			$title
+			$this->pageTitle
 		);
 		
+		
 		$this->render(
-			'category', 
+			'edit', 
 			array(
 				'languages' => $languages,
 				'categories' => $categoriesSingularList,
@@ -135,6 +138,7 @@ class CategoryController extends Controller
 	
 	/**
 	 * Удалить категорию
+	 * 
 	 */
 	public function actionDelete() {
 		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
@@ -166,17 +170,22 @@ class CategoryController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer the ID of the model to be loaded
+	 * 
 	 */
 	public function loadModel( $id ) {
 		$model = Category::model()->findByPk( $id );
-		if( $model === null )
+		if( $model === null ) {
 			throw new CHttpException( 404, Yii::t( 'application', 'The requested page does not exist.' ) );
+		}
+		
+		
 		return $model;
 	}
 
 
 	/**
 	 * Performs the AJAX validation.
+	 * 
 	 * @param CModel the model to be validated
 	 */
 	protected function performAjaxValidation( $model ) {

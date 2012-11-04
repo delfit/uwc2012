@@ -1,70 +1,48 @@
 <?php
-/* @var $this SiteController */
-
 $this->pageTitle = Yii::t( 'application', Yii::app()->name );
+?>
+
+<?php
+$this->widget('bootstrap.widgets.TbAlert', array(
+	'block' => true,
+	'fade' => true, 
+	'closeText' => '×', 
+	'alerts' => array( 
+		'success',
+		'info',
+		'warning',
+		'error',
+		'danger'
+	),
+));
 ?>
 
 <h1> 
 	<?php echo Yii::t( 'application', 'Welcome to' ) ?> <i><?php echo CHtml::encode( $this->pageTitle ); ?> </i>
 </h1>
 
-<?php
-$this->widget('bootstrap.widgets.TbAlert', array(
-	'block' => true,
-	'fade' => true, 
-	'closeText' => '×', 
-	'alerts' => array( 
-		'success',
-		'info',
-		'warning',
-		'error',
-		'danger'
-	),
-));
-?>
-
 <div class="thumbnail">
-
 	<?php
+	// построить элементы карусели
 	$items = array();
 	foreach( $products as $product ) {
+		$label = CHtml::tag( 'a', array( 
+			'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ),
+		), $product->fullName );
+		
 		$items[] = array(
 			'image' => $product->getMainImageURL(),
 			'alt' => $product->getFullName(),
-			'imageOptions' => array(
-				'style' => '
-					min-height: 400px;
-					max-height: 400px;
-					margin-left: auto;
-					margin-right: auto;
-				',
-			),
-			'label' => $product->getFullName(),
-			'caption' => $product->getFeatures()
+			'label' => $label,
+			'caption' => $product->getFeatures(),
 		);
 	}
 	
 	$this->widget( 'bootstrap.widgets.TbCarousel', array(
 		'items' => $items
 	));
-	
 	?>
 </div>
-
-<?php
-$this->widget('bootstrap.widgets.TbAlert', array(
-	'block' => true,
-	'fade' => true, 
-	'closeText' => '×', 
-	'alerts' => array( 
-		'success',
-		'info',
-		'warning',
-		'error',
-		'danger'
-	),
-));
-?>
 
 <div class="row">
 	<?php

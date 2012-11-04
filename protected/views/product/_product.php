@@ -1,10 +1,11 @@
+
 <?php
-	$productURL = Yii::app()->createUrl( 'product/view', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) );
+$productURL = Yii::app()->createUrl( 'product/view', array( 'id' => $data->ProductID, 'lc' => Yii::app()->language ) );
 ?>
 
 <div class="row row-spacer" itemscope itemtype="http://data-vocabulary.org/Product">
 	<div class="span4">
-		<a href="<?php echo $productURL;?>" target="_self">
+		<a href="<?php echo $productURL;?>">
 			<img src="<?php echo $data->mainImageURL; ?>" alt="<?php echo $data->fullName; ?>" class="img-rounded" itemprop="image" align="top" />
 		</a>
 		<br />
@@ -47,9 +48,12 @@
 		<span class="hidden" itemprop="name"><?php echo $data->Name; ?></span>
 		
 		
-		<?php
+		<p>
+			<?php
 			echo $data->getFeatures();
-		?>
+			?>
+		</p>
+		
 		
 		<p class="product-code">
 			<?php echo Yii::t( 'product', 'Product code' );?>: <span><?php echo $data->ProductID;?></span>

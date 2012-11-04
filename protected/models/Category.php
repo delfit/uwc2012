@@ -149,7 +149,8 @@ class Category extends CActiveRecord
 		$this->clearCache();
 		
 		return parent::beforeSave();
-	}	
+	}
+	
 	
 	public function beforeDelete() {
 		// очищаем кеш при удалении катерогии
@@ -159,15 +160,10 @@ class Category extends CActiveRecord
 	}
 	
 	
-	// TODO вынести в поведение в модели оставить только название ключей
 	/**
 	 * Очищает кеш категорий
 	 */
 	public function clearCache() {
-		$cacheKeys = array(
-			
-		);
-		
 		// добавить динамические ключи
 		$languages = Language::model()->getAll();
 		$categoryLanguageCacheKey = 'application.category.getList.LanguageCode.';
@@ -186,7 +182,7 @@ class Category extends CActiveRecord
 	 * 
 	 * @return boolean
 	 */
-	public function IsUsed() {
+	public function isUsed() {
 		return Product::model()->exists( 
 			'CategoryID = :categoryID', 
 			array( 
@@ -194,6 +190,7 @@ class Category extends CActiveRecord
 			)
 		);
 	}
+	
 	
 	/**
 	 * Список категорий
@@ -317,6 +314,7 @@ class Category extends CActiveRecord
 		return $this->generateSingularList( $levelCount, $skipLevels );
 	}
 	
+	
 	/**
 	 * Список ошибок одной строкой
 	 * 
@@ -333,5 +331,15 @@ class Category extends CActiveRecord
 		
 		
 		return $strErrors;
+	}
+	
+	
+	/**
+	 * Получить полное название категории
+	 * 
+	 * @return string
+	 */
+	public function getFullName() {
+		return $this->SingularName;
 	}
 }

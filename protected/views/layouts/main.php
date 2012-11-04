@@ -5,20 +5,12 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="language" content="<?php echo Yii::app()->language; ?>" />
 
-		<!-- blueprint CSS framework -->
-		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
-		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
-		<!--[if lt IE 8]>
-		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-		<![endif]-->
-
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 		
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/slimbox2.css" media="screen" />
 		
-		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/comparison.js', CClientScript::POS_END ) ?>
-		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/topScroller.js', CClientScript::POS_END ) ?>
+		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/app.js', CClientScript::POS_END ) ?>
 		<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl . '/js/slimbox2.js', CClientScript::POS_END ) ?>
 
 		<title><?php echo CHtml::encode( $this->pageTitle ); ?></title>
@@ -29,22 +21,23 @@
 			<div id="header">
 				<?php
 				
-				
-				$languageMenuItem[] = array(
+				// создать меню для выбора языков
+				$languageMenuItem = array(
 					'icon' => 'globe',
 					'items' => array()
 				);
 				
 				foreach( $this->languagesMenu as $language ) {
-					$languageMenuItem[ 0 ][ 'items' ][] = array( 
+					$languageMenuItem[ 'items' ][] = array( 
 						'label' => $language->Code, 
 						'url' => Yii::app()->createUrl( $this->getRoute(), array_merge( $this->getActionParams(), array( 'lc' => $language->Code ) ) ) 
 					);
 				}
 				
 				
+				// создать меню управления
 				if( Yii::app()->user->isGuest ) {
-					$configMenuItem[] = array(
+					$configMenuItem = array(
 						'icon' => 'cog',
 						'items' => array(
 							array( 'label' => Yii::t( 'application', 'Login' ), 'url' => Yii::app()->createUrl( '/site/login', array( 'lc' => Yii::app()->language ) ), 'icon' => 'user' ),
@@ -52,21 +45,23 @@
 					);
 				}
 				else {
-					$configMenuItem[] = array(
+					$configMenuItem = array(
 						'icon' => 'cog',
 						'items' => array(
-							array( 'label' => Yii::t( 'product', 'Add product' ), 'url' => Yii::app()->createUrl( 'product/create', array( 'lc' => Yii::app()->language ) ), 'icon' => 'plus' ),
 							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create', array( 'lc' => Yii::app()->language ) ), 'icon' => 'plus' ),
+							array( 'label' => Yii::t( 'product', 'Add product' ), 'url' => Yii::app()->createUrl( 'product/create', array( 'lc' => Yii::app()->language ) ), 'icon' => 'plus' ),
+							array( 'label' => Yii::t( 'product', 'Export products' ), 'url' => Yii::app()->createUrl( 'product/export', array( 'lc' => Yii::app()->language ) ), 'icon' => 'share' ),
+							'---',
 							array( 'label' => Yii::t( 'brand', 'Brands' ), 'url' => Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ), 'icon' => 'list' ),
 							array( 'label' => Yii::t( 'feature', 'Features' ), 'url' => Yii::app()->createUrl( 'feature/list', array( 'lc' => Yii::app()->language ) ), 'icon' => 'list' ),
-							'---',
+							'---',						
 							array( 'label' => Yii::t( 'application', 'Logout' ), 'url' => Yii::app()->createUrl( 'site/logout', array( 'lc' => Yii::app()->language ) ), 'icon' => 'off' ),
 						)
 					);
 				}
 				
 				
-				// главное меню
+				// отрисовать главное меню
 				$this->widget( 'bootstrap.widgets.TbNavbar', array(
 					'brand' => CHtml::encode( Yii::app()->name ), 
 					'brandUrl' => Yii::app()->homeUrl, 
@@ -83,7 +78,10 @@
 							'htmlOptions' => array(
 								'class' => 'pull-right'
 							),
-							'items' => array_merge( $languageMenuItem, $configMenuItem ),
+							'items' => array( 
+								$languageMenuItem, 
+								$configMenuItem 
+							),
 						),
 						
 						'<form class="navbar-search form-search pull-right" action="' . Yii::app()->createUrl( 'product/search', array( 'lc' => Yii::app()->language ) ) . '">

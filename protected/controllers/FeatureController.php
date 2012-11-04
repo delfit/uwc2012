@@ -8,7 +8,6 @@ class FeatureController extends Controller
 	public function filters() {
 		return array(
 			'accessControl',
-			'postOnly + delete',
 		);
 	}
 
@@ -16,6 +15,7 @@ class FeatureController extends Controller
 	/**
 	 * Определяет правила доступа
 	 * Используется в 'accessControl' фильтре.
+	 * 
 	 * @return array правила доступа
 	 */
 	public function accessRules() {
@@ -33,6 +33,7 @@ class FeatureController extends Controller
 	
 	/**
 	 * Получить список характеристик
+	 * 
 	 */
 	public function actionList() {
 		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();
@@ -47,11 +48,7 @@ class FeatureController extends Controller
 		if( isset( $_GET[ 'Feature' ] ) ) {
 			$model->attributes = $_GET[ 'Feature' ];
 		}
-
-		$this->pageTitle = Yii::t( 'feature', 'Features' );
-		$this->breadcrumbs = array(
-			Yii::t( 'feature', 'Features' )
-		);
+		
 		
 		$languages = Language::model()->getAll();
 		
@@ -77,8 +74,15 @@ class FeatureController extends Controller
 				)
 			)
 		);
+		// загрузить данные (обойти ленивую загрузку)
 		$featuresDataProvider->getData();
 		Yii::app()->user->setState( 'CurrentTranslationLanguageID', null );	
+		
+		
+		$this->pageTitle = Yii::t( 'feature', 'Features' );
+		$this->breadcrumbs = array(
+			Yii::t( 'feature', 'Features' )
+		);
 		
 		
 		$this->render( 'list', array(
@@ -92,6 +96,7 @@ class FeatureController extends Controller
 	
 	/**
 	 * Добавить новую характеристику товаров определенной категории
+	 * 
 	 */
 	public function actionCreate() {
 		$model = new Feature;
@@ -106,18 +111,13 @@ class FeatureController extends Controller
 			}
 		}
 		
-		// TODO упростить if
+		// перенаправить на страницу с такими же параметрами, как и были
 		$actionParams = array();
-		if( isset( $_POST[ 'lc' ] ) ) {
-			$actionParams[ 'lc' ] = $_POST[ 'lc' ];
-		}
-		
-		if( isset( $_POST[ 'tlid' ] ) ) {
-			$actionParams[ 'tlid' ] = $_POST[ 'tlid' ];
-		}
-		
-		if( isset( $_POST[ 'cid' ] ) ) {
-			$actionParams[ 'cid' ] = $_POST[ 'cid' ];
+		$aviableParams = array( 'lc', 'tlid', 'cid' );
+		foreach( $aviableParams as $paramName  ) {
+			if( isset( $_POST[ $paramName ] ) ) {
+				$actionParams[ $paramName ] = $_POST[ $paramName ];
+			}
 		}
 		
 		
@@ -127,6 +127,7 @@ class FeatureController extends Controller
 
 	/**
 	 * Редактировать характеристику
+	 * 
 	 */
 	public function actionUpdate() {
 		$currentTranslationLanguageID = isset( $_GET[ 'tlid' ] ) ? (integer) $_GET[ 'tlid' ] : Language::model()->getCurrentLanguageID();
@@ -158,7 +159,7 @@ class FeatureController extends Controller
 		$feature = $this->loadModel( $id );
 		$featureName = $feature->Name;
 		
-		if( $feature->IsUsed() ) {
+		if( $feature->isUsed() ) {
 			Yii::app()->user->setFlash( 'error', Yii::t( 'feature', 'Feature ":featureName" used in products and can not be delated', array( ':featureName' => $featureName ) ) );
 		}
 		else {
@@ -171,10 +172,13 @@ class FeatureController extends Controller
 			}
 		}
 		
+		
+		// перенаправить на страницу с такими же параметрами, как и были
 		$requestActionParams = $this->getActionParams();
 		if( key_exists( 'id', $requestActionParams ) ) {
 			unset( $requestActionParams[ 'id' ] );
-		}		
+		}
+		
 		$this->redirect( Yii::app()->createUrl( 'feature/list', $requestActionParams ) );
 	}
 
@@ -182,18 +186,23 @@ class FeatureController extends Controller
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
+	 * 
 	 * @param integer the ID of the model to be loaded
 	 */
 	public function loadModel( $id ) {
 		$model = Feature::model()->findByPk( $id );
-		if( $model === null )
+		if( $model === null ) {
 			throw new CHttpException( 404, Yii::t( 'application', 'The requested page does not exist.' ) );
+		}
+		
+		
 		return $model;
 	}
 
 
 	/**
 	 * Performs the AJAX validation.
+	 * 
 	 * @param CModel the model to be validated
 	 */
 	protected function performAjaxValidation( $model ) {

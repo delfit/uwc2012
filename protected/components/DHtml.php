@@ -17,8 +17,7 @@ class DHtml
 			'size' => 'mini',
 			'type' => 'link', 
 			'htmlOptions' => array(
-				// TODO вынести стили отсюда
-				'style' => 'display: inline; padding-right: 10px;'
+				'class' => 'action-buttons'
 			),
 			'buttons' => array(
 				array( 
@@ -44,6 +43,12 @@ class DHtml
 		), true );
 	}
 	
+	
+	/**
+	 * Добавить скрытое поле с текущим языком
+	 * 
+	 * @return string
+	 */
 	public static function actionLanguageCode() {
 		return CHtml::hiddenField( 'lc', Yii::app()->language );
 	}

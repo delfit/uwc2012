@@ -1,8 +1,14 @@
 <?php
+
+/**
+ * Поведение для динамического применения переводов  
+ * 
+ */
 class TranslationBehaviour extends CActiveRecordBehavior {
 	
 	/**
 	 * Загрузить перевод для атрибутов
+	 * 
 	 */
 	public function afterFind( $event ) {
 		parent::afterFind( $event );
@@ -54,7 +60,6 @@ class TranslationBehaviour extends CActiveRecordBehavior {
 		}
 			
 		$translation = $this->getTranslation( $model->LanguageID );
-
 		if( empty( $translation ) ) {
 			$translationTable = $model->translationTableName();
 			$translation = new $translationTable();
@@ -67,7 +72,7 @@ class TranslationBehaviour extends CActiveRecordBehavior {
 		}
 					
 		if( !$translation->save( true ) ) {
-			
+			$model->addErrors( $translation->getErrors() );
 		}
 		
 		
@@ -108,6 +113,13 @@ class TranslationBehaviour extends CActiveRecordBehavior {
 		return $translation;
 	}
 	
+	
+	/**
+	 * Проверить наличие перевода на указанном языке
+	 * 
+	 * @param integer $languageID
+	 * @return boolean
+	 */
 	public function hasTranslation( $languageID = null ) {
 		$translation = $this->getTranslation( $languageID );
 		if( !empty( $translation ) ) {

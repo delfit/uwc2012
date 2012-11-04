@@ -3,21 +3,6 @@
 class SiteController extends Controller
 {
 
-
-	/**
-	 * Declares class-based actions.
-	 */
-	public function actions() {
-		return array(
-			// captcha action renders the CAPTCHA image displayed on the contact page
-			'captcha' => array(
-				'class' => 'CCaptchaAction',
-				'backColor' => 0xFFFFFF,
-			),
-		);
-	}
-
-
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
@@ -36,19 +21,23 @@ class SiteController extends Controller
 
 	/**
 	 * This is the action to handle external exceptions.
+	 * 
 	 */
 	public function actionError() {
 		if( $error = Yii::app()->errorHandler->error ) {
-			if( Yii::app()->request->isAjaxRequest )
+			if( Yii::app()->request->isAjaxRequest ) {
 				echo $error[ 'message' ];
-			else
+			}
+			else {
 				$this->render( 'error', $error );
+			}
 		}
 	}
 
 
 	/**
 	 * Displays the login page
+	 * 
 	 */
 	public function actionLogin() {
 		$model = new LoginForm;
@@ -67,6 +56,8 @@ class SiteController extends Controller
 				Yii::app()->user->setFlash( 'success', Yii::t( 'application', 'Logined successful' ) );
 				$this->redirect( Yii::app()->homeUrl );
 		}
+		
+		
 		// display the login form
 		$this->render( 'login', array( 'model' => $model ) );
 	}
@@ -74,6 +65,7 @@ class SiteController extends Controller
 
 	/**
 	 * Logs out the current user and redirect to homepage.
+	 * 
 	 */
 	public function actionLogout() {
 		Yii::app()->user->logout();

@@ -5,6 +5,7 @@ return array(
 	'Brand ":brandName" used in products and can not be deleted' => 'Виробник ":brandName" використовується в товарах и не може бути видаленним',
 	'Brand ":brandName" was deleted' => 'Виробник ":brandName" видалено',
 	'Brands' => 'Виробники',
-	'Name' => 'Назва'
+	'Name' => 'Назва',
+	'New brand' => 'Новий виробник'
 );
 ?>

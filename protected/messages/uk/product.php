@@ -13,6 +13,7 @@ return array(
 	'Comparison list' => 'Список порівняння',
 	'Comparison list is empty' => 'Список порівняння порожній',
 	'Description' => 'Опис',
+	'Export products' => 'Експортувати товари',
 	'Features' => 'Характеристики',
 	'File Name' => 'Ім’я файлу',
 	'Images' => 'Зображення',
