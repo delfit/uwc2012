@@ -2,9 +2,14 @@
 return CMap::mergeArray(
 	require(dirname( __FILE__ ) . '/main.php'), array(
 		'components' => array(
+			'cache' => array(
+				'class' => 'system.caching.CDummyCache',
+			),
+			
 			'fixture' => array(
 				'class' => 'system.test.CDbFixtureManager',
 			),
+			
 			'db' => array(
 				'connectionString' => 'mysql:host=localhost;dbname=uwc2012_test',
 				'emulatePrepare' => true,

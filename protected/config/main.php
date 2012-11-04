@@ -44,8 +44,7 @@ return array(
 		),
 		
 		'cache' => array(
-			// TODO изменить на CFileCache
-			'class' => 'system.caching.CDummyCache' // CFileCache, CDummyCache
+			'class' => 'system.caching.CFileCache' // CFileCache, CDummyCache
 		),
 		
 		'db' => array(

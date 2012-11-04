@@ -57,13 +57,13 @@ class Controller extends CController
 			
 			Yii::app()->homeUrl = Yii::app()->createUrl( 'site/index', array( 'lc' => Yii::app()->language ) );
 		}
-		
 		// применить язык определенный в браузера пользователя при первом входе
-		if( !Yii::app()->user->hasState( 'DetectPreferredLanguage' ) ) {
+		else if( !Yii::app()->user->hasState( 'DetectPreferredLanguage' ) ) {
 			$preferredLanguage = Yii::app()->request->preferredLanguage;
 			if( !empty( $preferredLanguage ) ) {
 				$preferredLanguageCode = strstr( $preferredLanguage, '_', true );
 				Yii::app()->language = $preferredLanguageCode;
+				Yii::app()->homeUrl = Yii::app()->createUrl( 'site/index', array( 'lc' => Yii::app()->language ) );
 				Yii::app()->user->setState( 'DetectPreferredLanguage', 1 );
 				
 				$this->redirect( Yii::app()->createUrl( $this->getRoute(), array_merge( $this->getActionParams(), array( 'lc' => Yii::app()->language ) ) ) );
