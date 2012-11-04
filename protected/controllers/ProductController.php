@@ -7,6 +7,32 @@
 class ProductController extends Controller
 {
 	/**
+	 * @return array action filters
+	 */
+	public function filters() {
+		return array(
+			'accessControl +create,update,delete',
+		);
+	}
+	
+	/**
+	 * Определяет правила доступа
+	 * Используется в 'accessControl' фильтре.
+	 * @return array правила доступа
+	 */
+	public function accessRules() {
+		return array(
+			array( 'allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions' => array( 'create', 'update', 'delete' ),
+				'users' => array( 'admin' ),
+			),
+			array( 'deny', // deny all users
+				'users' => array( '*' ),
+			),
+		);
+	}
+	
+	/**
 	 * Поиск по товарам
 	 * 
 	 * @return null

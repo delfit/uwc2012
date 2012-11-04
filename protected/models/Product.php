@@ -62,12 +62,12 @@ class Product extends CActiveRecord
                 array( 'CategoryID, BrandID, IsDraft', 'numerical', 'integerOnly' => true ),
                 array( 'LanguageID, Description', 'safe' ),
 				array( 'Image', 'file', 'allowEmpty'=>true,'types'=>'jpg, gif, png' ),
-				array( 'Image', 'safe' ),				
+				array( 'Image, LastModified', 'safe' ),				
                 array( 'Name', 'length', 'max' => 100 ),
 				array( 'Name', 'match', 'pattern' => '([a-zA-Z0-9_() ])', 'allowEmpty' => false ),
                 // The following rule is used by search().
                 // Please remove those attributes that should not be searched.
-                array( 'ProductID, CategoryID, BrandID, Name, IsDraft', 'safe', 'on' => 'search' ),
+                array( 'ProductID, CategoryID, BrandID, Name, IsDraft, LastModified', 'safe', 'on' => 'search' ),
             );
 	}
 	
@@ -99,7 +99,8 @@ class Product extends CActiveRecord
                 'BrandID' => 'Brand',
                 'Name' => 'Name',
                 'IsDraft' => 'Is Draft',
-				//'Image' => 'Image'
+				'LastModified' => 'LastModified',
+				'Image' => 'Image'
             );
 	}
 	
@@ -109,16 +110,17 @@ class Product extends CActiveRecord
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
 	public function search() {
-            // Warning: Please modify the following code to remove attributes that
-            // should not be searched.
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
 
-            $criteria = new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-            $criteria->compare( 'ProductID', $this->ProductID );
-            $criteria->compare( 'CategoryID', $this->CategoryID );
-            $criteria->compare( 'BrandID', $this->BrandID );
-            $criteria->compare( 'Name', $this->Name, true );
-            $criteria->compare( 'IsDraft', $this->IsDraft );
+		$criteria->compare( 'ProductID', $this->ProductID );
+		$criteria->compare( 'CategoryID', $this->CategoryID );
+		$criteria->compare( 'BrandID', $this->BrandID );
+		$criteria->compare( 'Name', $this->Name, true );
+		$criteria->compare( 'IsDraft', $this->IsDraft );
+		$criteria->compare( 'LastModified', $this->LastModified );
 
 		return new CActiveDataProvider( $this, array(
 			'criteria' => $criteria,
@@ -486,6 +488,49 @@ class Product extends CActiveRecord
 	 */
 	public function getFullName() {
 		return $this->category->SingularName . ' ' . $this->brand->Name . ' ' . $this->Name;
+	}
+	
+	
+	/**
+	 * Получить список характеристик товара
+	 * 
+	 * @return string характеристики товара строкой
+	 */
+	public function getFeatures() {
+		$features = '';
+		foreach( $this->productHasFeatures as $productHasFeature ) {
+			if( !empty( $productHasFeature->Value ) ) {
+				$features .= '<b>' . $productHasFeature->feature->Name . '</b>' . ': ' . $productHasFeature->Value . '; ';
+			}			
+		}
+		
+		
+		return $features;
+	}
+	
+	
+	/**
+	 * Список последних товаров из изображениями
+	 * 
+	 * @return array
+	 */
+	public function getCarouselProducts() {
+		return  Product::model()->findAll( 
+			array(
+				'condition' => '
+					(
+						SELECT 
+							count( * ) > 0
+						FROM
+							ProductHasImages
+						WHERE
+							ProductHasImages.ProductID = t.ProductID
+					)
+				',
+				'order' => 'ProductID DESC', 
+				'limit' => Yii::app()->params[ 'default' ][ 'countImagesPerCarousel' ]
+			)			
+		);
 	}
 	
 	

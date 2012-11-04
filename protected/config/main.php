@@ -8,7 +8,7 @@ return array(
 	
 	'name' => 'UWC2012',
 	
-	'language' => 'ru', 
+	'language' => 'uk', 
 	
 	// preloading 'log' component
 	'preload' => array( 
@@ -44,6 +44,7 @@ return array(
 		),
 		
 		'cache' => array(
+			// TODO изменить на CFileCache
 			'class' => 'system.caching.CFileCache' // CFileCache, CDummyCache
 		),
 		
@@ -171,7 +172,8 @@ return array(
 		'adminEmail' => 'webmaster@example.com',
 		'default' => array(
 			'pageSize' => 2,
-			'countImagesPerProduct' => 5
+			'countImagesPerProduct' => 5,
+			'countImagesPerCarousel' => 3
 		),
 		
 		'imagesFolder' => 'images',
