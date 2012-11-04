@@ -21,28 +21,35 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	<?php echo Yii::t( 'application', 'Welcome to' ) ?> <i><?php echo CHtml::encode( $this->pageTitle ); ?> </i>
 </h1>
 
-<div class="thumbnail">
-	<?php
-	// построить элементы карусели
-	$items = array();
-	foreach( $products as $product ) {
-		$label = CHtml::tag( 'a', array( 
-			'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ),
-		), $product->fullName );
-		
-		$items[] = array(
-			'image' => $product->getMainImageURL(),
-			'alt' => $product->getFullName(),
-			'label' => $label,
-			'caption' => $product->getFeatures(),
-		);
-	}
+
+<?php
+// построить элементы карусели
+$items = array();
+foreach( $products as $product ) {
+	$label = CHtml::tag( 'a', array( 
+		'href' => Yii::app()->createUrl( 'product/view', array( 'id' => $product->ProductID, 'lc' => Yii::app()->language ) ),
+	), $product->fullName );
+
+	$items[] = array(
+		'image' => $product->getMainImageURL(),
+		'alt' => $product->getFullName(),
+		'label' => $label,
+		'caption' => $product->getFeatures(),
+	);
+}
+
+// отобразить карусель только если в ней есть элементы
+if( !empty( $items ) ) {
+	echo CHtml::openTag( 'div', array( 'class' => 'thumbnail' ) );
 	
 	$this->widget( 'bootstrap.widgets.TbCarousel', array(
 		'items' => $items
 	));
-	?>
-</div>
+	
+	echo CHtml::closeTag( 'div' );
+}
+?>
+
 
 <div class="row">
 	<?php

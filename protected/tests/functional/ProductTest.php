@@ -70,7 +70,7 @@ class ProductTest extends WebTestCase
 		
 		
 		// прочитать товар
-		$this->clickAndWait( "css=h3 a:contains('" . $dummyProductCreate[ 'Name' ] . "')" );
+		$this->clickAndWait( "css=legend a:contains('" . $dummyProductCreate[ 'Name' ] . "')" );
 		$this->assertElementPresent( "css=h3:contains('" . $dummyProductCreate[ 'CategoryName' ] . "')" );
 		$this->assertElementPresent( "css=h3:contains('" . $dummyProductCreate[ 'BrandName' ] . "')" );
 		$this->assertElementPresent( "css=h3:contains('" . $dummyProductCreate[ 'Name' ] . "')" );
@@ -99,8 +99,8 @@ class ProductTest extends WebTestCase
 		
 		
 		// прочитать товар
-		$this->clickAndWait( "css=h3 a:contains('" . $dummyProductUpdate[ 'Name' ] . "')" );
-		// катгорию менять нельзя
+		$this->clickAndWait( "css=legend a:contains('" . $dummyProductUpdate[ 'Name' ] . "')" );
+		// категорию менять нельзя
 		$this->assertElementPresent( "css=h3:contains('" . $dummyProductCreate[ 'CategoryName' ] . "')" );
 		$this->assertElementPresent( "css=h3:contains('" . $dummyProductUpdate[ 'BrandName' ] . "')" );
 		$this->assertElementPresent( "css=h3:contains('" . $dummyProductUpdate[ 'Name' ] . "')" );
