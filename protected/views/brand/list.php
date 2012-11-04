@@ -39,6 +39,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 			'name' => 'Name',
 			'sortable' => true,
 			'editable' => array(
+				'title' => Yii::t( 'brand', 'Name' ),
 				'url' => $this->createUrl( 'brand/update' ),
 				'placement' => 'right',
 				'inputclass' => 'span3'

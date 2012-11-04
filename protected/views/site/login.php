@@ -33,7 +33,7 @@ $this->breadcrumbs = array(
 		<?php echo $form->passwordField( $model, 'password' ); ?>
 		<?php echo $form->error( $model, 'password' ); ?>
 		<p class="hint">
-			Hint: You may login with <kbd>admin</kbd>/<kbd>admin</kbd>.
+			<?php echo Yii::t( 'application', 'Hint: You may login with' ); ?> <kbd>admin</kbd>/<kbd>admin</kbd>.
 		</p>
 	</div>
 

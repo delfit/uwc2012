@@ -40,12 +40,12 @@ class Brand extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('Name', 'unique'),
-			array('Name', 'required'),
-			array('Name', 'length', 'max'=>100),
+			array( 'Name', 'unique' ),
+			array( 'Name', 'required' ),
+			array( 'Name', 'length', 'max'=>100 ),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('BrandID, Name', 'safe', 'on'=>'search'),
+			array( 'BrandID, Name', 'safe', 'on'=>'search' ),
 		);
 	}
 
@@ -89,6 +89,20 @@ class Brand extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+	
+	
+	/**
+	 * Получить локализированное название атрибута
+	 * 
+	 * @param type $attribute
+	 * 
+	 * @return локализированное название атрибута
+	 */
+	public function getAttributeLabel( $attribute ) {
+		$label = parent::getAttributeLabel( $attribute );
+		
+		return Yii::t( strtolower( $this->tableSchema->name ), $label );
 	}
 	
 	

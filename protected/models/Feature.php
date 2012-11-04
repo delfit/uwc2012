@@ -49,9 +49,9 @@ class Feature extends CActiveRecord
 	public function rules()
 	{
 		return array(
-			array('CategoryID', 'required'),
+			array('CategoryID, Name', 'required'),
 			array('CategoryID', 'numerical', 'integerOnly'=>true, 'allowEmpty' => false ),
-			array('Name, Description, LanguageID', 'safe' ),
+			array('Description, LanguageID', 'safe' ),
 			array( 'Name', 'length', 'max' => 100 ),
 			
 			// The following rule is used by search().
@@ -104,6 +104,21 @@ class Feature extends CActiveRecord
 			'application.behaviours.TranslationBehaviour'
 		) );
 	}
+	
+	
+	/**
+	 * Получить локализированное название атрибута
+	 * 
+	 * @param type $attribute
+	 * 
+	 * @return локализированное название атрибута
+	 */
+	public function getAttributeLabel( $attribute ) {
+		$label = parent::getAttributeLabel( $attribute );
+		
+		return Yii::t( strtolower( $this->tableSchema->name ), $label );
+	}
+	
 	
 	/**
 	 * Проверяет включает ли AR указанный атрибут с учетом атрибутов определенных в модели

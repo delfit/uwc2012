@@ -39,6 +39,19 @@ class LoginForm extends CFormModel
 			'rememberMe'=>'Remember me next time',
 		);
 	}
+	
+	/**
+	 * Получить локализированное название атрибута
+	 * 
+	 * @param type $attribute
+	 * 
+	 * @return локализированное название атрибута
+	 */
+	public function getAttributeLabel( $attribute ) {
+		$label = parent::getAttributeLabel( $attribute );
+		
+		return Yii::t( 'application', $label );
+	}
 
 	/**
 	 * Authenticates the password.

@@ -2,6 +2,8 @@
 return array(
 	'Add product' => 'Додати товар',
 	'Add to comparison' => 'Додати до порівняння',
+	'Brand' => 'Виробник',
+	'Category' => 'Категорія',
 	'Category not defined' => 'Категорію не визначено',
 	'Can not delete features' => 'Неможливо видалити характеристики',
 	'Can not delete images' => 'Неможливо видалити зображення',
@@ -14,6 +16,7 @@ return array(
 	'Features' => 'Характеристики',
 	'File Name' => 'Ім’я файлу',
 	'Images' => 'Зображення',
+	'Name' => 'Назва',
 	'New Product' => 'Новий товар',
 	'Product code' => 'Код товару',
 	'Product created' => 'Товар додано',

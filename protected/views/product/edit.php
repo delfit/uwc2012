@@ -122,7 +122,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 		<h4><?php echo Yii::t( 'product', 'Images' ) ?></h4>
 		
 		<?php 		
-			echo $form->fileFieldRow( $product, 'Image' );
+			echo $form->fileField( $product, 'Image' );
 		?>
 
 		<?php
