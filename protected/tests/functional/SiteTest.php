@@ -4,14 +4,14 @@ class SiteTest extends WebTestCase
 {
 
 	public function testIndex() {
-		$this->open( '' );
+		$this->open( 'site/index' );
 		
 		$this->assertTextPresent( 'UWC2012' );
 	}
 	
 
 	public function testLoginLogout() {
-		$this->open('');
+		$this->open( 'site/index' );
 		
 		// проверить, что пользователь не вошел
 		$this->assertElementPresent( "css=.navbar a:contains('" . Yii::t( 'application', 'Login' ) . "')" );

@@ -99,7 +99,7 @@ class FeatureController extends Controller
 		if( isset( $_POST[ 'Feature' ] ) ) {
 			$model->attributes = $_POST[ 'Feature' ];
 			if( $model->save() ) {
-				Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature "' . $model->Name . '" created' ) );
+				Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature ":featureName" created', array( ':featureName' => $model->Name ) ) );
 			}
 			else {
 				Yii::app()->user->setFlash( 'error', $model->getError( 'CategoryID' ) );
@@ -156,17 +156,18 @@ class FeatureController extends Controller
 		$id = isset( $_GET[ 'id' ] ) ? (integer) $_GET[ 'id' ] : null;
 		
 		$feature = $this->loadModel( $id );
+		$featureName = $feature->Name;
 		
 		if( $feature->IsUsed() ) {
-			Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature used in products and can not be delated' ) );
+			Yii::app()->user->setFlash( 'error', Yii::t( 'feature', 'Feature ":featureName" used in products and can not be delated', array( ':featureName' => $featureName ) ) );
 		}
 		else {
 			$success = $feature->delete();
 			if( $success ) {
-				Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature deleted' ) );
+				Yii::app()->user->setFlash( 'success', Yii::t( 'feature', 'Feature ":featureName" was deleted', array( ':featureName' => $featureName ) ) );
 			}
 			else {
-				Yii::app()->user->setFlash( 'error', Yii::t( 'feature', 'Feature not deleted' ) );
+				Yii::app()->user->setFlash( 'error', Yii::t( 'feature', 'Feature ":featureName" was not deleted', array( ':featureName' => $featureName ) ) );
 			}
 		}
 		

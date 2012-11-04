@@ -1,3 +1,20 @@
+
+<?php
+$this->widget('bootstrap.widgets.TbAlert', array(
+		'block' => true,
+		'fade' => true, 
+		'closeText' => '×', 
+		'alerts' => array( 
+			'success',
+			'info',
+			'warning',
+			'error',
+			'danger'
+		),
+	)
+);
+?>
+
 <center>
 	
 	<?php
@@ -69,24 +86,6 @@
 
 
 <?php $this->endWidget(); ?>
-
-<?php
-
-	$this->widget('bootstrap.widgets.TbAlert', array(
-			'block' => true,
-			'fade' => true, 
-			'closeText' => '×', 
-			'alerts' => array( 
-				'success',
-				'info',
-				'warning',
-				'error',
-				'danger'
-			),
-		)
-	);
-
-?>
 
 <?php 
 	if( count( $featuresDataProvider ) > 0 ) {

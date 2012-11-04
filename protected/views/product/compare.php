@@ -24,7 +24,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	echo CHtml::openTag( 'tr' );
 	echo CHtml::tag( 'th', array(), '&nbsp;' );
 	foreach( $compareProducts as $compareProduct ) {
-		echo CHtml::openTag( 'th' );
+		echo CHtml::openTag( 'th', array( 'class' => 'span' . ceil( 12 / count( $compareProducts ) ) ) );
 		
 		// кнопка удаления из сравнения
 		echo CHtml::tag( 'a', array( 
@@ -51,8 +51,8 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	foreach( $compareProducts as $compareProduct ) {
 		echo CHtml::openTag( 'td' );
 		// TODO улучшить код
-		echo '<a href="' . $compareProduct->mainImageURL . '" rel="lightbox-product" class="span3 thumbnail" title="' . $compareProduct->fullName . '">
-			<img src="' . $compareProduct->mainImageURL . '" width="200" alt="' . $compareProduct->fullName . '" class="img-rounded" align="top" />
+		echo '<a href="' . $compareProduct->mainImageURL . '" rel="lightbox-product" class="thumbnail" title="' . $compareProduct->fullName . '">
+			<img src="' . $compareProduct->mainImageURL . '" style="max-width: 200px; width: 200px;" alt="' . $compareProduct->fullName . '" class="img-rounded" align="top" />
 		</a>';
 		echo CHtml::closeTag( 'td' );
 	}

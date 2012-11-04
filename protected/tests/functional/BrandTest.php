@@ -28,7 +28,7 @@ class BrandTest extends WebTestCase
 		$this->type( 'name=Brand[Name]', $dummyBrandCreate[ 'Name' ] );
 		$this->clickAndWait( "css=button:contains('" . Yii::t( 'application', 'Add' ) . "')" );
 		$this->assertTextPresent( Yii::t( 'brand', 'Brand ":brandName" created', array( ':brandName' => $dummyBrandCreate[ 'Name' ] ) ) );
-		$this->assertElementPresent( "css=a:contains('" . $dummyBrandCreate[ 'Name' ] . "')" );
+		$this->assertElementPresent( "css=div.grid-view td a:contains('" . $dummyBrandCreate[ 'Name' ] . "')" );
 		
 		
 		// попробовать создать производителя с тем же самым именем
@@ -38,19 +38,19 @@ class BrandTest extends WebTestCase
 		
 		
 		// обновить производителя
-		$this->click( "css=a:contains('" . $dummyBrandCreate[ 'Name' ] . "')" );
+		$this->click( "css=div.grid-view td a:contains('" . $dummyBrandCreate[ 'Name' ] . "')" );
 		$this->waitForElementPresent( 'css=form.form-inline input' );
 		$this->type( 'css=form.form-inline input', $dummyBrandUpdate[ 'Name' ] );
 		$this->click( 'css=form.form-inline i.icon-ok' );
-		$this->waitForElementPresent( "css=a:contains('" . $dummyBrandUpdate[ 'Name' ] . "')" );
-		$this->assertElementPresent( "css=a:contains('" . $dummyBrandUpdate[ 'Name' ] . "')" );
+		$this->waitForElementPresent( "css=div.grid-view td a:contains('" . $dummyBrandUpdate[ 'Name' ] . "')" );
+		$this->assertElementPresent( "css=div.grid-view td a:contains('" . $dummyBrandUpdate[ 'Name' ] . "')" );
 		
 		
-		// удалить производитель
+		// удалить производителя
 		$this->chooseOkOnNextConfirmation();
-		$this->clickAndWait( "css=tr:contains('" . $dummyBrandUpdate[ 'Name' ] . "') i.icon-trash" );
+		$this->clickAndWait( "css=div.grid-view tr:contains('" . $dummyBrandUpdate[ 'Name' ] . "') a i.icon-trash" );
 		$this->assertTextPresent( Yii::t( 'brand', 'Brand ":brandName" was deleted', array( ':brandName' => $dummyBrandUpdate[ 'Name' ] ) ) );
-		$this->assertElementNotPresent( "css=a:contains('" . $dummyBrandUpdate[ 'Name' ] . "')" );
+		$this->assertElementNotPresent( "css=div.grid-view td aa:contains('" . $dummyBrandUpdate[ 'Name' ] . "')" );
 	}
 
 }

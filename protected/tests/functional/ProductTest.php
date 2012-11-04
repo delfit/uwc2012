@@ -28,7 +28,7 @@ class ProductTest extends WebTestCase
 			'features' => array(
 				array(
 					'Name' => $this->featureTranslations[ 'screen' ][ 'Name' ],
-					'Value' => '14 (1366x768) 720p'
+					'Value' => '14 [1366x768] 720p'
 				)
 			)
 		);
@@ -41,7 +41,7 @@ class ProductTest extends WebTestCase
 			'features' => array(
 				array(
 					'Name' => $this->featureTranslations[ 'screen' ][ 'Name' ],
-					'Value' => '13,3 (1600x900)'
+					'Value' => '13,3 [1600x900]'
 				)
 			)
 		);
@@ -121,8 +121,73 @@ class ProductTest extends WebTestCase
 	}
 	
 	
+	public function testCompare() {
+		$this->open( 'site/index' );
+		
+		// перейти в категорию ноутбуков
+		$this->clickAndWait( "css=li a:contains('" . $this->сategoryTranslations[ 'notebooks' ][ 'PluralName' ] . "')" );
+		$this->assertElementPresent( "css=h2:contains('" . $this->сategoryTranslations[ 'notebooks' ][ 'PluralName' ] . "')" );
+		
+		
+		// добавить к сравнению первый ноутбук
+		$this->click( "css=div.row:contains('" . $this->products[ 'asus_u31sd' ][ 'Name' ] . "') a.compare-link" );
+		$this->waitForElementPresent( "css=a.comparison-text:contains('" . Yii::t( 'product', ':count product(s) in comparison', array( ':count' => 1 ) ) . "')" );
+		
+		
+		// добавить к сравнению второй ноутбук
+		$this->click( "css=div.row:contains('" . $this->products[ 'hp_probook_4540s' ][ 'Name' ] . "') a.compare-link" );
+		$this->waitForElementPresent( "css=a.comparison-text:contains('" . Yii::t( 'product', ':count product(s) in comparison', array( ':count' => 2 ) ) . "')" );
+		
+		
+		// проверить страницу сравнения
+		$this->clickAndWait( "css=a.comparison-text:contains('" . Yii::t( 'product', ':count product(s) in comparison', array( ':count' => 2 ) ) . "')" );
+		$this->assertElementPresent( "css=th:contains('" . $this->products[ 'asus_u31sd' ][ 'Name' ] . "')" );
+		$this->assertElementPresent( "css=th:contains('" . $this->products[ 'hp_probook_4540s' ][ 'Name' ] . "')" );
+		
+		$this->assertElementPresent( "css=tr:contains('" . $this->featureTranslations[ 'screen' ][ 'Name' ] . "') td:contains('" . $this->productHasFeatures[ 'asus_u31sd' ][ 'Value' ] . "')" );
+		$this->assertElementPresent( "css=tr:contains('" . $this->featureTranslations[ 'screen' ][ 'Name' ] . "') td:contains('" . $this->productHasFeatures[ 'hp_probook_4540s' ][ 'Value' ] . "')" );
+		
+		
+		// удалить ноутбук из сравнения
+		$this->clickAndWait( "css=th:contains('" . $this->products[ 'asus_u31sd' ][ 'Name' ] . "') a i.icon-remove" );
+		$fullProductName = $this->сategoryTranslations[ 'notebooks' ][ 'SingularName' ] . ' ' . $this->brands[ 'asus' ][ 'Name' ] . ' ' . $this->products[ 'asus_u31sd' ][ 'Name' ];
+		$this->assertTextPresent( Yii::t( 'product', 'Product ":productName" removed from comparison', array( ':productName' => $fullProductName ) ) );
+		$this->assertElementPresent( "css=th:contains('" . $this->products[ 'hp_probook_4540s' ][ 'Name' ] . "')" );
+		$this->assertElementNotPresent( "css=th:contains('" . $this->products[ 'asus_u31sd' ][ 'Name' ] . "')" );
+		
+		
+		// перейти в категорию планшетов
+		$this->clickAndWait( "css=li a:contains('" . $this->сategoryTranslations[ 'tablets' ][ 'PluralName' ] . "')" );
+		$this->assertElementPresent( "css=h2:contains('" . $this->сategoryTranslations[ 'tablets' ][ 'PluralName' ] . "')" );
+		
+		
+		// добавить к сравнению первый планшет
+		$this->click( "css=div.row:contains('" . $this->products[ 'samsung_galaxy_tab_2' ][ 'Name' ] . "') a.compare-link" );
+		$this->waitForElementPresent( "css=a.comparison-text:contains('" . Yii::t( 'product', ':count product(s) in comparison', array( ':count' => 1 ) ) . "')" );
+		
+		
+		// проверить страницу сравнения
+		$this->clickAndWait( "css=a.comparison-text:contains('" . Yii::t( 'product', ':count product(s) in comparison', array( ':count' => 1 ) ) . "')" );
+		$this->assertElementPresent( "css=th:contains('" . $this->products[ 'samsung_galaxy_tab_2' ][ 'Name' ] . "')" );
+		$this->assertElementNotPresent( "css=th:contains('" . $this->products[ 'asus_u31sd' ][ 'Name' ] . "')" );
+		$this->assertElementNotPresent( "css=th:contains('" . $this->products[ 'hp_probook_4540s' ][ 'Name' ] . "')" );
+		
+		
+		// перейти обратно в категорию ноутбуков
+		$this->clickAndWait( "css=li a:contains('" . $this->сategoryTranslations[ 'notebooks' ][ 'PluralName' ] . "')" );
+		$this->assertElementPresent( "css=h2:contains('" . $this->сategoryTranslations[ 'notebooks' ][ 'PluralName' ] . "')" );
+		
+		
+		// проверить страницу сравнения
+		$this->clickAndWait( "css=a.comparison-text:contains('" . Yii::t( 'product', ':count product(s) in comparison', array( ':count' => 1 ) ) . "')" );
+		$this->assertElementPresent( "css=th:contains('" . $this->products[ 'hp_probook_4540s' ][ 'Name' ] . "')" );
+		$this->assertElementNotPresent( "css=th:contains('" . $this->products[ 'asus_u31sd' ][ 'Name' ] . "')" );
+		$this->assertElementNotPresent( "css=th:contains('" . $this->products[ 'samsung_galaxy_tab_2' ][ 'Name' ] . "')" );
+	}
+	
+	
 	public function testSearch() {
-		$this->open('');
+		$this->open( 'site/index' );
 		
 		// проверить присутствие поля поиска
 		$this->assertElementPresent( "css=.navbar input.search-query" );
@@ -155,5 +220,7 @@ class ProductTest extends WebTestCase
 		$this->assertElementPresent( "css=h4:contains('" . $this->products[ 'asus_u31sd' ][ 'Name' ] . "')" );
 		$this->assertElementNotPresent( "css=h4:contains('" . $this->products[ 'hp_probook_4540s' ][ 'Name' ] . "')" );
 		$this->assertElementNotPresent( "css=h4:contains('" . $this->products[ 'samsung_galaxy_tab_2' ][ 'Name' ] . "')" );
+		
+		// TODO сделать тест на поиск по категории
 	}
 }
