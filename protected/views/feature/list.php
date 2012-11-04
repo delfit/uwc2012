@@ -58,7 +58,7 @@
 	<?php echo $form->textFieldRow( $model, 'Name', array( 'class' => 'span7' ) ); ?>
 	<?php echo $form->textAreaRow( $model, 'Description', array( 'class' => 'span7' ) ); ?>
 	<?php echo $form->hiddenField( $model, 'LanguageID' ); ?>
-	<?php echo CHtml::hiddenField( 'tlid', $language->LanguageID ); ?>
+	<?php echo CHtml::hiddenField( 'tlid', $model->LanguageID ); ?>
 	<?php echo CHtml::hiddenField( 'cid', $model->CategoryID ); ?>
 	<?php echo DHtml::actionLanguageCode(); ?>
 

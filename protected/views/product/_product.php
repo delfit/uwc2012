@@ -48,11 +48,7 @@
 		
 		
 		<?php
-		$features = '';
-		foreach( $data->productHasFeatures as $productHasFeature ) {
-			$features .= '<b>' . $productHasFeature->feature->Name . '</b>' . ': ' . $productHasFeature->Value . '; ';
-		}
-		echo $features;
+			echo $data->getFeatures();
 		?>
 		
 		<p class="product-code">

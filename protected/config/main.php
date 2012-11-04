@@ -172,7 +172,8 @@ return array(
 		'adminEmail' => 'webmaster@example.com',
 		'default' => array(
 			'pageSize' => 2,
-			'countImagesPerProduct' => 5
+			'countImagesPerProduct' => 5,
+			'countImagesPerCarousel' => 3
 		),
 		
 		'imagesFolder' => 'images',

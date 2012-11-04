@@ -23,33 +23,32 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 ));
 ?>
 
-<div class="row">
-	<div class="span12">
+<div class="thumbnail">
+
 	<?php
+	$items = array();
+	foreach( $products as $product ) {
+		$items[] = array(
+			'image' => $product->getMainImageURL(),
+			'alt' => $product->getFullName(),
+			'imageOptions' => array(
+				'style' => '
+					min-height: 400px;
+					max-height: 400px;
+					margin-left: auto;
+					margin-right: auto;
+				',
+			),
+			'label' => $product->getFullName(),
+			'caption' => $product->getFeatures()
+		);
+	}
+	
 	$this->widget( 'bootstrap.widgets.TbCarousel', array(
-		'items' => array(
-			array(
-				'image' => 'http://i5.rozetka.ua/goods/5319/asus_u31sds_2310m_n4drap_5319537.jpg',
-				'alt' => 'Ноутбук Asus U31SD (U31SD-RX130R) Silver',
-				'imageOptions' => array(
-					'style' => 'height: 400px; '
-				),
-				'label' => 'Ноутбук Asus U31SD (U31SD-RX130R) Silver',
-				'caption' => 'Реализованная в U31SD технология Super Hybrid Engine при выполнении сложных задач автоматически увеличивает производительность системы вплоть до 15%...',
-			),
-			array(
-				'image' => 'http://i2.rozetka.ua/goods/7003/hp_probook_4540s_b6n43ea_7003380.jpg',
-				'alt' => 'Ноутбук HP ProBook 4540s (B6N43EA)',
-				'imageOptions' => array(
-					'style' => 'height: 400px; '
-				),
-				'label' => 'Ноутбук HP ProBook 4540s (B6N43EA)',
-				'caption' => 'Стильный ноутбук HP ProBook 4540s станет вашим незаменимым помощником в работе. Он оснащен матовым дисплеем HD диагональю 39.6 см (15.6\") с LED-подсветкой...'
-			),
-		),
+		'items' => $items
 	));
+	
 	?>
-	</div>
 </div>
 
 <?php
