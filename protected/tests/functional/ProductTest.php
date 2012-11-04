@@ -48,7 +48,7 @@ class ProductTest extends WebTestCase
 		
 		
 		$this->login();
-		$this->open( '/product/create' );
+		$this->openPage( '/product/create' );
 		
 		
 		// создать товар
@@ -122,7 +122,7 @@ class ProductTest extends WebTestCase
 	
 	
 	public function testCompare() {
-		$this->open( 'site/index' );
+		$this->openHomePage();
 		
 		// перейти в категорию ноутбуков
 		$this->clickAndWait( "css=li a:contains('" . $this->сategoryTranslations[ 'notebooks' ][ 'PluralName' ] . "')" );
@@ -187,7 +187,7 @@ class ProductTest extends WebTestCase
 	
 	
 	public function testSearch() {
-		$this->open( 'site/index' );
+		$this->openHomePage();
 		
 		// проверить присутствие поля поиска
 		$this->assertElementPresent( "css=.navbar input.search-query" );

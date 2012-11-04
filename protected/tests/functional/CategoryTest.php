@@ -22,7 +22,7 @@ class CategoryTest extends WebTestCase
 		
 		
 		$this->login();
-		$this->open( '/category/create' );
+		$this->openPage( '/category/create' );
 		
 		
 		// создать категорию
@@ -50,7 +50,7 @@ class CategoryTest extends WebTestCase
 		
 		
 		// удалить категорию
-		$this->open( '/site/index' );
+		$this->openHomePage();
 		$this->waitForElementPresent( "css=h4:contains('" . $dummyCategoryUpdate[ 'PluralName' ] . "')" );
 		$this->assertElementPresent( "css=h4:contains('" . $dummyCategoryUpdate[ 'PluralName' ] . "')" );
 		$this->chooseOkOnNextConfirmation();

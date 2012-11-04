@@ -29,7 +29,7 @@ class FeaturesTest extends WebTestCase
 		
 		
 		$this->login();
-		$this->open( '/features' );
+		$this->openPage( '/features' );
 		
 		
 		// создать характеристику
@@ -51,7 +51,7 @@ class FeaturesTest extends WebTestCase
 		
 		
 		// обновить характеристику
-		$this->open( '/features' );
+		$this->openPage( '/features' );
 		$this->select( 'name=Feature[CategoryID]', 'value=' . $this->categories[ 'notebooks' ][ 'CategoryID' ] );
 		$this->waitForElementPresent( "css=div.grid-view td a:contains('" . $dummyFeatureCreate[ 'Name' ] . "')" );
 		
@@ -70,7 +70,7 @@ class FeaturesTest extends WebTestCase
 		
 		
 		// удалить характеристику
-		$this->open( '/features' );
+		$this->openPage( '/features' );
 		$this->select( 'name=Feature[CategoryID]', 'value=' . $this->categories[ 'notebooks' ][ 'CategoryID' ] );
 		$this->waitForElementPresent( "css=div.grid-view td a:contains('" . $dummyFeatureUpdate[ 'Name' ] . "')" );
 		
@@ -83,7 +83,7 @@ class FeaturesTest extends WebTestCase
 	
 	public function testRemoveFeatureInUse() {
 		$this->login();
-		$this->open( '/features' );
+		$this->openPage( '/features' );
 		
 		// попробовать удалить используемую характеристику
 		$this->select( 'name=Feature[CategoryID]', 'value=' . $this->categories[ 'notebooks' ][ 'CategoryID' ] );

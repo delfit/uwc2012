@@ -20,7 +20,7 @@ class BrandTest extends WebTestCase
 		
 		
 		$this->login();
-		$this->open( '/brands' );
+		$this->openPage( '/brands' );
 		
 		
 		// создать производителя

@@ -114,6 +114,8 @@ return array(
 				
 				
 				// categories 
+				array( 'category/create', 'pattern' => '<lc:\w+>/category/create/<cid:\d+>' ),
+				array( 'category/create', 'pattern' => '<lc:\w+>/category/create' ),
 				array( 'category/create', 'pattern' => '<lc:\w+>/category' ),
 				array( 'category/create', 'pattern' => 'category' ),
 				

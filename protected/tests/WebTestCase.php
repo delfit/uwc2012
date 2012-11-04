@@ -30,7 +30,8 @@ class WebTestCase extends CWebTestCase
 	 * 
 	 */
 	protected function login() {
-		$this->open( 'site/index' );
+		// перейти на главную
+		$this->openHomePage();
 		$this->clickAndWait( "css=.navbar a:contains('" . Yii::t( 'application', 'Login' ) . "')" );
 		
 		$this->assertElementPresent( 'name=LoginForm[username]' );
@@ -38,6 +39,21 @@ class WebTestCase extends CWebTestCase
 		$this->type( 'name=LoginForm[password]', 'admin' );
 		$this->clickAndWait( "//input[@value='" . Yii::t( 'application', 'Login' ) . "']" );
 		$this->assertTextPresent( Yii::t( 'application', 'Logined successful' ) );
+	}
+	
+	
+	/**
+	 * Перейти на главную страницу 
+	 * 
+	 */
+	protected function openHomePage() {
+		$this->openPage( '' );
+		$this->open( Yii::app()->language );
+	}
+	
+	
+	protected function openPage( $url ) {
+		$this->open( Yii::app()->language . $url );
 	}
 
 }
