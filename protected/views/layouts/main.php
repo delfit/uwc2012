@@ -58,6 +58,7 @@
 							array( 'label' => Yii::t( 'product', 'Add product' ), 'url' => Yii::app()->createUrl( 'product/create', array( 'lc' => Yii::app()->language ) ), 'icon' => 'plus' ),
 							array( 'label' => Yii::t( 'category', 'Add category' ), 'url' => Yii::app()->createUrl( 'category/create', array( 'lc' => Yii::app()->language ) ), 'icon' => 'plus' ),
 							array( 'label' => Yii::t( 'brand', 'Brands' ), 'url' => Yii::app()->createUrl( 'brand/list', array( 'lc' => Yii::app()->language ) ), 'icon' => 'list' ),
+							array( 'label' => Yii::t( 'feature', 'Features' ), 'url' => Yii::app()->createUrl( 'feature/list', array( 'lc' => Yii::app()->language ) ), 'icon' => 'list' ),
 							'---',
 							array( 'label' => Yii::t( 'application', 'Logout' ), 'url' => Yii::app()->createUrl( 'site/logout', array( 'lc' => Yii::app()->language ) ), 'icon' => 'off' ),
 						)

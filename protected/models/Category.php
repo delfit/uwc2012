@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 /**
  * This is the model class for table "Category".
@@ -124,6 +124,21 @@ class Category extends CActiveRecord
 			'application.behaviours.TranslationBehaviour'
 		) );
 	}
+	
+	
+	/**
+	 * Получить локализированное название атрибута
+	 * 
+	 * @param type $attribute
+	 * 
+	 * @return локализированное название атрибута
+	 */
+	public function getAttributeLabel( $attribute ) {
+		$label = parent::getAttributeLabel( $attribute );
+		
+		return Yii::t( strtolower( $this->tableSchema->name ), $label );
+	}
+	
 	
 	public function beforeSave() {
 		if( $this->hasErrors() ) {

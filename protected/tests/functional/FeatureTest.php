@@ -41,7 +41,6 @@ class FeaturesTest extends WebTestCase
 		$this->type( 'name=Feature[Description]', $dummyFeatureCreate[ 'Description' ] );
 		$this->clickAndWait( "css=button:contains('" . Yii::t( 'application', 'Add' ) . "')" );
 		$this->assertTextPresent( Yii::t( 'feature', 'Feature ":featureName" created', array( ':featureName' => $dummyFeatureCreate[ 'Name' ] ) ) );
-		sleep(5);
 		$this->assertElementPresent( "css=div.grid-view td a:contains('" . $dummyFeatureCreate[ 'Name' ] . "')" );
 		
 		

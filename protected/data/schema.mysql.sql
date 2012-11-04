@@ -53,7 +53,7 @@ CREATE TABLE `Category` (
   PRIMARY KEY (`CategoryID`),
   KEY `FK_CategoryHasParentCategory_idx` (`ParentCategoryID`),
   CONSTRAINT `FK_CategoryHasParentCategory` FOREIGN KEY (`ParentCategoryID`) REFERENCES `Category` (`CategoryID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='таблица категорий';
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='таблица категорий';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +62,7 @@ CREATE TABLE `Category` (
 
 LOCK TABLES `Category` WRITE;
 /*!40000 ALTER TABLE `Category` DISABLE KEYS */;
-INSERT INTO `Category` (`CategoryID`, `ParentCategoryID`) VALUES (1,NULL),(10,NULL),(2,1),(6,1),(3,2),(4,2),(5,2),(7,6),(8,6),(9,6),(11,10),(13,10),(12,11),(14,13),(15,13);
+INSERT INTO `Category` (`CategoryID`, `ParentCategoryID`) VALUES (1,NULL),(10,NULL),(16,NULL),(2,1),(6,1),(3,2),(4,2),(5,2),(7,6),(8,6),(9,6),(11,10),(13,10),(12,11),(14,13),(15,13),(17,16),(21,16),(18,17),(19,17),(20,17),(22,21),(23,21),(24,21);
 /*!40000 ALTER TABLE `Category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ CREATE TABLE `CategoryTranslation` (
 
 LOCK TABLES `CategoryTranslation` WRITE;
 /*!40000 ALTER TABLE `CategoryTranslation` DISABLE KEYS */;
-INSERT INTO `CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (1,2,'Компьютеры и ноутбуки','Компьютеры и ноутбуки'),(2,2,'Ноутбуки','Ноутбуки'),(3,2,'Ноутбук','Ноутбуки'),(4,2,'Планшет','Планшеты'),(5,2,'Сумка для ноутбука','Сумки для ноутбуков'),(6,2,'Комплектующие','Комплектующие'),(7,2,'Процессор','Процессоры'),(8,2,'Материнская плата','Материнские платы'),(9,2,'Видеокарта','Видеокарты'),(10,2,'ТВ, фото- и видео','ТВ, фото- и видео'),(11,2,'ТВ-техника','ТВ-техника'),(12,2,'ЖК-телевизор','ЖК-телевизоры'),(13,2,'Фото и видео','Фото и видео'),(14,2,'Фотоаппарат','Фотоаппараты'),(15,2,'Видеокамер','Видеокамеры'),(1,3,'Computers and notebooks','Computers and notebooks'),(10,3,'TV, Photo and Video','TV, Photo and Video'),(2,3,'Notebooks','Notebooks'),(6,3,'Components','Components'),(11,3,'TV','TV'),(13,3,'Photo and Video','Photo and Video'),(3,3,'Notebook','Notebooks'),(4,3,'Tablet','Tablets'),(5,3,'Laptop Bag','Laptop Bags'),(7,3,'Processor','Processors'),(8,3,'Motherboard','Motherboards'),(9,3,'Video Card','Video Cards'),(12,3,'LCD TV','LCD TVs'),(14,3,'Camera','Cameras'),(15,3,'Camcorder','Camcorders'),(1,1,'Комп\'ютери та ноутбуки','Комп\'ютери та ноутбуки'),(10,1,'ТВ, фото-та відео','ТВ, фото-та відео'),(2,1,'Ноутбуки','Ноутбуки'),(11,1,'ТВ-техніка','ТВ-техніка'),(3,1,'Ноутбук','Ноутбуки'),(4,1,'Планшет','Планшети'),(5,1,'Сумка для ноутбука','Сумки для ноутбуків'),(12,1,'РК-телевізор','РК-телевізори'),(14,1,'Фотоапарат','Фотоапарати'),(15,1,'Відеокамера','Відеокамери'),(7,1,'Процесор','Процесори'),(8,1,'Материнська плата','Материнські плати'),(9,1,'Відеокарта','Відеокарти'),(6,1,'Комплектуючі','Комплектуючі');
+INSERT INTO `CategoryTranslation` (`CategoryID`, `LanguageID`, `SingularName`, `PluralName`) VALUES (1,2,'Компьютеры и ноутбуки','Компьютеры и ноутбуки'),(2,2,'Ноутбуки','Ноутбуки'),(3,2,'Ноутбук','Ноутбуки'),(4,2,'Планшет','Планшеты'),(5,2,'Сумка для ноутбука','Сумки для ноутбуков'),(6,2,'Комплектующие','Комплектующие'),(7,2,'Процессор','Процессоры'),(8,2,'Материнская плата','Материнские платы'),(9,2,'Видеокарта','Видеокарты'),(10,2,'ТВ, фото- и видео','ТВ, фото- и видео'),(11,2,'ТВ-техника','ТВ-техника'),(12,2,'ЖК-телевизор','ЖК-телевизоры'),(13,2,'Фото и видео','Фото и видео'),(14,2,'Фотоаппарат','Фотоаппараты'),(15,2,'Видеокамер','Видеокамеры'),(1,3,'Computers & Notebooks','Computers & Notebooks'),(10,3,'TV, Photo and Video','TV, Photo and Video'),(2,3,'Notebooks','Notebooks'),(6,3,'Components','Components'),(11,3,'TV','TV'),(13,3,'Photo and Video','Photo and Video'),(3,3,'Notebook','Notebooks'),(4,3,'Tablet','Tablets'),(5,3,'Laptop Bag','Laptop Bags'),(7,3,'Processor','Processors'),(8,3,'Motherboard','Motherboards'),(9,3,'Video Card','Video Cards'),(12,3,'LCD TV','LCD TVs'),(14,3,'Camera','Cameras'),(15,3,'Camcorder','Camcorders'),(1,1,'Комп\'ютери та ноутбуки','Комп\'ютери та ноутбуки'),(10,1,'ТВ, фото-та відео','ТВ, фото-та відео'),(2,1,'Ноутбуки','Ноутбуки'),(11,1,'ТВ-техніка','ТВ-техніка'),(3,1,'Ноутбук','Ноутбуки'),(4,1,'Планшет','Планшети'),(5,1,'Сумка для ноутбука','Сумки для ноутбуків'),(12,1,'РК-телевізор','РК-телевізори'),(14,1,'Фотоапарат','Фотоапарати'),(15,1,'Відеокамера','Відеокамери'),(7,1,'Процесор','Процесори'),(8,1,'Материнська плата','Материнські плати'),(9,1,'Відеокарта','Відеокарти'),(6,1,'Комплектуючі','Комплектуючі'),(16,2,'Бытовая техника','Бытовая техника'),(16,1,'Побутова техніка','Побутова техніка'),(16,3,'Household Appliances','Household Appliances'),(17,2,'Крупная бытовая техника','Крупная бытовая техника'),(17,3,'Major Appliances','Major Appliances'),(17,1,'Велика побутова техніка','Велика побутова техніка'),(18,2,'Холодильник','Холодильники'),(18,1,'Холодильник','Холодильники'),(18,3,'Refrigerator','Refrigerators'),(19,2,'Морозильная камера','Морозильные камеры'),(19,3,'Freezer','Freezers'),(19,1,'Морозильна камера','Морозильні камери'),(20,2,'Стиральная машина','Стиральные машины'),(20,1,'Пральна машина','Пральні машини'),(20,3,'Washer','Washers'),(21,2,'Мелкая бытовая техника','Мелкая бытовая техника'),(21,3,'Small Appliances','Small Appliances'),(21,1,'Дрібна побутова техніка','Дрібна побутова техніка'),(22,2,'Блендер','Блендеры'),(22,1,'Блендер','Блендери'),(22,3,'Blender','Blenders'),(23,2,'Кофеварка','Кофеварки'),(23,3,'Coffee Maker','Coffee Makers'),(23,1,'Кавоварка','Кавоварки'),(24,2,'Микроволновая печь','Микроволновые печи'),(24,1,'Мікрохвильова піч','Мікрохвильові печі'),(24,3,'Microwave','Microwaves');
 /*!40000 ALTER TABLE `CategoryTranslation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -305,4 +305,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-11-03 20:00:15
+-- Dump completed on 2012-11-04 12:37:25

@@ -55,9 +55,10 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 		}
 		$routeUrl = Yii::app()->createUrl( $this->getRoute(), $actionParams );
 
-		$separator = '&';
-		if( empty( $actionParams ) ) {
-			$separator = '?';
+		
+		$separator = '?';
+		if( count( $actionParams ) > 1 ) {
+			$separator = '&';			
 		}
 		
 		echo $form->dropDownListRow( 
@@ -74,7 +75,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	<?php echo $form->textFieldRow( $model, 'Name', array( 'class' => 'span7' ) ); ?>
 	<?php echo $form->textAreaRow( $model, 'Description', array( 'class' => 'span7' ) ); ?>
 	<?php echo $form->hiddenField( $model, 'LanguageID' ); ?>
-	<?php echo CHtml::hiddenField( 'tlid', $language->LanguageID ); ?>
+	<?php echo CHtml::hiddenField( 'tlid', $model->LanguageID ); ?>
 	<?php echo CHtml::hiddenField( 'cid', $model->CategoryID ); ?>
 	<?php echo DHtml::actionLanguageCode(); ?>
 
@@ -101,6 +102,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 					'name' => 'Name',
 					'sortable' => true,
 					'editable' => array(
+						'title' => Yii::t( 'feature', 'Name' ),
 						'url' => $this->createUrl( 'feature/update', array( 'tlid' => $model->LanguageID  ) ),
 						'placement' => 'right',
 						'inputclass' => 'span3'
@@ -110,7 +112,10 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 					'class' => 'bootstrap.widgets.TbEditableColumn',
 					'name' => 'Description',
 					'sortable' => true,
+					
 					'editable' => array(
+						'title' => Yii::t( 'feature', 'Description' ),
+						'type' => 'textarea',
 						'url' => $this->createUrl( 'feature/update', array( 'tlid' => $model->LanguageID, 'cid' => $model->CategoryID, 'lc' => Yii::app()->language ) ),
 						'placement' => 'right',
 						'inputclass' => 'span3'

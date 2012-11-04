@@ -2,6 +2,8 @@
 return array(
 	'Add product' => 'Добавить товар',
 	'Add to comparison' => 'Добавить к сравнению',
+	'Brand' => 'Производитель',
+	'Category' => 'Категория',
 	'Category not defined' => 'Категория не определена',	
 	'Can not delete features' => 'Невозможно удалить характеристики',	
 	'Can not delete images' => 'Невозможно удалить изображения',	
@@ -14,6 +16,7 @@ return array(
 	'Features' => 'Характеристики',
 	'File Name' => 'Имя файла',
 	'Images' => 'Изображения',
+	'Name' => 'Название',
 	'New Product' => 'Новый товар',
 	'Product code' => 'Код товара',
 	'Product created' => 'Товар добавлен',

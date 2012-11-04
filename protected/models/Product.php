@@ -9,6 +9,7 @@
  * @property integer $BrandID
  * @property string $Name
  * @property integer $IsDraft
+ * @property string $LastModified
  *
  * The followings are the available model relations:
  * @property Category $category
@@ -130,87 +131,107 @@ class Product extends CActiveRecord
 			'application.behaviours.TranslationBehaviour'
 		));
 	}
+	
+	
+	/**
+	 * Получить локализированное название атрибута
+	 * 
+	 * @param type $attribute
+	 * 
+	 * @return локализированное название атрибута
+	 */
+	public function getAttributeLabel( $attribute ) {
+		$label = parent::getAttributeLabel( $attribute );
+		
+		return Yii::t( strtolower( $this->tableSchema->name ), $label );
+	}
+	
+	
+	public function beforeSave() {
+		$this->LastModified = date( 'Y-m-d H:i:s' ); 		
+		return parent::beforeSave();
+	}
         
         
-        /**
-         * Получить список товаро соответствующих критерию
-         * 
-         * @param string $query
-         * @param integer $categoryID
-         * 
-         * @return CActiveDataProvider
-         */
-        public function searchList( $query, $categoryID = null ) {
-            // убрать лишние символы
-            // TODO убрать пробелы встречающиеся больше одного раза
-            $query = str_replace( ' ', '%', $query );
-            
-            
-            // формирование условия получения данных по которым производится поиск
-            $criteria = new CDbCriteria( array(
-                'condition' => '
-                    CONCAT_WS( \' \',
-                        (
-                            SELECT 
-                                CategoryTranslation.PluralName
-                            FROM 
-                                CategoryTranslation
-                            WHERE
-                                CategoryTranslation.CategoryID = t.CategoryID AND
-                                CategoryTranslation.LanguageID = :currentLanguageID
-                            LIMIT 1
-                        ),  
-                        brand.Name,
-                        t.Name,
-                        (
-                            SELECT 
-                                ProductTranslation.Description
-                            FROM 
-                                ProductTranslation
-                            WHERE
-                                ProductTranslation.ProductID = t.ProductID AND
-                                ProductTranslation.LanguageID = :currentLanguageID
-                            LIMIT 1
-                        ),
-                        (
-                            SELECT 
-                                    GROUP_CONCAT( Value separator \' \' )
-                            FROM 
-                                    ProductHasFeatures 
-                            WHERE 
-                                    ProductHasFeatures.ProductID = t.ProductID
-                        )
-                    ) like :query
-                ',
-                'params' => array(
-                    ':query' => '%'. $query . '%',
-                    ':currentLanguageID' => 2
-                ),
+	/**
+	 * Получить список товаро соответствующих критерию
+	 * 
+	 * @param string $query
+	 * @param integer $categoryID
+	 * 
+	 * @return CActiveDataProvider
+	 */
+	public function searchList( $query, $categoryID = null ) {
+		// убрать лишние символы
+		// TODO убрать пробелы встречающиеся больше одного раза
+		$query = str_replace( ' ', '%', $query );
 
-                'with' => array(
-                    'brand',
-                    'category',
-                )
-            ) );
-            
-            if( !empty( $categoryID ) ) {
-                if( !empty( $criteria->condition ) ) {
-                    $criteria->condition .= ' AND ';
-                }
-                
-                $criteria->condition .= ' t.CategoryID = :categoryID ';
-                $criteria->params[ ':categoryID' ] = $categoryID;
-            }
-            
-            $products = new CActiveDataProvider( $this, array( 
-                'criteria' => $criteria,
-                'pagination' => array(
-                    'pageSize' => Yii::app()->params[ 'default' ][ 'pageSize' ],
-                ),
-            ));
 
-            return $products;
-        }
+		// формирование условия получения данных по которым производится поиск
+		$criteria = new CDbCriteria( array(
+			'condition' => '
+				CONCAT_WS( \' \',
+					(
+						SELECT 
+							CategoryTranslation.PluralName
+						FROM 
+							CategoryTranslation
+						WHERE
+							CategoryTranslation.CategoryID = t.CategoryID AND
+							CategoryTranslation.LanguageID = :currentLanguageID
+						LIMIT 1
+					),  
+					brand.Name,
+					t.Name,
+					(
+						SELECT 
+							ProductTranslation.Description
+						FROM 
+							ProductTranslation
+						WHERE
+							ProductTranslation.ProductID = t.ProductID AND
+							ProductTranslation.LanguageID = :currentLanguageID
+						LIMIT 1
+					),
+					(
+						SELECT 
+								GROUP_CONCAT( Value separator \' \' )
+						FROM 
+								ProductHasFeatures 
+						WHERE 
+								ProductHasFeatures.ProductID = t.ProductID
+					)
+				) like :query
+			',
+			'params' => array(
+				':query' => '%'. $query . '%',
+				':currentLanguageID' => 2
+			),
+
+			'with' => array(
+				'brand',
+				'category',
+			)
+		) );
+
+		if( !empty( $categoryID ) ) {
+			if( !empty( $criteria->condition ) ) {
+				$criteria->condition .= ' AND ';
+			}
+
+			$criteria->condition .= ' t.CategoryID = :categoryID ';
+			$criteria->params[ ':categoryID' ] = $categoryID;
+		}
+
+		$products = new CActiveDataProvider( $this, array( 
+			'criteria' => $criteria,
+			'pagination' => array(
+				'pageSize' => Yii::app()->params[ 'default' ][ 'pageSize' ],
+			),
+		));
+
+		return $products;
+	}
 	
 
 	/**

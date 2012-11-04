@@ -11,7 +11,9 @@
 		'Category ":categoryName" not deleted' => 'Категория ":categoryName" не удалена',
 		'Category updated' => 'Категория обновлена',
 		'New Category' => 'Новая категория',
-		'PluralName' => 'Название во множественном числе',
+		'Parent Category' => 'Родительская категория',
+		'Plural Name' => 'Название во множественном числе',
+		'Singular Name' => 'Название в единственном числе',
 		'[Root]' => '[Без категорії]',
 		'Select category...' => 'Укажите категорию...'
 	);
