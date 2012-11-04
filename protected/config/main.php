@@ -8,7 +8,7 @@ return array(
 	
 	'name' => 'UWC2012',
 	
-	'language' => 'uk', 
+	'language' => 'ru', 
 	
 	// preloading 'log' component
 	'preload' => array( 
@@ -45,7 +45,7 @@ return array(
 		
 		'cache' => array(
 			// TODO изменить на CFileCache
-			'class' => 'system.caching.CFileCache' // CFileCache, CDummyCache
+			'class' => 'system.caching.CDummyCache' // CFileCache, CDummyCache
 		),
 		
 		'db' => array(
